@@ -1,11 +1,11 @@
 #ifndef GLOBAL_VALUE_H
 #define GLOBAL_VALUE_H
 
-#include"mainwindow.h"
+#include "mainwindow.h"
 #include <QStandardPaths>
 
-
 extern mainWindow *mainwid;
+extern rightStackedWidgets0 *wifiWid;
 
 // music
 //const QString MUSIC_SEARCH_PATH = QStandardPaths::writableLocation(QStandardPaths::HomeLocation).append("/mnt");
@@ -30,7 +30,9 @@ extern mainWindow *mainwid;
 //const QString str_common_setting= "通用设置";
 //const QString str_system_setting= "系统设置";
 //const QString str_open_wifi= "打开WLAN";
-//const QString str_wifi_adapter= "网卡适配器";
+//const QString str_wifi_adapter= "网卡适配器:";
+//const QString str_current_net= " 当前网络:";
+//const QString str_current_no_net_tip= "无网络连接";
 
 
 const QString MUSIC_SEARCH_PATH = QStandardPaths::writableLocation(QStandardPaths::HomeLocation).append("/mnt");
@@ -55,7 +57,9 @@ const QString str_bt_manager= "BlueTooth";
 const QString str_common_setting= "General";
 const QString str_system_setting= "System";
 const QString str_open_wifi= "WLAN";
-const QString str_wifi_adapter= "adapter";
+const QString str_wifi_adapter= "Adapter:";
+const QString str_current_net= "Network:";
+const QString str_current_no_net_tip= "no connection";
 
 
 #endif

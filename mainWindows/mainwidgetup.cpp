@@ -22,7 +22,6 @@ mainWidgetUp::mainWidgetUp(QWidget *parent):baseWidget(parent)
 void mainWidgetUp::initLayout()
 {
     QVBoxLayout *vmainyout = new QVBoxLayout;
-
     // first layout
     QHBoxLayout *hyout1=new QHBoxLayout;
 

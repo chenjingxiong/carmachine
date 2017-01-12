@@ -48,7 +48,7 @@ void settingTopWidgets::initWidget()
     label1->setStyleSheet("color:rgb(255,255,255,255);");
     label1->adjustSize();
 
-    QLabel*label2=new QLabel("camera.",this);
+    QLabel*label2=new QLabel("Setting",this);
     label2->setFont(QFont("Microsoft YaHei",12,QFont::DemiBold));
     label2->setStyleSheet("color:rgb(255,255,255,255);");
     label2->adjustSize();

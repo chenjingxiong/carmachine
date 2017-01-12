@@ -23,8 +23,11 @@ public:
     virtual int getNetworkDisabled(const QString &sel);
     void setBssFromScan(const QString &bssid);
     void addInterface();
+    int openCtrlConnection(const char *ifname);
 #ifndef QT_NO_SESSIONMANAGER
     void saveState();
+
+    void updateScanResult();        // 根据搜索到的结果更新界面
 #endif
 
 public slots:
@@ -43,6 +46,7 @@ public slots:
     virtual void processMsg(char *msg); // 与receiveMsgs配合使用，处理消息
     virtual void connectB();            // wpa_supplicant连接无线网络
     virtual void disconnectB();         // wpa_supplicant取消连接无线网络
+    virtual void selectAdapter(const QString &sel); // 选择网卡设备
     virtual void selectNetwork(const QString &sel);
     virtual void editSelectedNetwork();
     virtual void editListedNetwork();
@@ -91,8 +95,6 @@ private:
     bool startInTray;
     bool quietMode;
 
-    int openCtrlConnection(const char *ifname);
-
     bool wpsRunning;
 
     QString bssFromScan;
@@ -103,7 +105,6 @@ private:
     int signalMeterInterval;
 
 #ifdef CONFIG_NATIVE_WINDOWS
-
 
     bool serviceRunning();
 #endif /* CONFIG_NATIVE_WINDOWS */

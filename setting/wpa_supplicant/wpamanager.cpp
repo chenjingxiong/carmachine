@@ -16,6 +16,7 @@
 #include <QCloseEvent>
 #include <QImageReader>
 #include <QSettings>
+#include <QList>
 
 #include "wpamanager.h"
 #include "dirent.h"
@@ -62,18 +63,16 @@ wpaManager::wpaManager(QObject *parent):QObject(parent)
     signalMeterTimer->setInterval(signalMeterInterval);
     connect(signalMeterTimer, SIGNAL(timeout()),SLOT(signalMeterUpdate()));
 
+    wifiWid->m_tabCurrentStatus->textStatus->setText(tr("connecting to wpa_supplicant"));
     // 打开ctrl连接,连接建立成功之后会建立连接连接_monitor_conn、ctrl_conn;
     if (openCtrlConnection(ctrl_iface) < 0) {
         debug("Failed to open control connection to "
               "wpa_supplicant.");
-    }else{
-        openCtrlConnection("wlan0"); // 先默认打开wlan0适配器
     }
     updateStatus();
     networkMayHaveChanged = true;
     updateNetworks();
 }
-
 
 int wpaManager::openCtrlConnection(const char *ifname)
 {
@@ -105,12 +104,12 @@ int wpaManager::openCtrlConnection(const char *ifname)
                  * the C library or underlying file
                  * system does not support d_type. */
                 if (dent->d_type != DT_SOCK &&
-                    dent->d_type != DT_UNKNOWN)
+                        dent->d_type != DT_UNKNOWN)
                     continue;
 #endif /* _DIRENT_HAVE_D_TYPE */
 
                 if (strcmp(dent->d_name, ".") == 0 ||
-                    strcmp(dent->d_name, "..") == 0)
+                        strcmp(dent->d_name, "..") == 0)
                     continue;
                 debug("Selected interface '%s'",
                       dent->d_name);
@@ -131,7 +130,7 @@ int wpaManager::openCtrlConnection(const char *ifname)
         if (ctrl) {
             len = sizeof(buf) - 1;
             ret = wpa_ctrl_request(ctrl, "INTERFACES", 10, buf,
-                           &len, NULL);
+                                   &len, NULL);
             if (ret >= 0) {
                 connectedToService = true;
                 buf[len] = '\0';
@@ -151,12 +150,12 @@ int wpaManager::openCtrlConnection(const char *ifname)
         if (first && !serviceRunning()) {
             first = false;
             if (QMessageBox::warning(
-                    mainwid, qAppName(),
-                    tr("wpa_supplicant service is not "
-                       "running.\n"
-                       "Do you want to start it?"),
-                    QMessageBox::Yes | QMessageBox::No) ==
-                QMessageBox::Yes)
+                        mainwid, qAppName(),
+                        tr("wpa_supplicant service is not "
+                           "running.\n"
+                           "Do you want to start it?"),
+                        QMessageBox::Yes | QMessageBox::No) ==
+                    QMessageBox::Yes)
                 startService();
         }
 #endif /* CONFIG_NATIVE_WINDOWS */
@@ -213,13 +212,13 @@ int wpaManager::openCtrlConnection(const char *ifname)
 
 #if defined(CONFIG_CTRL_IFACE_UNIX) || defined(CONFIG_CTRL_IFACE_UDP)
     msgNotifier = new QSocketNotifier(wpa_ctrl_get_fd(monitor_conn),
-                      QSocketNotifier::Read, this);
+                                      QSocketNotifier::Read, this);
     connect(msgNotifier, SIGNAL(activated(int)), SLOT(receiveMsgs()));
 #endif
 
-//    adapterSelect->clear();
-//    adapterSelect->addItem(ctrl_iface);
-//    adapterSelect->setCurrentIndex(0);
+//    wifiWid->m_adapterSeletor->clear();
+//    wifiWid->m_adapterSeletor->addItem(ctrl_iface);
+//    wifiWid->m_adapterSeletor->setCurrentIndex(0);
 
     len = sizeof(buf) - 1;
     if (wpa_ctrl_request(ctrl_conn, "INTERFACES", 10, buf, &len, NULL) >=0)
@@ -231,7 +230,8 @@ int wpaManager::openCtrlConnection(const char *ifname)
             if (pos2)
                 *pos2 = '\0';
             if (strcmp(pos, ctrl_iface) != 0)
-//                adapterSelect->addItem(pos);
+            {}
+//                wifiWid->m_adapterSeletor->addItem(pos);
             if (pos2)
                 pos = pos2 + 1;
             else
@@ -241,17 +241,17 @@ int wpaManager::openCtrlConnection(const char *ifname)
 
     len = sizeof(buf) - 1;
     if (wpa_ctrl_request(ctrl_conn, "GET_CAPABILITY eap", 18, buf, &len,
-                 NULL) >= 0) {
+                         NULL) >= 0) {
         buf[len] = '\0';
 
         QString res(buf);
         QStringList types = res.split(QChar(' '));
         bool wps = types.contains("WSC");
-//        actionWPS->setEnabled(wps);
-//        wpsTab->setEnabled(wps);
-//        wpaguiTab->setTabEnabled(wpaguiTab->indexOf(wpsTab), wps);
+        //        actionWPS->setEnabled(wps);
+        //        wpsTab->setEnabled(wps);
+        //        wpaguiTab->setTabEnabled(wpaguiTab->indexOf(wpsTab), wps);
     }
-
+    scan();
     return 0;
 }
 
@@ -268,6 +268,15 @@ int wpaManager::ctrlRequest(const char *cmd, char *buf, size_t *buflen)
     return ret;
 }
 
+void wpaManager::selectAdapter(const QString & sel)
+{
+    if (openCtrlConnection(sel.toLocal8Bit().constData()) < 0)
+        debug("Failed to open control connection to "
+              "wpa_supplicant.");
+    updateStatus();
+    updateNetworks();
+}
+
 
 void wpaManager::updateStatus()
 {
@@ -278,22 +287,29 @@ void wpaManager::updateStatus()
 
     len = sizeof(buf) - 1;
     if (ctrl_conn == NULL || ctrlRequest("STATUS", buf, &len) < 0) {
-        // 无网络设备
+        wifiWid->m_tabCurrentStatus->textStatus->setText(tr("Could not get status from ""wpa_supplicant"));
+        wifiWid->m_tabCurrentStatus->textAuthentication->clear();
+        wifiWid->m_tabCurrentStatus->textEncryption->clear();
+        wifiWid->m_tabCurrentStatus->textSSID->clear();
+        wifiWid->m_tabCurrentStatus->textBSSID->clear();
+        wifiWid->m_tabCurrentStatus->textIPAddress->clear();
+        //        updateTrayToolTip(tr("no status information"));
+        //        updateTrayIcon(TrayIconOffline);
         signalMeterTimer->stop();
 
 #ifdef CONFIG_NATIVE_WINDOWS
         static bool first = true;
-                if (first && connectedToService &&
-                    (ctrl_iface == NULL || *ctrl_iface == '\0')) {
-                    first = false;
-                    if (QMessageBox::information(
-                            mainwid, qAppName(),
-                            tr("No network interfaces in use.\n"
-                               "Would you like to add one?"),
-                            QMessageBox::Yes | QMessageBox::No) ==
-                        QMessageBox::Yes)
-                        addInterface();
-                }
+        if (first && connectedToService &&
+                (ctrl_iface == NULL || *ctrl_iface == '\0')) {
+            first = false;
+            if (QMessageBox::information(
+                        mainwid, qAppName(),
+                        tr("No network interfaces in use.\n"
+                           "Would you like to add one?"),
+                        QMessageBox::Yes | QMessageBox::No) ==
+                    QMessageBox::Yes)
+                addInterface();
+        }
 #endif /* CONFIG_NATIVE_WINDOWS */
         return;
     }
@@ -323,10 +339,11 @@ void wpaManager::updateStatus()
             *pos++ = '\0';
             if (strcmp(start, "bssid") == 0) {
                 bssid_updated = true;
-                //                textBssid->setText(pos);
+                wifiWid->m_tabCurrentStatus->textBSSID->setText(pos);
             } else if (strcmp(start, "ssid") == 0) {
                 ssid_updated = true;
-                //                textSsid->setText(pos);
+                wifiWid->m_tabCurrentStatus->textSSID->setText(pos);
+                //                updateTrayToolTip(pos + tr(" (associated)"));
                 if (!signalMeterInterval) {
                     /* if signal meter is not enabled show
                      * full signal strength */
@@ -334,13 +351,13 @@ void wpaManager::updateStatus()
                 }
             } else if (strcmp(start, "ip_address") == 0) {
                 ipaddr_updated = true;
-                //                textIpAddress->setText(pos);
+                wifiWid->m_tabCurrentStatus->textIPAddress->setText(pos);
             } else if (strcmp(start, "wpa_state") == 0) {
                 status_updated = true;
-                //                textStatus->setText(wpaStateTranslate(pos));
+                wifiWid->m_tabCurrentStatus->textStatus->setText(wpaStateTranslate(pos));
             } else if (strcmp(start, "key_mgmt") == 0) {
                 auth_updated = true;
-                //                textAuthentication->setText(pos);
+                wifiWid->m_tabCurrentStatus->textAuthentication->setText(pos);
                 /* TODO: could add EAP status to this */
             } else if (strcmp(start, "pairwise_cipher") == 0) {
                 pairwise_cipher = pos;
@@ -356,67 +373,90 @@ void wpaManager::updateStatus()
         start = end + 1;
     }
     if (status_updated && mode)
-        //        textStatus->setText(textStatus->text() + " (" + mode + ")");
+        wifiWid->m_tabCurrentStatus->textStatus->setText(wifiWid->m_tabCurrentStatus->textStatus->text() + " (" + mode + ")");
 
-        if (pairwise_cipher || group_cipher) {
-            QString encr;
-            if (pairwise_cipher && group_cipher &&
-                    strcmp(pairwise_cipher, group_cipher) != 0) {
-                encr.append(pairwise_cipher);
-                encr.append(" + ");
-                encr.append(group_cipher);
-            } else if (pairwise_cipher) {
-                encr.append(pairwise_cipher);
-            } else {
-                encr.append(group_cipher);
-                encr.append(" [group key only]");
-            }
-            //        textEncryption->setText(encr);
-        } else
-            //        textEncryption->clear();
+    if (pairwise_cipher || group_cipher) {
+        QString encr;
+        if (pairwise_cipher && group_cipher &&
+                strcmp(pairwise_cipher, group_cipher) != 0) {
+            encr.append(pairwise_cipher);
+            encr.append(" + ");
+            encr.append(group_cipher);
+        } else if (pairwise_cipher) {
+            encr.append(pairwise_cipher);
+        } else {
+            encr.append(group_cipher);
+            encr.append(" [group key only]");
+        }
+        wifiWid->m_tabCurrentStatus->textEncryption->setText(encr);
+    } else
+        wifiWid->m_tabCurrentStatus->textEncryption->clear();
 
-            if (signalMeterInterval) {
-                /*
+    if (signalMeterInterval) {
+        /*
          * Handle signal meter service. When network is not associated,
          * deactivate timer, otherwise keep it going. Tray icon has to
          * be initialized here, because of the initial delay of the
          * timer.
          */
-                if (ssid_updated) {
-                    if (!signalMeterTimer->isActive()) {
-                        //                updateTrayIcon(TrayIconConnected);
-                        signalMeterTimer->start();
-                    }
-                } else {
-                    signalMeterTimer->stop();
-                }
+        if (ssid_updated) {
+            if (!signalMeterTimer->isActive()) {
+                //                updateTrayIcon(TrayIconConnected);
+                signalMeterTimer->start();
             }
+        } else {
+            signalMeterTimer->stop();
+        }
+    }
 
-    //    if (!status_updated)
-    //        textStatus->clear();
-    //    if (!auth_updated)
-    //        textAuthentication->clear();
-    //    if (!ssid_updated) {
-    //        textSsid->clear();
-    //        updateTrayToolTip(tr("(not-associated)"));
-    //        updateTrayIcon(TrayIconOffline);
-    //    }
-    //    if (!bssid_updated)
-    //        textBssid->clear();
-    //    if (!ipaddr_updated)
-    //        textIpAddress->clear();
+    if (!status_updated)
+        wifiWid->m_tabCurrentStatus->textStatus->clear();
+    if (!auth_updated)
+        wifiWid->m_tabCurrentStatus->textAuthentication->clear();
+    if (!ssid_updated) {
+        wifiWid->m_tabCurrentStatus->textSSID->clear();
+        //        updateTrayToolTip(tr("(not-associated)"));
+        //        updateTrayIcon(TrayIconOffline);
+    }
+    if (!bssid_updated)
+        wifiWid->m_tabCurrentStatus->textBSSID->clear();
+    if (!ipaddr_updated)
+        wifiWid->m_tabCurrentStatus->textIPAddress->clear();
 }
 
+QString wpaManager::wpaStateTranslate(char *state)
+{
+    if (!strcmp(state, "DISCONNECTED"))
+        return tr("Disconnected");
+    else if (!strcmp(state, "INACTIVE"))
+        return tr("Inactive");
+    else if (!strcmp(state, "SCANNING"))
+        return tr("Scanning");
+    else if (!strcmp(state, "AUTHENTICATING"))
+        return tr("Authenticating");
+    else if (!strcmp(state, "ASSOCIATING"))
+        return tr("Associating");
+    else if (!strcmp(state, "ASSOCIATED"))
+        return tr("Associated");
+    else if (!strcmp(state, "4WAY_HANDSHAKE"))
+        return tr("4-Way Handshake");
+    else if (!strcmp(state, "GROUP_HANDSHAKE"))
+        return tr("Group Handshake");
+    else if (!strcmp(state, "COMPLETED"))
+        return tr("Completed");
+    else
+        return tr("Unknown");
+}
 
 void wpaManager::addInterface()
 {
-//    if (add_iface) {
-//        add_iface->close();
-//        delete add_iface;
-//    }
-//    add_iface = new AddInterface(this, this);
-//    add_iface->show();
-//    add_iface->exec();
+    //    if (add_iface) {
+    //        add_iface->close();
+    //        delete add_iface;
+    //    }
+    //    add_iface = new AddInterface(this, this);
+    //    add_iface->show();
+    //    add_iface->exec();
 }
 
 
@@ -434,7 +474,7 @@ void wpaManager::updateNetworks()
     //    if (networkList->currentRow() >= 0)
     //        was_selected = networkList->currentRow();
 
-    //    networkSelect->clear();
+    //    wifiWid->m_netWorkSeletor->clear();
     //    networkList->clear();
 
     //    if (ctrl_conn == NULL)
@@ -485,27 +525,26 @@ void wpaManager::updateNetworks()
     //        QString network(id);
     //        network.append(": ");
     //        network.append(ssid);
-    //        networkSelect->addItem(network);
+    //        wifiWid->m_netWorkSeletor->addItem(network);
     //        networkList->addItem(network);
 
     //        if (strstr(flags, "[CURRENT]")) {
-    //            networkSelect->setCurrentIndex(networkSelect->count() -
-    //                              1);
+    //            wifiWid->m_netWorkSeletor->setCurrentIndex(wifiWid->m_netWorkSeletor->count() -1);
     //            current = true;
     //        } else if (first_active < 0 &&
-    //               strstr(flags, "[DISABLED]") == NULL)
-    //            first_active = networkSelect->count() - 1;
+    //                   strstr(flags, "[DISABLED]") == NULL)
+    //            first_active = wifiWid->m_netWorkSeletor->count() - 1;
 
     //        if (last)
     //            break;
     //        start = end + 1;
     //    }
 
-    //    if (networkSelect->count() > 1)
-    //        networkSelect->addItem(tr("Select any network"));
+    //    if (wifiWid->m_netWorkSeletor->count() > 1)
+    //        wifiWid->m_netWorkSeletor->addItem(tr("Select any network"));
 
     //    if (!current && first_active >= 0)
-    //        networkSelect->setCurrentIndex(first_active);
+    //        wifiWid->m_netWorkSeletor->setCurrentIndex(first_active);
 
     //    if (was_selected >= 0 && networkList->count() > 0) {
     //        if (was_selected < networkList->count())
@@ -560,17 +599,10 @@ void wpaManager::disconnectB()
 
 void wpaManager::scan()
 {
-    //    if (scanres) {
-    //        scanres->close();
-    //        delete scanres;
-    //    }
-
-    //    scanres = new ScanResults();
-    //    if (scanres == NULL)
-    //        return;
-    //    scanres->setWpaGui(this);
-    //    scanres->show();
-    //    scanres->exec();
+    wifiWid->m_tabScanResult->clearTable();
+    char reply[10];
+    size_t reply_len = sizeof(reply);
+    ctrlRequest("SCAN", reply, &reply_len);
 }
 
 
@@ -720,16 +752,18 @@ void wpaManager::processMsg(char *msg)
         pos2 = pos;
     QString lastmsg = pos2;
     lastmsg.truncate(40);
-    //    textLastMessage->setText(lastmsg);
+
+    wifiWid->m_tabCurrentStatus->textLastMsg->setText(lastmsg);
 
     pingsToStatusUpdate = 0;
     networkMayHaveChanged = true;
 
-    if (str_match(pos, WPA_CTRL_REQ))
+    if(str_match(pos,WPA_EVENT_SCAN_RESULTS))
+    {
+        wifiWid->m_tabScanResult->clearTable();
+        updateScanResult();
+    } else if (str_match(pos, WPA_CTRL_REQ))
         processCtrlReq(pos + strlen(WPA_CTRL_REQ));
-    //    else if (str_match(pos, WPA_EVENT_SCAN_RESULTS) && scanres)
-    //        scanres->updateResults();
-    //    {}
     else if (str_match(pos, WPA_EVENT_DISCONNECTED))
     {}
     //        showTrayMessage(QSystemTrayIcon::Information, 3,
@@ -758,8 +792,9 @@ void wpaManager::processMsg(char *msg)
         //                "indicating this client is authorized.");
         //        wpsStatusText->setText("WPS AP indicating this client is "
         //                       "authorized");
-        //        if (textStatus->text() == "INACTIVE" ||
-        //            textStatus->text() == "DISCONNECTED")
+        if (wifiWid->m_tabCurrentStatus->textStatus->text() == "INACTIVE" ||
+                wifiWid->m_tabCurrentStatus->textStatus->text() == "DISCONNECTED")
+        {}
         //            wpaguiTab->setCurrentWidget(wpsTab);
     } else if (str_match(pos, WPS_EVENT_AP_AVAILABLE)) {
         //        wpsStatusText->setText(tr("WPS AP detected"));
@@ -784,6 +819,55 @@ void wpaManager::processMsg(char *msg)
     //    } else if (str_match(pos, WPS_EVENT_SUCCESS)) {
     //        wpsStatusText->setText(tr("Registration succeeded"));
     //    }
+}
+
+void wpaManager::updateScanResult()
+{
+    char reply[2048];
+    size_t reply_len;
+    int index;
+    char cmd[20];
+
+    index = 0;
+    while (true) {
+        snprintf(cmd, sizeof(cmd), "BSS %d", index++);
+        if (index > 1000)
+            break;
+
+        reply_len = sizeof(reply) - 1;
+        if (ctrlRequest(cmd, reply, &reply_len) < 0)
+            break;
+        reply[reply_len] = '\0';
+
+        QString bss(reply);
+        if (bss.isEmpty() || bss.startsWith("FAIL"))
+            break;
+
+        QString ssid, bssid, freq, signal, flags;
+
+        QStringList lines = bss.split(QRegExp("\\n"));
+
+        for (QStringList::Iterator it = lines.begin();it != lines.end(); it++) {
+            int pos = (*it).indexOf('=') + 1;
+            if (pos < 1)
+                continue;
+
+            if ((*it).startsWith("bssid="))
+                bssid = (*it).mid(pos);
+            else if ((*it).startsWith("freq="))
+                freq = (*it).mid(pos);
+            else if ((*it).startsWith("level="))
+                signal = (*it).mid(pos);
+            else if ((*it).startsWith("flags="))
+                flags = (*it).mid(pos);
+            else if ((*it).startsWith("ssid="))
+                ssid = (*it).mid(pos);
+        }
+        wifiWid->m_tabScanResult->insertIntoTable(ssid,bssid,signal,flags);
+
+        if (bssid.isEmpty())
+            break;
+    }
 }
 
 
@@ -1117,11 +1201,6 @@ void wpaManager::saveConfig()
 }
 
 
-
-
-
-
-
 void wpaManager::showTrayStatus()
 {
     char buf[2048];
@@ -1165,8 +1244,6 @@ void wpaManager::showTrayStatus()
     {}
     //        showTrayMessage(QSystemTrayIcon::Information, 10, msg);
 }
-
-
 
 
 void wpaManager::peersDialog()

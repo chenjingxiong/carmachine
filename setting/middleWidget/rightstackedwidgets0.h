@@ -3,12 +3,29 @@
 
 #include <QLabel>
 #include <QComboBox>
+#include <QTableWidget>
+#include <QTabWidget>
+#include <QThread>
 #include "basewidget.h"
+#include "basepushbutton.h"
 #include "commonwidgets.h"
 #include "wlanlisttable.h"
 #include "wpa_supplicant/wpamanager.h"
 
+
 class switchWidget;
+class tabCurrentStatus;
+class tabScanResult;
+class myNetThread;
+
+struct netWork   // Wifi信息结构体
+{
+   QString SSID;
+   QString BSSID;
+   QString frequence;
+   QString signal;
+   QString flags;
+};
 
 class rightStackedWidgets0:public baseWidget
 {
@@ -16,38 +33,81 @@ class rightStackedWidgets0:public baseWidget
 public:
     rightStackedWidgets0(QWidget *parent);
 
-    void insertIntoTable(QString name,QString lock,QString siganl,QString detail);
+    switchWidget *m_wifiSwitch;   // 开关控件
+    QTabWidget *m_tab;           // TabWidget 包含status、Scan result二个部分
+    tabCurrentStatus *m_tabCurrentStatus;
+    tabScanResult *m_tabScanResult;
 
-    QComboBox *m_adapterSeletor;
+    wpaManager *m_netManager; // 网络管理类
 private:
     void initData();
     void initLayout();
     void initConnection();
-
-    //    switchWidget *m_switchWid;
-    wlanListTable *m_table;
-
-    wpaManager *m_netManager; // 网络管理类
+    void wifiOn();
+    void wifiOff();
 public slots:
-    void slot_onToggled(bool);
-    void slot_onNetOpened();
+    void slot_showItemDetail(int,int);
+    void slot_onToggled(bool isChecked);
 signals:
-    void sig_netOpened();
+
 };
 
 
-//// 控制开关Widget:包含一个开关控件和一个开关状态提示字体
-//class switchWidget:public baseWidget
-//{
-//public:
-//    switchWidget(QWidget *parent);
-//    switchButton* getSwitchButton(){return m_btnSwitch;}
-//private:
-//    QLabel *m_lblState;
-//    switchButton *m_btnSwitch;
+// 控制开关Widget:包含一个开关控件和一个开关状态提示字体
+class switchWidget:public baseWidget
+{
+public:
+    switchWidget(QWidget *parent);
+    switchButton* getSwitchButton(){return m_btnSwitch;}
+private:
+    QLabel *m_lblState;
+    switchButton *m_btnSwitch;
 
-//};
+};
+
+// TabWidget中当前状态布局
+class tabCurrentStatus:public baseWidget
+{
+public:
+    tabCurrentStatus(QWidget *parent);
+
+    QLabel *textStatus;
+    QLabel *textLastMsg;
+    QLabel *textAuthentication;
+    QLabel *textEncryption;
+    QLabel *textSSID;
+    QLabel *textBSSID;
+    QLabel *textIPAddress;
+    QPushButton *connectButton;
+    QPushButton *disconnectButton;
+private:
+};
+
+class tabScanResult:public baseWidget
+{
+public:
+    tabScanResult(QWidget *parent);
+
+    wlanListTable *m_table;
+    QPushButton *scanButton;
+
+    struct netWork* m_netWorks = new struct netWork[200];
+
+    void clearTable();
+    void insertIntoTable(QString name,QString lock,QString siganl,QString detail);
+protected:
+
+};
+
+class myNetThread:public QThread
+{
+public:
+    myNetThread(QObject *parent = 0): QThread(parent){}
+protected:
+    virtual void run();
+private:
 
 
+};
 
 #endif // RIGHTSTACKEDWIDGETS0_H

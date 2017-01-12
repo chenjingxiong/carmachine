@@ -5,7 +5,8 @@ HEADERS += \
     $$PWD/rightstackedwidgets0.h \
     $$PWD/commonwidgets.h \
     $$PWD/wlanlisttable.h \
-    $$PWD/rightstackedwidgets1.h
+    $$PWD/rightstackedwidgets1.h \
+    $$PWD/netconfigdialog.h
 
 SOURCES += \
     $$PWD/settingmiddlewidgets.cpp \
@@ -14,4 +15,5 @@ SOURCES += \
     $$PWD/rightstackedwidgets0.cpp \
     $$PWD/commonwidgets.cpp \
     $$PWD/wlanlisttable.cpp \
-    $$PWD/rightstackedwidgets1.cpp
+    $$PWD/rightstackedwidgets1.cpp \
+    $$PWD/netconfigdialog.cpp

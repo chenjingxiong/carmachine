@@ -14,7 +14,7 @@ TEMPLATE = app
 
 DEFINES += CONFIG_CTRL_IFACE
 
-CONFIG	+= qt warn_on release
+#CONFIG	+= qt warn_on release
 
 win32 {
   LIBS += -lws2_32 -static
@@ -58,6 +58,9 @@ include(camera/camera.pri)
 SOURCES +=$$PWD/singleApplication/qsingleapplication.cpp \
 
 HEADERS +=$$PWD/singleApplication/qsingleapplication.h \
+
+FORMS = networkconfig.ui \
+
 
 
 RESOURCES += \

@@ -18,9 +18,9 @@ int main(int argc, char *argv[])
                           "QLabel:focus{padding: -1;}");
         mainWindow w;
         app.w=&w;
-        w.setGeometry(100,100,1000,700);
-        w.show();
-        //        w.showMaximized();
+        //        w.setGeometry(100,100,1000,700);
+        //        w.show();
+        w.showMaximized();
         return app.exec();
     }
     return 0;
