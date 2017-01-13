@@ -13,11 +13,12 @@ QColor middleWidgetLeft::bgcolor=QColor(255,255,255,100);
 middleWidgetLeft::middleWidgetLeft(QWidget *parent):baseWidget(parent)
 {
     m_isDrawVerticalLine=true;
-    setMinimumWidth(310);
+//    setMinimumWidth(310);
     setSizePolicy(QSizePolicy::MinimumExpanding,QSizePolicy::Expanding);
 
     initLayout();
     initAnimation();
+    setStyleSheet("QLabel{color:black}");
 }
 
 void middleWidgetLeft::initLayout()
@@ -42,9 +43,9 @@ void middleWidgetLeft::initLayout()
     m_btn[1]=new stackButton(":/image/music/btn_cloud (1).png",":/image/music/btn_cloud (2).png",":/image/music/btn_cloud (3).png",this);
     m_btn[2]=new stackButton(":/image/music/btn_radio (1).png",":/image/music/btn_radio (2).png",":/image/music/btn_radio (3).png",this);
 
-    m_btn[0]->setFixedHeight(40);
-    m_btn[1]->setFixedHeight(40);
-    m_btn[2]->setFixedHeight(40);
+    m_btn[0]->setFixedHeight(70);
+    m_btn[1]->setFixedHeight(70);
+    m_btn[2]->setFixedHeight(70);
 
     QHBoxLayout *hlyout=new QHBoxLayout;
     hlyout->addWidget(m_btn[0]);

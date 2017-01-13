@@ -15,8 +15,8 @@ void videoMiddleWidgets::initLayout()
     m_rightWid = new videoMiddleWidgetRight(this);
     m_leftWid = new videoMiddleWidgetLeft(this);
 
-    hmainlyout->addWidget(m_leftWid,4);
-    hmainlyout->addWidget(m_rightWid,1);
+    hmainlyout->addWidget(m_leftWid,9);
+    hmainlyout->addWidget(m_rightWid,4);
     hmainlyout->setContentsMargins(0,0,0,0);
     hmainlyout->setSpacing(0);
 

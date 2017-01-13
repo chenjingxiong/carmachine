@@ -3,6 +3,8 @@
 #include <QHeaderView>
 #include <QScrollBar>
 
+#include "global_value.h"
+
 
 videoLocalListTable::videoLocalListTable(QWidget *parent):QTableWidget(parent)
 {
@@ -36,7 +38,7 @@ void videoLocalListTable::init()
 
     insertColumn(0);
     insertColumn(1);
-    verticalHeader()->setDefaultSectionSize(32);//设置默认item高度的30
+    verticalHeader()->setDefaultSectionSize(60);//设置默认item高度
 
     verticalScrollBar()->setStyleSheet("QScrollBar{background:transparent; width: 10px;margin: 0px 2px 0px 0px;}"
                                        "QScrollBar::handle{background:rgb(217,217,217);border-radius:4px;}"
@@ -51,7 +53,7 @@ void videoLocalListTable::init()
                   "QTableWidget::item{selection-color:rgb(26,158,255);}"
                   );
 
-    setFont(QFont("Microsoft YaHei",10,QFont::Normal));
+    setFont(QFont(Font_Family,Font_size_Normal,QFont::Normal));
 }
 
 void videoLocalListTable::initConnection()
@@ -105,6 +107,6 @@ void videoLocalListTable::mouseMoveEvent(QMouseEvent *event)
 
 void videoLocalListTable::resizeEvent(QResizeEvent *)
 {
-    horizontalHeader()->resizeSection(0,width()-60);
-    horizontalHeader()->resizeSection(1,60);
+    horizontalHeader()->resizeSection(0,width()-120);
+    horizontalHeader()->resizeSection(1,120);
 }

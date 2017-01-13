@@ -48,7 +48,7 @@ void middleLeftStackWidget0::initConnection()
 {
     connect(m_header,SIGNAL(sig_addSong()),this,SLOT(slot_addSong()));
 
-    connect(m_table,SIGNAL(cellDoubleClicked(int,int)),this,SLOT(slot_itemDoubleClick(int,int)));
+    connect(m_table,SIGNAL(cellClicked(int,int)),this,SLOT(slot_itemDoubleClick(int,int)));
 }
 
 void middleLeftStackWidget0::setInitMainWidgets(musicWidgets *musicWidgets)
@@ -112,31 +112,31 @@ QFileInfoList middleLeftStackWidget0::getFileList(QString path){
 void middleLeftStackWidget0::beginSearchFromPath(QString path){
     QStringList filter;
     filter<<".mp3";
-    QMediaPlayer player;
-    QEventLoop lp;
+//    QMediaPlayer player;
+//    QEventLoop lp;
     QFileInfoList fileList = getFileList(path);
     for(int i=0;i<fileList.size();i++){
         QFileInfo fileInfo = fileList.at(i);
         for(int j=0;j<filter.size();j++){
             // 如果是后缀为mp3的文件
             if(!m_playlist->getUrlList().contains(QUrl::fromLocalFile(fileInfo.absoluteFilePath()))&&fileInfo.fileName().endsWith(filter.at(j))){
-                player.setMedia(QUrl::fromLocalFile(fileInfo.absoluteFilePath()));
-                //prevent the loop dont stop
-                QTimer timer;
-                connect(&timer,&QTimer::timeout,[&](){
-                    lp.quit();
-                });
-                timer.setSingleShot(true);
-                timer.start(2000);
+//                player.setMedia(QUrl::fromLocalFile(fileInfo.absoluteFilePath()));
+//                //prevent the loop dont stop
+//                QTimer timer;
+//                connect(&timer,&QTimer::timeout,[&](){
+//                    lp.quit();
+//                });
+//                timer.setSingleShot(true);
+//                timer.start(2000);
 
-                connect(&player,SIGNAL(durationChanged(qint64)),&lp,SLOT(quit()));
-                lp.exec();
-                qint64 musicTime= player.duration();
-                QTime total_time(0, (musicTime/60000)%60, (musicTime/1000)%60);
-                QString duration=total_time.toString("mm:ss");
-                if(musicTime>0){
-                    addToPlayList(fileInfo.baseName(),fileInfo.absoluteFilePath(),duration);
-                }
+//                connect(&player,SIGNAL(durationChanged(qint64)),&lp,SLOT(quit()));
+//                lp.exec();
+//                qint64 musicTime= player.duration();
+//                QTime total_time(0, (musicTime/60000)%60, (musicTime/1000)%60);
+//                QString duration=total_time.toString("mm:ss");
+//                if(musicTime>0){
+                    addToPlayList(fileInfo.fileName(),fileInfo.absoluteFilePath()," ");
+//                }
             }
         }
     }
@@ -149,34 +149,34 @@ void middleLeftStackWidget0::slot_addSong()
     if(files.isEmpty())
         return;
 
-    QMediaPlayer player;
-    QEventLoop lp;
+//    QMediaPlayer player;
+//    QEventLoop lp;
     for(int i=0;i<files.count();i++)
     {
         QFileInfo info(files[i]);
-        QString m_name=info.completeBaseName();
+        QString m_name=info.fileName();
         if(!m_playlist->getUrlList().contains(QUrl::fromLocalFile(files.value(i))))
         {
             QString filePath=files.value(i);
-            // to get the infomation of music
-            player.setMedia(QUrl::fromLocalFile(filePath));
-            //prevent the loop dont stop
-            QTimer timer;
-            connect(&timer,&QTimer::timeout,[&](){
-                lp.quit();
-            });
-            timer.setSingleShot(true);
-            timer.start(2000);
+//            // to get the infomation of music
+//            player.setMedia(QUrl::fromLocalFile(filePath));
+//            //prevent the loop dont stop
+//            QTimer timer;
+//            connect(&timer,&QTimer::timeout,[&](){
+//                lp.quit();
+//            });
+//            timer.setSingleShot(true);
+//            timer.start(2000);
 
-            connect(&player,SIGNAL(durationChanged(qint64)),&lp,SLOT(quit()));
-            lp.exec();
-            qint64 musicTime= player.duration();
-            QTime total_time(0, (musicTime/60000)%60, (musicTime/1000)%60);
-            QString duration=total_time.toString("mm:ss");
+//            connect(&player,SIGNAL(durationChanged(qint64)),&lp,SLOT(quit()));
+//            lp.exec();
+//            qint64 musicTime= player.duration();
+//            QTime total_time(0, (musicTime/60000)%60, (musicTime/1000)%60);
+//            QString duration=total_time.toString("mm:ss");
 
-            if(musicTime>0){
-                addToPlayList(m_name,files.at(i),duration);
-            }
+//            if(musicTime>0){
+                addToPlayList(m_name,files.at(i)," ");
+//            }
         }
     }
 }
@@ -226,9 +226,9 @@ void middleLeftStackWidget0::updatePlayingItemStyle(QMediaContent content)
 
 void middleLeftStackWidget0::resizeEvent(QResizeEvent *)
 {
-    m_table->horizontalHeader()->resizeSection(0,10);
-    m_table->horizontalHeader()->resizeSection(1,m_table->width()-110);
-    m_table->horizontalHeader()->resizeSection(2,90);
+    m_table->horizontalHeader()->resizeSection(0,20);
+    m_table->horizontalHeader()->resizeSection(1,m_table->width()-140);
+    m_table->horizontalHeader()->resizeSection(2,110);
     m_table->horizontalHeader()->resizeSection(3,10);
 }
 
@@ -245,10 +245,10 @@ void playListHeader::initWidget()
     QHBoxLayout *lyout=new QHBoxLayout;
 
     m_listInfo=new QLabel(str_song_list+"[0]",this);
-    m_listInfo->setStyleSheet("color:rgb(38,38,38);font: 14px Microsoft YaHei;");
+    m_listInfo->setFont(QFont(Font_Family,Font_size_Normal,QFont::Normal));
 
     m_btnmenu=new flatButton(this);
-    m_btnmenu->setFixedSize(16,16);
+    m_btnmenu->setFixedSize(30,30);
     m_btnmenu->setStyleSheet("QPushButton{border-image:url(:/image/music/indicator_menu (1).png);}"
                              "QPushButton:hover{border-image:url(:/image/music/indicator_menu (2).png);}"
                              "QPushButton:pressed{border-image:url(:/image/music/indicator_menu (3).png);}");

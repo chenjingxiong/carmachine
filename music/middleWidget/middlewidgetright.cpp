@@ -11,7 +11,7 @@ void middleWidgetRight::initLayout()
 {
     QVBoxLayout *vlyout = new QVBoxLayout;
 
-    m_lblTip=new QLabel("absolute music,Please enjoy~~",this);
+    m_lblTip=new QLabel("",this);
     m_lblTip->setAlignment(Qt::AlignCenter);
     m_lblTip->setFont(QFont("Microsoft YaHei",18,QFont::Normal));
     m_lblTip->setStyleSheet("color:red");

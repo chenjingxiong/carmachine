@@ -50,17 +50,17 @@ void mainWindow::initLayout()
 
 void mainWindow::initConnection()
 {
-    connect(m_mainwidup->m_btnmini,SIGNAL(clicked(bool)),this,SLOT(showMinimized()));
-    connect(m_mainwidup->m_btnexit,SIGNAL(clicked(bool)),this,SLOT(slot_appQuit()));
+//    connect(m_mainwidup->m_btnmini,SIGNAL(clicked(bool)),this,SLOT(showMinimized()));
+//    connect(m_mainwidup->m_btnexit,SIGNAL(clicked(bool)),this,SLOT(slot_appQuit()));
 
     connect(m_settingwid->m_topWid->m_btnmini,SIGNAL(clicked(bool)),this,SLOT(showMinimized()));
     connect(m_settingwid->m_topWid->m_btnexit,SIGNAL(clicked(bool)),this,SLOT(slot_appQuit()));
-    connect(m_musicwid->m_topwid->m_btnmini,SIGNAL(clicked(bool)),this,SLOT(showMinimized()));
-    connect(m_musicwid->m_topwid->m_btnexit,SIGNAL(clicked(bool)),this,SLOT(slot_appQuit()));
+//    connect(m_musicwid->m_topwid->m_btnmini,SIGNAL(clicked(bool)),this,SLOT(showMinimized()));
+//    connect(m_musicwid->m_topwid->m_btnexit,SIGNAL(clicked(bool)),this,SLOT(slot_appQuit()));
     connect(m_camerawid->m_topWid->m_btnmini,SIGNAL(clicked(bool)),this,SLOT(showMinimized()));
     connect(m_camerawid->m_topWid->m_btnexit,SIGNAL(clicked(bool)),this,SLOT(slot_appQuit()));
-    connect(m_videowid->m_topWid->m_btnmini,SIGNAL(clicked(bool)),this,SLOT(showMinimized()));
-    connect(m_videowid->m_topWid->m_btnexit,SIGNAL(clicked(bool)),this,SLOT(slot_appQuit()));
+//    connect(m_videowid->m_topWid->m_btnmini,SIGNAL(clicked(bool)),this,SLOT(showMinimized()));
+//    connect(m_videowid->m_topWid->m_btnexit,SIGNAL(clicked(bool)),this,SLOT(slot_appQuit()));
 
     connect(m_mainwidlow->m_btnsetting,SIGNAL(clicked()),this,SLOT(slot_showsetting()));
     connect(m_mainwidlow->m_btnmusic,SIGNAL(clicked()),this,SLOT(slot_showmusic()));

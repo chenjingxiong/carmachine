@@ -7,6 +7,12 @@
 extern mainWindow *mainwid;
 extern rightStackedWidgets0 *wifiWid;
 
+const QString Font_Family = "Microsoft YaHei";
+const int Font_Size_Big = 12;
+const int Font_size_Middle = 10;
+const int Font_size_Small = 5;
+const int Font_size_Normal = 7;
+
 // music
 //const QString MUSIC_SEARCH_PATH = QStandardPaths::writableLocation(QStandardPaths::HomeLocation).append("/mnt");
 //const QString str_add_song= "添加音乐";
@@ -38,8 +44,8 @@ extern rightStackedWidgets0 *wifiWid;
 const QString MUSIC_SEARCH_PATH = QStandardPaths::writableLocation(QStandardPaths::HomeLocation).append("/mnt");
 const QString str_add_song= "Add music";
 const QString str_clear_list= "Clear list";
-const QString str_song_list= "Music List";
-const QString str_song_playing= "Playing..";
+const QString str_song_list= "music list";
+const QString str_song_playing= "Playing";
 const QString str_playmode_list= "List";
 const QString str_playmode_random= "Random";
 const QString str_playmode_single= "Single";
@@ -48,7 +54,7 @@ const QString str_origin_move_songname = "Please first select one music";
 const QString VIDEO_SEARCH_PATH = QStandardPaths::writableLocation(QStandardPaths::HomeLocation).append("/mnt");
 const QString str_listheader_local_video = "Local Video";
 const QString str_listheader_net_video = "Net Video";
-const QString str_video_playing = "Playing..";
+const QString str_video_playing = "Playing";
 const QString str_videoName_default = "Video Player";
 const QString str_videoTime_minite= "min";
 // setting

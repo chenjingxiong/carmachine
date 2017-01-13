@@ -3,14 +3,14 @@
 #include <string.h>
 #include <errno.h>
 
-#include <stdlib.h>
-#include <fcntl.h>
-#include <dirent.h>
-#include <sys/socket.h>
-#include <sys/stat.h>
-#include <unistd.h>
-#include <poll.h>
-#include <stdbool.h>
+//#include <stdlib.h>
+//#include <fcntl.h>
+//#include <dirent.h>
+//#include <sys/socket.h>
+//#include <sys/stat.h>
+//#include <unistd.h>
+//#include <poll.h>
+//#include <stdbool.h>
 #include "rightstackedwidgets0.h"
 #include <QVBoxLayout>
 #include <QMessageBox>
@@ -37,73 +37,73 @@ rightStackedWidgets0::rightStackedWidgets0(QWidget *parent):baseWidget(parent)
 
 void rightStackedWidgets0::initData()
 {
-    wifiWid = this;
-    m_netManager = wpaManager::getInstance(this);
-    m_wifiSwitch->getSwitchButton()->setToggle(is_supplicant_running());
-    if(is_supplicant_running())
-    {
-        m_netManager->openCtrlConnection("wlan0");
-    }
+//    wifiWid = this;
+//    m_netManager = wpaManager::getInstance(this);
+//    m_wifiSwitch->getSwitchButton()->setToggle(is_supplicant_running());
+//    if(is_supplicant_running())
+//    {
+//        m_netManager->openCtrlConnection("wlan0");
+//    }
 }
 
 void rightStackedWidgets0::initLayout()
 {
-    // 第1行布局 开关
-    m_wifiSwitch = new switchWidget(this);
+//    // 第1行布局 开关
+//    m_wifiSwitch = new switchWidget(this);
 
 
-    // 第2部分布局 TabWidget 包含2部分内容:Current status、WifiList
-    m_tab = new QTabWidget(this);
-    m_tab->setStyleSheet("background:rgb(33,36,43)");
+//    // 第2部分布局 TabWidget 包含2部分内容:Current status、WifiList
+//    m_tab = new QTabWidget(this);
+//    m_tab->setStyleSheet("background:rgb(33,36,43)");
 
-    m_tabCurrentStatus = new tabCurrentStatus(this);
-    m_tabScanResult = new tabScanResult(this);
-    m_tab->addTab(m_tabScanResult,QString("scan result"));
-    m_tab->addTab(m_tabCurrentStatus,QString("Current Status"));
-    m_tab->setCurrentIndex(0);
+//    m_tabCurrentStatus = new tabCurrentStatus(this);
+//    m_tabScanResult = new tabScanResult(this);
+//    m_tab->addTab(m_tabScanResult,QString("scan result"));
+//    m_tab->addTab(m_tabCurrentStatus,QString("Current Status"));
+//    m_tab->setCurrentIndex(0);
 
 
-    QVBoxLayout *vmainlyout = new QVBoxLayout;
-    vmainlyout->addSpacing(30);
-    //    vmainlyout->addLayout(hlyout1);
-    vmainlyout->addWidget(m_wifiSwitch);
-    vmainlyout->addWidget(m_tab);
-    vmainlyout->addStretch(0);
-    vmainlyout->setContentsMargins(0,0,0,0);
-    vmainlyout->setSpacing(12);
+//    QVBoxLayout *vmainlyout = new QVBoxLayout;
+//    vmainlyout->addSpacing(30);
+//    //    vmainlyout->addLayout(hlyout1);
+//    vmainlyout->addWidget(m_wifiSwitch);
+//    vmainlyout->addWidget(m_tab);
+//    vmainlyout->addStretch(0);
+//    vmainlyout->setContentsMargins(0,0,0,0);
+//    vmainlyout->setSpacing(12);
 
-    // 空间太大显示不便，加一个横向的布局
-    QHBoxLayout *hmainlyout = new QHBoxLayout;
-    hmainlyout->addStretch(1);
-    hmainlyout->addLayout(vmainlyout,3);
-    hmainlyout->addStretch(1);
-    setLayout(hmainlyout);
+//    // 空间太大显示不便，加一个横向的布局
+//    QHBoxLayout *hmainlyout = new QHBoxLayout;
+//    hmainlyout->addStretch(1);
+//    hmainlyout->addLayout(vmainlyout,3);
+//    hmainlyout->addStretch(1);
+//    setLayout(hmainlyout);
 }
 
 void rightStackedWidgets0::initConnection()
 {
-    if (access(WPA_SUPPLICANT_CONF_DIR, F_OK) < 0) {
-        creat_supplicant_file();
-    }
-    //    connect(m_adapterSeletor,SIGNAL(activated(const QString&)),m_netManager,SLOT(selectAdapter(const QString&)));
+//    if (access(WPA_SUPPLICANT_CONF_DIR, F_OK) < 0) {
+//        creat_supplicant_file();
+//    }
+//    //    connect(m_adapterSeletor,SIGNAL(activated(const QString&)),m_netManager,SLOT(selectAdapter(const QString&)));
 
-    connect(m_tabCurrentStatus->connectButton,SIGNAL(clicked(bool)),m_netManager,SLOT(connectB()));
-    connect(m_tabCurrentStatus->disconnectButton,SIGNAL(clicked(bool)),m_netManager,SLOT(disconnectB()));
-    connect(m_tabScanResult->scanButton,SIGNAL(clicked(bool)),m_netManager,SLOT(scan()));
+//    connect(m_tabCurrentStatus->connectButton,SIGNAL(clicked(bool)),m_netManager,SLOT(connectB()));
+//    connect(m_tabCurrentStatus->disconnectButton,SIGNAL(clicked(bool)),m_netManager,SLOT(disconnectB()));
+//    connect(m_tabScanResult->scanButton,SIGNAL(clicked(bool)),m_netManager,SLOT(scan()));
 
-    connect(m_tabScanResult->m_table,SIGNAL(cellDoubleClicked(int,int)),this,SLOT(slot_showItemDetail(int,int)));
+//    connect(m_tabScanResult->m_table,SIGNAL(cellDoubleClicked(int,int)),this,SLOT(slot_showItemDetail(int,int)));
 
-    connect(m_wifiSwitch->getSwitchButton(),SIGNAL(toggled(bool)),this,SLOT(slot_onToggled(bool)));
+//    connect(m_wifiSwitch->getSwitchButton(),SIGNAL(toggled(bool)),this,SLOT(slot_onToggled(bool)));
 }
 
 void rightStackedWidgets0::slot_showItemDetail(int row,int)
 {
-    netConfigDialog *dialog = new netConfigDialog(this);
-    if (dialog == NULL)
-        return;
-    dialog->paramsFromScanResults(m_tabScanResult->m_netWorks[row]);
-    dialog->show();
-    dialog->exec();
+//    netConfigDialog *dialog = new netConfigDialog(this);
+//    if (dialog == NULL)
+//        return;
+//    dialog->paramsFromScanResults(m_tabScanResult->m_netWorks[row]);
+//    dialog->show();
+//    dialog->exec();
 }
 
 const bool console_run(const char *cmdline) {
@@ -196,27 +196,27 @@ int wifi_start_supplicant()
 
 int wifi_stop_supplicant()
 {
-    int count = 50; /* wait at most 5 seconds for completion */
-    int pid;
-    char *cmd = NULL;
+//    int count = 50; /* wait at most 5 seconds for completion */
+//    int pid;
+//    char *cmd = NULL;
 
-    /* Check whether supplicant already stopped */
-    if (!is_supplicant_running()) {
-        return 0;
-    }
+//    /* Check whether supplicant already stopped */
+//    if (!is_supplicant_running()) {
+//        return 0;
+//    }
 
-    //    while (count-- > 0) {
-    //stop wpa_supplicant here
-    pid = get_pid("wpa_supplicant");
-    asprintf(&cmd, "kill %d", pid);
-    console_run(cmd);
-    free(cmd);
-    //      if (!is_supplicant_running())
-    //          return 0;
-    //      usleep(100000);
-    //   }
-    //   DEBUG_ERR("Failed to stop supplicant");
-    //    return -1;*/
+//    //    while (count-- > 0) {
+//    //stop wpa_supplicant here
+//    pid = get_pid("wpa_supplicant");
+//    asprintf(&cmd, "kill %d", pid);
+//    console_run(cmd);
+//    free(cmd);
+//    //      if (!is_supplicant_running())
+//    //          return 0;
+//    //      usleep(100000);
+//    //   }
+//    //   DEBUG_ERR("Failed to stop supplicant");
+//    //    return -1;*/
     return 0;
 }
 

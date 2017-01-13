@@ -2,6 +2,7 @@
 
 #include <QHeaderView>
 #include <QScrollBar>
+#include "global_value.h"
 
 musicListTable::musicListTable(QWidget *parent):QTableWidget(parent)
 {
@@ -34,7 +35,7 @@ void musicListTable::init()
     insertColumn(1);
     insertColumn(2);
     insertColumn(3);
-    verticalHeader()->setDefaultSectionSize(32);//设置默认item高度的32
+    verticalHeader()->setDefaultSectionSize(60);//设置默认item高度
 
     verticalScrollBar()->setStyleSheet("QScrollBar{background:transparent; width: 10px;margin: 0px 2px 0px 0px;}"
                                        "QScrollBar::handle{background:rgb(217,217,217);border-radius:4px;}"
@@ -46,7 +47,7 @@ void musicListTable::init()
     setStyleSheet("QTableWidget{color:rgb(48,48,48);}"
                   "QTableWidget::item:selected{background:rgb(180,180,180,100);}"
                   "QTableWidget::item{selection-color:rgb(37,120,255);}");
-    //    setFont(QFont("Microsoft YaHei",10,QFont::Normal));
+    setFont(QFont(Font_Family,Font_size_Normal,QFont::Normal));
 
 }
 

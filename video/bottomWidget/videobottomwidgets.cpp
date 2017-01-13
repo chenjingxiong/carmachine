@@ -7,7 +7,7 @@ videoBottomWidgets::videoBottomWidgets(QWidget *parent):baseWidget(parent)
 {
     setObjectName("videoBottomWidgets");
     setStyleSheet("#videoBottomWidgets{background:rgb(89,92,102)}");
-    setFixedHeight(70);
+    setFixedHeight(140);
     initLayout();
 }
 
@@ -21,10 +21,10 @@ void videoBottomWidgets::initLayout()
     m_btnOpenFile = new flatButton(this);
     m_volWidget = new volWidget(this);
 
-    m_btnPlayPause->setFixedSize(50,50);
-    m_btnNext->setFixedSize(50,50);
-    m_btnLast->setFixedSize(50,50);
-    m_btnOpenFile->setFixedSize(30,30);
+    m_btnPlayPause->setFixedSize(100,100);
+    m_btnNext->setFixedSize(100,100);
+    m_btnLast->setFixedSize(100,100);
+    m_btnOpenFile->setFixedSize(80,80);
 
     m_btnNext->setStyleSheet("QPushButton{border-image:url(:/image/music/btn_next (1).png);}"
                              "QPushButton::hover{border-image:url(:/image/music/btn_next (2).png);}"
@@ -42,16 +42,16 @@ void videoBottomWidgets::initLayout()
     QHBoxLayout *hlyout1 = new QHBoxLayout;
     hlyout1->addSpacing(80);
     hlyout1->addWidget(m_btnOpenFile);
-    hlyout1->addSpacing(10);
+    hlyout1->addSpacing(40);
     hlyout1->addWidget(m_volWidget);
     hlyout1->addStretch(0);
 
     // second layout
     QHBoxLayout *hlyout2 = new QHBoxLayout;
     hlyout2->addWidget(m_btnLast);
-    hlyout2->addSpacing(15);
+    hlyout2->addSpacing(30);
     hlyout2->addWidget(m_btnPlayPause);
-    hlyout2->addSpacing(15);
+    hlyout2->addSpacing(30);
     hlyout2->addWidget(m_btnNext);
 
     hmainlyout->addLayout(hlyout1,1);

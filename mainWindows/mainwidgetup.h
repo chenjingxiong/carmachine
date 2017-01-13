@@ -13,10 +13,10 @@ class mainWidgetUp:public baseWidget
 public:
     mainWidgetUp(QWidget *parent = 0);
 public:
-    flatButton *m_btnmobile;
-    flatButton *m_btnsetting;
-    flatButton *m_btnmini;
-    flatButton *m_btnexit;
+//    flatButton *m_btnmobile;
+//    flatButton *m_btnsetting;
+//    flatButton *m_btnmini;
+//    flatButton *m_btnexit;
 
     QLabel *m_lbltime;
     QTimer *m_timer;  //  定时器，用于更新时间

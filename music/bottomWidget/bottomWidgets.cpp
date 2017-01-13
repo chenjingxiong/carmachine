@@ -9,6 +9,7 @@ bottomWidgets::bottomWidgets(QWidget *parent) : baseWidget(parent)
 {
     init();
     setMouseTracking(true);
+    setFixedHeight(120);
 }
 
 void bottomWidgets::init()
@@ -24,9 +25,9 @@ void bottomWidgets::init()
     m_btnprevious=new flatButton(this);
     m_btnPlay=new flatButton(this);
 
-    m_btnnext->setFixedSize(50,50);
-    m_btnprevious->setFixedSize(50,50);
-    m_btnPlay->setFixedSize(50,50);
+    m_btnnext->setFixedSize(80,80);
+    m_btnprevious->setFixedSize(80,80);
+    m_btnPlay->setFixedSize(80,80);
 
     m_btnnext->setStyleSheet("QPushButton{border-image:url(:/image/music/btn_next (1).png);}"
                              "QPushButton::hover{border-image:url(:/image/music/btn_next (2).png);}"
@@ -41,7 +42,7 @@ void bottomWidgets::init()
     layout1->addWidget(m_btnprevious);
     layout1->addWidget(m_btnPlay);
     layout1->addWidget(m_btnnext);
-    layout1->setSpacing(15);
+    layout1->setSpacing(20);
     layout1->setContentsMargins(0,0,0,0);
     //////////////////////////////////////////////////////////////
 
@@ -57,24 +58,24 @@ void bottomWidgets::init()
                                 "QSlider::add-page:horizontal{background:rgb(200,200,209);}"
                                 "QSlider::handle:horizontal{background:rgb(255, 255, 160);width:8px;border-radius:4px;margin:-3px 0px -3px 0px;}");
 
-    QFont font;
-    font.setFamily("微软雅黑");
-    font.setPixelSize(16);
-    font.setBold(true);
+//    QFont font;
+//    font.setFamily("微软雅黑");
+//    font.setPixelSize(16);
+//    font.setBold(true);
 
     QHBoxLayout *layout2_1=new QHBoxLayout;
     m_labnowPlayname=new TextMovingWidget(str_origin_move_songname,this);
     m_labnowPlayname->setMinimumWidth(250);
     m_labnowPlayname->setFixedHeight(30);
     m_labnowPlayname->setSizePolicy(QSizePolicy::Expanding,QSizePolicy::Fixed);
-    m_labnowPlayname->setFont(font);
+    m_labnowPlayname->setFont(QFont(Font_Family,Font_size_Normal,QFont::Normal));
 
-    font.setPixelSize(14);
-    font.setBold(false);
+//    font.setPixelSize(14);
+//    font.setBold(false);
     m_labposition=new QLabel("00:00/00:00",this);
-    m_labposition->setAlignment(Qt::AlignRight|Qt::AlignBottom);
-    m_labposition->setFixedSize(80,24);
-    m_labposition->setFont(font);
+    m_labposition->setAlignment(Qt::AlignRight|Qt::AlignVCenter);
+    m_labposition->setFixedSize(170,30);
+    m_labposition->setFont(QFont(Font_Family,Font_size_Normal,QFont::Normal));
 
     layout2_1->addWidget(m_labnowPlayname);
     layout2_1->addWidget(m_labposition);
@@ -94,9 +95,9 @@ void bottomWidgets::init()
     m_volwid=new volWidget(this);
     m_btnplaymode=new flatButton(this);
 
-    m_btnlrc->setFixedSize(20,20);
+    m_btnlrc->setFixedSize(40,40);
     //    m_volwid->setFixedSize(20,20);
-    m_btnplaymode->setFixedSize(20,20);
+    m_btnplaymode->setFixedSize(40,40);
 
 
     m_btnlrc->setStyleSheet("QPushButton{border-image:url(:/image/music/btn_lrc (1).png);}"

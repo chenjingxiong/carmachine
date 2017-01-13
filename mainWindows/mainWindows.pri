@@ -9,5 +9,5 @@ SOURCES += \
    $$PWD/mainWindow.cpp \
     $$PWD/global_value.cpp \
     $$PWD/mainwidgetup.cpp \
-    $$PWD/mainwidgetlow.cpp
+    $$PWD/mainwidgetlow.cpp\
 

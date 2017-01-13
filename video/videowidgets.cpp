@@ -5,6 +5,7 @@
 
 #include "player/videolist.h"
 #include "global_value.h"
+#include <QMessageBox>
 
 videoWidgets::videoWidgets(QWidget *parent): baseWidget(parent)
 {
@@ -65,7 +66,7 @@ void videoWidgets::initPlayerAndConnection()
     connect(m_player, SIGNAL(durationChanged(qint64)), this, SLOT(slot_onDurationChanged(qint64)));
     //    connect(m_player, SIGNAL(error(QMediaPlayer::Error)), this, SLOT(onErrorAppear(QMediaPlayer::Error)));
 
-    connect(m_middleWid->m_rightWid->m_localTable,SIGNAL(cellDoubleClicked(int,int)),this,SLOT(slot_onLocalListItemDoubleClick(int,int)));
+    connect(m_middleWid->m_rightWid->m_localTable,SIGNAL(cellClicked(int,int)),this,SLOT(slot_onLocalListItemDoubleClick(int,int)));
     connect(m_bottomWid->m_btnPlayPause,SIGNAL(clicked(bool)),this,SLOT(slot_setPlayPause()));
     connect(m_bottomWid->m_btnNext,SIGNAL(clicked(bool)),this,SLOT(slot_nextVideo()));
     connect(m_bottomWid->m_btnLast,SIGNAL(clicked(bool)),this,SLOT(slot_lastVideo()));
@@ -150,13 +151,13 @@ void videoWidgets::slot_lastVideo()
 
 void videoWidgets::slot_onContentDoubleClick()
 {
-    if(m_player->state()==QMediaPlayer::PlayingState||m_player->state()==QMediaPlayer::PausedState){
+//    if(m_player->state()==QMediaPlayer::PlayingState||m_player->state()==QMediaPlayer::PausedState){
         if(m_middleWid->m_leftWid->getContentWidget()->isFullScreen()){
             m_middleWid->m_leftWid->getContentWidget()->setFullScreen(false);
         }else{
             m_middleWid->m_leftWid->getContentWidget()->setFullScreen(true);
         }
-    }
+//    }
 }
 
 void videoWidgets::slot_onDurationChanged(qint64 duration)

@@ -1,7 +1,6 @@
 #include "listheader.h"
 #include <QVBoxLayout>
 #include <QHBoxLayout>
-
 #include "global_value.h"
 
 
@@ -19,8 +18,8 @@ void listHeader::initWidget()
 
     m_button1 = new funtionButton(str_listheader_local_video,this);
     m_button2 = new funtionButton(str_listheader_net_video,this);
-    m_button1->setFixedHeight(38);
-    m_button2->setFixedHeight(38);
+    m_button1->setFixedHeight(70);
+    m_button2->setFixedHeight(70);
 
     hmainlyout->addWidget(m_button1);
     hmainlyout->addWidget(m_button2);
@@ -55,12 +54,12 @@ void funtionButton::initWidget()
 
     m_title = new QLabel("",this);
     m_title->setAlignment(Qt::AlignCenter);
-    m_title->setFont(QFont("Microsoft YaHei",11,QFont::DemiBold));
+    m_title->setFont(QFont(Font_Family,Font_size_Normal,QFont::DemiBold));
     m_title->setStyleSheet("color:rgb(255,255,255);");
     m_title->adjustSize();
 
     m_bottomLine=new QFrame(this);
-    m_bottomLine->setFixedHeight(1);
+    m_bottomLine->setFixedHeight(2);
     m_bottomLine->setStyleSheet("QFrame{border:1px solid rgb(100,100,100,255);}");
     m_bottomLine->setSizePolicy(QSizePolicy::Expanding,QSizePolicy::Fixed);
 

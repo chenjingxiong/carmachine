@@ -1,6 +1,7 @@
 #include "videomiddlewidgetleft.h"
 #include <QHBoxLayout>
 #include <QTime>
+#include "global_value.h"
 
 videoMiddleWidgetLeft::videoMiddleWidgetLeft(QWidget *parent):baseWidget(parent)
 {
@@ -19,11 +20,11 @@ void videoMiddleWidgetLeft::initLayout()
     m_slider->setRange(0,0);
 
     m_currentTime = new QLabel("00:00",this);
-    m_currentTime->setFont(QFont("微软雅黑",9,QFont::Normal));
+    m_currentTime->setFont(QFont(Font_Family,Font_size_Small,QFont::Normal));
     m_currentTime->setStyleSheet("color:rgb(150,150,150);");
 
     m_totalTime = new QLabel("00:00",this);
-    m_totalTime->setFont(QFont("微软雅黑",9,QFont::Normal));
+    m_totalTime->setFont(QFont(Font_Family,Font_size_Small,QFont::Normal));
     m_totalTime->setStyleSheet("color:rgb(150,150,150);");
 
     QHBoxLayout *m_positionLayout = new QHBoxLayout;
@@ -32,7 +33,7 @@ void videoMiddleWidgetLeft::initLayout()
     m_positionLayout->addWidget(m_totalTime);
 
     m_positionWid = new QWidget(this);
-    m_positionWid->setFixedHeight(27);
+    m_positionWid->setFixedHeight(85);
     m_positionWid->setStyleSheet("background:rgb(31,31,31)");
     m_positionWid->setLayout(m_positionLayout);
 
