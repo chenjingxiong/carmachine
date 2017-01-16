@@ -35,10 +35,10 @@ void musicWidgets::initLayout()
 
     QVBoxLayout *vlyout=new QVBoxLayout;
     vlyout->addWidget(m_topwid);
-    vlyout->addSpacing(30);
     vlyout->addWidget(m_middlewid);
-     vlyout->addSpacing(30);
+    vlyout->addSpacing(10);
     vlyout->addWidget(m_bottomwid);
+    vlyout->addSpacing(10);
     vlyout->setSpacing(0);
     vlyout->setContentsMargins(0,0,0,0);
     m_mainwid->setLayout(vlyout);

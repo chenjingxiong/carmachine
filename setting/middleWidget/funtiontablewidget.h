@@ -20,6 +20,8 @@ protected:
     QStringList m_normalicon;
     QStringList m_selectedicon;
 
+    void resizeEvent(QResizeEvent*);
+
 public:
     void addFunctionItems(QStringList &normalicon, QStringList &selectedicon, QStringList &name);
     void ChangeIcon(int currentrow);

@@ -39,7 +39,6 @@ void videoMiddleWidgetRight::initLayout()
     m_stackedWid->addWidget(m_netTable);
 
     vmianlyout->addWidget(m_listHeader);
-    vmianlyout->addSpacing(10);
     vmianlyout->addWidget(m_stackedWid);
     vmianlyout->setContentsMargins(10,0,10,0);
 

@@ -7,11 +7,15 @@
 extern mainWindow *mainwid;
 extern rightStackedWidgets0 *wifiWid;
 
+//global
+
 const QString Font_Family = "Microsoft YaHei";
-const int Font_Size_Big = 12;
-const int Font_size_Middle = 10;
+const int Font_Size_Big = 11;
+const int Font_size_Middle = 9;
+const int Font_size_Normal = 6;
 const int Font_size_Small = 5;
-const int Font_size_Normal = 7;
+
+
 
 // music
 //const QString MUSIC_SEARCH_PATH = QStandardPaths::writableLocation(QStandardPaths::HomeLocation).append("/mnt");
@@ -44,7 +48,7 @@ const int Font_size_Normal = 7;
 const QString MUSIC_SEARCH_PATH = QStandardPaths::writableLocation(QStandardPaths::HomeLocation).append("/mnt");
 const QString str_add_song= "Add music";
 const QString str_clear_list= "Clear list";
-const QString str_song_list= "music list";
+const QString str_song_list= "   musicPlay";
 const QString str_song_playing= "Playing";
 const QString str_playmode_list= "List";
 const QString str_playmode_random= "Random";

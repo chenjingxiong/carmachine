@@ -1,5 +1,5 @@
 #include "mainwindow.h"
-#include<QDesktopWidget>
+#include <QDesktopWidget>
 #include "singleApplication/qsingleapplication.h"
 
 int main(int argc, char *argv[])
@@ -9,8 +9,6 @@ int main(int argc, char *argv[])
     {
         mainWindow w;
         app.w=&w;
-        // w.setGeometry(100,100,1000,700);
-        // w.show();
         w.showMaximized();
         return app.exec();
     }

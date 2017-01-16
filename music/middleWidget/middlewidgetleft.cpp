@@ -8,17 +8,15 @@
 #include <QTimer>
 
 QColor middleWidgetLeft::color=QColor(230,230,230);
-QColor middleWidgetLeft::bgcolor=QColor(255,255,255,100);
+QColor middleWidgetLeft::bgcolor=QColor(255,255,255);
 
 middleWidgetLeft::middleWidgetLeft(QWidget *parent):baseWidget(parent)
 {
     m_isDrawVerticalLine=true;
-//    setMinimumWidth(310);
     setSizePolicy(QSizePolicy::MinimumExpanding,QSizePolicy::Expanding);
 
     initLayout();
     initAnimation();
-    setStyleSheet("QLabel{color:black}");
 }
 
 void middleWidgetLeft::initLayout()
@@ -43,9 +41,9 @@ void middleWidgetLeft::initLayout()
     m_btn[1]=new stackButton(":/image/music/btn_cloud (1).png",":/image/music/btn_cloud (2).png",":/image/music/btn_cloud (3).png",this);
     m_btn[2]=new stackButton(":/image/music/btn_radio (1).png",":/image/music/btn_radio (2).png",":/image/music/btn_radio (3).png",this);
 
-    m_btn[0]->setFixedHeight(70);
-    m_btn[1]->setFixedHeight(70);
-    m_btn[2]->setFixedHeight(70);
+    m_btn[0]->setFixedHeight(80);
+    m_btn[1]->setFixedHeight(80);
+    m_btn[2]->setFixedHeight(80);
 
     QHBoxLayout *hlyout=new QHBoxLayout;
     hlyout->addWidget(m_btn[0]);
@@ -96,15 +94,15 @@ void middleWidgetLeft::slot_changeButtonSelected(int index)
     if(index>m_preItem)
     {
         m_Widanimation->setTargetObject(m_stackwid);
-        m_Widanimation->setStartValue(QRect(m_stackwid->width(),40,m_stackwid->width(),m_stackwid->height()));
-        m_Widanimation->setEndValue(QRect(0,40,m_stackwid->width(),m_stackwid->height()));
+        m_Widanimation->setStartValue(QRect(m_stackwid->width(),80,m_stackwid->width(),m_stackwid->height()));
+        m_Widanimation->setEndValue(QRect(0,80,m_stackwid->width(),m_stackwid->height()));
         m_Widanimation->start();
     }
     if(index<m_preItem)
     {
         m_Widanimation->setTargetObject(m_stackwid);
-        m_Widanimation->setStartValue(QRect(-m_stackwid->width(),40,m_stackwid->width(),m_stackwid->height()));
-        m_Widanimation->setEndValue(QRect(0,40,m_stackwid->width(),m_stackwid->height()));
+        m_Widanimation->setStartValue(QRect(-m_stackwid->width(),80,m_stackwid->width(),m_stackwid->height()));
+        m_Widanimation->setEndValue(QRect(0,80,m_stackwid->width(),m_stackwid->height()));
         m_Widanimation->start();
     }
     m_preItem=index;
@@ -165,7 +163,7 @@ void middleWidgetLeft::paintEvent(QPaintEvent *)
     if(m_isAnima)
     {
         if(m_isDrawVerticalLine)
-            p.drawLine(width()-1,0,width()-1,height());//vertical line
+        p.drawLine(width()-1,0,width()-1,height());//vertical line
         p.drawLine(0,m_btn[0]->y()+m_btn[0]->height()-1,m_x+(m_btn[0]->width()-m_pix.width())/2-1,m_btn[0]->y()+m_btn[0]->height()-1);//first line
         p.drawLine(m_x+(m_btn[0]->width()-m_pix.width())/2+m_pix.width(),m_btn[0]->y()+m_btn[0]->height()-1,width(),m_btn[0]->y()+m_btn[0]->height()-1);//second line
         p.drawPixmap(m_x+(m_btn[0]->width()-m_pix.width())/2,m_btn[0]->y()+m_btn[0]->height()-m_pix.height()+1,m_pix);

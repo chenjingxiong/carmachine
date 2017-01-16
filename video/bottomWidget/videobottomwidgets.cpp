@@ -7,7 +7,7 @@ videoBottomWidgets::videoBottomWidgets(QWidget *parent):baseWidget(parent)
 {
     setObjectName("videoBottomWidgets");
     setStyleSheet("#videoBottomWidgets{background:rgb(89,92,102)}");
-    setFixedHeight(140);
+    setFixedHeight(160);
     initLayout();
 }
 
@@ -49,9 +49,9 @@ void videoBottomWidgets::initLayout()
     // second layout
     QHBoxLayout *hlyout2 = new QHBoxLayout;
     hlyout2->addWidget(m_btnLast);
-    hlyout2->addSpacing(30);
+    hlyout2->addSpacing(20);
     hlyout2->addWidget(m_btnPlayPause);
-    hlyout2->addSpacing(30);
+    hlyout2->addSpacing(20);
     hlyout2->addWidget(m_btnNext);
 
     hmainlyout->addLayout(hlyout1,1);

@@ -3,6 +3,7 @@
 #include "basepushbutton.h"
 #include <QVBoxLayout>
 #include <QPainter>
+#include "global_value.h"
 
 middleLeftStackWidget1::middleLeftStackWidget1(QWidget*parent):baseWidget(parent)
 {
@@ -17,20 +18,20 @@ void middleLeftStackWidget1::initLayout()
     label->setPixmap(QPixmap(":/image/music/lab_backups.png"));
     label->setFixedSize(146,90);
 
-    QLabel *label2=new QLabel("云端备份 多屏同步",this);
+    QLabel *label2=new QLabel("Cloud Backup Multi-screen Display",this);
     label2->adjustSize();
     label2->setAlignment(Qt::AlignHCenter);
     label2->setStyleSheet("color:rgb(52,52,52);");
-    label2->setFont(QFont("Microsoft YaHei",14,QFont::Normal));
+    label2->setFont(QFont(Font_Family,Font_size_Normal+1,QFont::Normal));
 
 
-    QLabel *label3=new QLabel("你的列表有0首歌曲未设置备份",this);
+    QLabel *label3=new QLabel("",this);
     label3->adjustSize();
     label3->setAlignment(Qt::AlignHCenter);
     label3->setStyleSheet("color:rgb(51,51,51);");
-    label3->setFont(QFont("Microsoft YaHei",12,QFont::Normal));
+    label3->setFont(QFont(Font_Family,Font_size_Normal+1,QFont::Normal));
 
-    flatButton *btn=new flatButton("马上使用",this);
+    flatButton *btn=new flatButton("Use This",this);
     btn->setFixedSize(170,36);
     btn->setStyleSheet("QPushButton{font-size:16px;color:rgb(80,80,80);border: 1px solid rgb(229,229,229);background:rgb(240,240,240);}"
                        "QPushButton:hover{color:rgb(30,30,30);border: 1px solid rgb(219,219,219);background:rgb(229,229,229);}"

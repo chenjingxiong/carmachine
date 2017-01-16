@@ -18,7 +18,7 @@ void videoTopWidgets::initWidget()
     QHBoxLayout *hmainyout=new QHBoxLayout;
 
     m_btnreturn=new FourStateButton(":/image/main/return.png",this);
-    m_btnreturn->setFixedSize(181,60);
+    m_btnreturn->setFixedSize(212,70);
 
     m_btnicon=new flatButton(this);
     m_btnicon->setFixedSize(60,60);
@@ -56,7 +56,6 @@ void videoTopWidgets::initWidget()
     m_playingVideoName->setFont(QFont(Font_Family,Font_size_Middle,QFont::DemiBold));
     m_playingVideoName->setStyleSheet("color:rgb(255,255,255,255);");
     m_playingVideoName->setAlignment(Qt::AlignCenter);
-    m_playingVideoName->adjustSize();
 
 
     //layou1
@@ -64,21 +63,20 @@ void videoTopWidgets::initWidget()
     lyout1->addWidget(m_btnreturn);
     lyout1->addSpacing(30);
     lyout1->addWidget(m_btnicon);
-    lyout1->addSpacing(100);
+    lyout1->addStretch(0);
 
     //lyout2
-    QHBoxLayout *lyout2 = new QHBoxLayout;
-    lyout2->addStretch(0);
+//    QHBoxLayout *lyout2 = new QHBoxLayout;
+//    lyout2->addStretch(0);
 //    lyout2->addWidget(label1);
 //    lyout2->addWidget(m_btnmobile);
 //    lyout2->addWidget(m_btnsetting);
 //    lyout2->addWidget(m_btnmini);
 //    lyout2->addWidget(m_btnexit);
 
-    hmainyout->addLayout(lyout1,1);
-    hmainyout->addWidget(m_playingVideoName,1);
-    hmainyout->addLayout(lyout2,1);
-    hmainyout->setSpacing(12);
-    hmainyout->setContentsMargins(0,0,10,0);
+    hmainyout->addLayout(lyout1);
+    hmainyout->addWidget(m_playingVideoName);
+    hmainyout->addStretch(0);
+    hmainyout->setContentsMargins(0,0,0,0);
     setLayout(hmainyout);
 }

@@ -5,26 +5,28 @@
 #include <QComboBox>
 #include <QTableWidget>
 #include <QTabWidget>
+#include <QTimer>
 #include <QThread>
+#include <QLineEdit>
 #include "basewidget.h"
 #include "basepushbutton.h"
 #include "commonwidgets.h"
 #include "wlanlisttable.h"
 #include "wpa_supplicant/wpamanager.h"
 
-
 class switchWidget;
 class tabCurrentStatus;
 class tabScanResult;
+//class tabApHotspot;
 class myNetThread;
 
 struct netWork   // Wifi信息结构体
 {
-   QString SSID;
-   QString BSSID;
-   QString frequence;
-   QString signal;
-   QString flags;
+    QString SSID;
+    QString BSSID;
+    QString frequence;
+    QString signal;
+    QString flags;
 };
 
 class rightStackedWidgets0:public baseWidget
@@ -37,17 +39,23 @@ public:
     QTabWidget *m_tab;           // TabWidget 包含status、Scan result二个部分
     tabCurrentStatus *m_tabCurrentStatus;
     tabScanResult *m_tabScanResult;
+//    tabApHotspot *m_tabHotspot;
 
     wpaManager *m_netManager; // 网络管理类
 private:
     void initData();
     void initLayout();
     void initConnection();
-    void wifiOn();
-    void wifiOff();
+    void wifiStationOn();
+    void wifiStationOff();
+    void wifiAccessPointOn();
+    void wifiAccessPointOff();
+
+    QTimer *m_workTimer;
 public slots:
     void slot_showItemDetail(int,int);
     void slot_onToggled(bool isChecked);
+    void slot_checkLanConnection();
 signals:
 
 };
@@ -99,6 +107,17 @@ protected:
 
 };
 
+//// tabWidget中 <无线热点> 布局
+//class tabApHotspot:public baseWidget
+//{
+//public:
+//    tabApHotspot(QWidget *parent);
+
+//    switchButton *m_hotspotSwitch;
+//    QLineEdit *m_hotspotNameEdit;
+//    QPushButton *m_confirmButton;
+//};
+
 class myNetThread:public QThread
 {
 public:
@@ -106,8 +125,6 @@ public:
 protected:
     virtual void run();
 private:
-
-
 };
 
 #endif // RIGHTSTACKEDWIDGETS0_H

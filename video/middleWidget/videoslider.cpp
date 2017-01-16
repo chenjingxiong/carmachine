@@ -2,7 +2,7 @@
 
 videoSlider::videoSlider(Qt::Orientation orientation,QWidget*parent):QSlider(orientation,parent)
 {
-    setStyleSheet("QSlider::groove:horizontal{border-radius:2px;height:10px;}"
+    setStyleSheet("QSlider::groove:horizontal{border-radius:2px;height:8px;}"
                   "QSlider::sub-page:horizontal{background:rgb(26,158,255);}"
                   "QSlider::add-page:horizontal{background:rgb(200,200,209);}"
                   "QSlider::handle:horizontal{background:rgb(255, 255, 160);width:8px;border-radius:4px;margin:-3px 0px -3px 0px;}");

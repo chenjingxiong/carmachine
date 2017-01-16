@@ -8,7 +8,6 @@
 leftWidgets::leftWidgets(QWidget *parent):baseWidget(parent)
 {
     setStyleSheet("QWidget{background:rgb(32,38,51)}");
-    setFixedWidth(180);
     initLayout();
 }
 
@@ -33,9 +32,7 @@ void leftWidgets::initLayout()
 
 
     QVBoxLayout *vmainlyout = new QVBoxLayout;
-    vmainlyout->addSpacing(15);
     vmainlyout->addWidget(m_funtionlist);
-    vmainlyout->addStretch(0);
     vmainlyout->setContentsMargins(0,0,0,0);
 
     setLayout(vmainlyout);

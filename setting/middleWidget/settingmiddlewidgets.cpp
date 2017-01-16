@@ -20,8 +20,9 @@ void settingMiddleWidgets::initLayout()
     m_stackedWid->addWidget(m_wifiWid);
     m_stackedWid->addWidget(m_otherWid);
 
-    hmainlyout->addWidget(m_leftWid);
-    hmainlyout->addWidget(m_stackedWid);
+    hmainlyout->addWidget(m_leftWid,1);
+    hmainlyout->addWidget(m_stackedWid,4);
+
     hmainlyout->setContentsMargins(0,0,0,0);
     hmainlyout->setSpacing(0);
     setLayout(hmainlyout);

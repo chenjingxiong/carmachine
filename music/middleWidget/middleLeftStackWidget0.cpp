@@ -39,8 +39,11 @@ void middleLeftStackWidget0::initLayout()
     //    lineWid->setSizePolicy(QSizePolicy::Expanding,QSizePolicy::Fixed);
 
     vlyout->addWidget(m_header);
-    //    vlyout->addWidget(lineWid);
+    vlyout->addSpacing(20);
     vlyout->addWidget(m_table);
+    vlyout->setSpacing(0);
+    vlyout->setContentsMargins(0,0,0,0);
+
     setLayout(vlyout);
 }
 
@@ -64,8 +67,9 @@ void middleLeftStackWidget0::addToPlayList(const QString &name,const QString &pa
     m_table->setItem(rowcount,2, new QTableWidgetItem(duration));
     m_table->item(rowcount,2)->setTextAlignment(Qt::AlignVCenter|Qt::AlignRight);
 
+    qDebug("insert line:%d,the song is%s",rowcount,name);
+
     m_playlist->addPlayList(path);
-    //    mediaDataBase::addSong(name,path,duration);
 
     updateSongCountLabel();
 }
@@ -107,9 +111,14 @@ QFileInfoList middleLeftStackWidget0::getFileList(QString path){
     }
     return file_list;
 }
+bool isSearchOver = false;
 
 // 从path路径下搜索所有mp3文件并添加到list
 void middleLeftStackWidget0::beginSearchFromPath(QString path){
+    if(isSearchOver){
+        return;
+    }
+    isSearchOver = true;
     QStringList filter;
     filter<<".mp3";
 //    QMediaPlayer player;
@@ -135,7 +144,7 @@ void middleLeftStackWidget0::beginSearchFromPath(QString path){
 //                QTime total_time(0, (musicTime/60000)%60, (musicTime/1000)%60);
 //                QString duration=total_time.toString("mm:ss");
 //                if(musicTime>0){
-                    addToPlayList(fileInfo.fileName(),fileInfo.absoluteFilePath()," ");
+                    addToPlayList(fileInfo.baseName(),fileInfo.absoluteFilePath()," ");
 //                }
             }
         }
@@ -154,10 +163,10 @@ void middleLeftStackWidget0::slot_addSong()
     for(int i=0;i<files.count();i++)
     {
         QFileInfo info(files[i]);
-        QString m_name=info.fileName();
+        QString m_name=info.baseName();
         if(!m_playlist->getUrlList().contains(QUrl::fromLocalFile(files.value(i))))
         {
-            QString filePath=files.value(i);
+//            QString filePath=files.value(i);
 //            // to get the infomation of music
 //            player.setMedia(QUrl::fromLocalFile(filePath));
 //            //prevent the loop dont stop
@@ -235,6 +244,8 @@ void middleLeftStackWidget0::resizeEvent(QResizeEvent *)
 // 头标识
 playListHeader::playListHeader(QWidget*parent):baseWidget(parent)
 {
+    setFixedHeight(70);
+    setStyleSheet("background:rgb(240,240,240)");
     setCursor(Qt::PointingHandCursor);
     initWidget();
     initMenu();
@@ -245,10 +256,10 @@ void playListHeader::initWidget()
     QHBoxLayout *lyout=new QHBoxLayout;
 
     m_listInfo=new QLabel(str_song_list+"[0]",this);
-    m_listInfo->setFont(QFont(Font_Family,Font_size_Normal,QFont::Normal));
+    m_listInfo->setFont(QFont(Font_Family,Font_size_Normal+1,QFont::Normal));
 
     m_btnmenu=new flatButton(this);
-    m_btnmenu->setFixedSize(30,30);
+    m_btnmenu->setFixedSize(50,50);
     m_btnmenu->setStyleSheet("QPushButton{border-image:url(:/image/music/indicator_menu (1).png);}"
                              "QPushButton:hover{border-image:url(:/image/music/indicator_menu (2).png);}"
                              "QPushButton:pressed{border-image:url(:/image/music/indicator_menu (3).png);}");

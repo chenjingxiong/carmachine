@@ -22,18 +22,24 @@ void videoMiddleWidgetLeft::initLayout()
     m_currentTime = new QLabel("00:00",this);
     m_currentTime->setFont(QFont(Font_Family,Font_size_Small,QFont::Normal));
     m_currentTime->setStyleSheet("color:rgb(150,150,150);");
+    m_currentTime->setAlignment(Qt::AlignVCenter);
+
 
     m_totalTime = new QLabel("00:00",this);
     m_totalTime->setFont(QFont(Font_Family,Font_size_Small,QFont::Normal));
     m_totalTime->setStyleSheet("color:rgb(150,150,150);");
+    m_totalTime->setAlignment(Qt::AlignVCenter);
 
     QHBoxLayout *m_positionLayout = new QHBoxLayout;
+    m_positionLayout->addSpacing(10);
     m_positionLayout->addWidget(m_currentTime);
     m_positionLayout->addWidget(m_slider);
-    m_positionLayout->addWidget(m_totalTime);
+    m_positionLayout->addWidget(m_totalTime);\
+    m_positionLayout->addSpacing(10);
+    m_positionLayout->setContentsMargins(0,0,0,0);
 
     m_positionWid = new QWidget(this);
-    m_positionWid->setFixedHeight(85);
+    m_positionWid->setFixedHeight(60);
     m_positionWid->setStyleSheet("background:rgb(31,31,31)");
     m_positionWid->setLayout(m_positionLayout);
 

@@ -35,7 +35,7 @@ void musicListTable::init()
     insertColumn(1);
     insertColumn(2);
     insertColumn(3);
-    verticalHeader()->setDefaultSectionSize(60);//设置默认item高度
+    verticalHeader()->setDefaultSectionSize(55);//设置默认item高度
 
     verticalScrollBar()->setStyleSheet("QScrollBar{background:transparent; width: 10px;margin: 0px 2px 0px 0px;}"
                                        "QScrollBar::handle{background:rgb(217,217,217);border-radius:4px;}"
@@ -44,11 +44,11 @@ void musicListTable::init()
                                        "QScrollBar::sub-line:vertical{border:1px rgb(230,230,230);height: 1px;}"
                                        "QScrollBar::add-page:vertical, QScrollBar::sub-page:vertical {background:transparent;}");
 
-    setStyleSheet("QTableWidget{color:rgb(48,48,48);}"
-                  "QTableWidget::item:selected{background:rgb(180,180,180,100);}"
+    setStyleSheet("QTableWidget{background:transparent}"
+                  "QTableWidget{color:rgb(48,48,48);}"
+                  "QTableWidget::item:selected{background:rgb(255,255,255);}"
                   "QTableWidget::item{selection-color:rgb(37,120,255);}");
-    setFont(QFont(Font_Family,Font_size_Normal,QFont::Normal));
-
+    setFont(QFont(Font_Family,Font_size_Normal+1,QFont::Normal));
 }
 
 

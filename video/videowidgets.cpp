@@ -15,6 +15,9 @@ videoWidgets::videoWidgets(QWidget *parent): baseWidget(parent)
     setOriginState();
 }
 
+/**
+ * 读取之前保存设置并应用,包括音量等
+ */
 void videoWidgets::readSetting()
 {
     QSettings setting("config.ini",QSettings::IniFormat,0);
@@ -29,12 +32,16 @@ void videoWidgets::readSetting()
     setting.endGroup();
 }
 
+/**
+ * 还原界面为初始状态
+ */
 void videoWidgets::setOriginState()
 {
     m_topWid->setPlayingVideoName(str_videoName_default);
     m_middleWid->m_leftWid->removePositionWidget();
     m_middleWid->m_rightWid->setOriginState();
 }
+
 
 void videoWidgets::initLayout()
 {

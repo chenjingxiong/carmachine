@@ -2,6 +2,7 @@
 
 #include <QHeaderView>
 #include <QScrollBar>
+#include "global_value.h"
 
 wlanListTable::wlanListTable(QWidget *parent):QTableWidget(parent)
 {
@@ -39,7 +40,7 @@ void wlanListTable::init()
     verticalHeader()->setVisible(false);
 
 
-    verticalHeader()->setDefaultSectionSize(25);//设置默认item高度
+    verticalHeader()->setDefaultSectionSize(50);//设置默认item高度
 
     verticalScrollBar()->setStyleSheet("QScrollBar{background:transparent; width: 10px;margin: 0px 2px 0px 0px;}"
                                        "QScrollBar::handle{background:rgb(217,217,217);border-radius:4px;}"
@@ -50,11 +51,11 @@ void wlanListTable::init()
 
     setStyleSheet("QTableWidget{background:rgb(27,29,36)}"
                   "QTableWidget{color:rgb(255,255,255);}"
-                  "QTableWidget{border-radius:10px}"
+                  "QTableWidget{border-radius:15px}"
                   "QTableWidget::item:selected{background:rgb(27,29,36);}"
                   "QTableWidget::item{selection-color:rgb(255,255,255);}");
 
-    setFont(QFont("Microsoft YaHei",10,QFont::Normal));
+    setFont(QFont(Font_Family,Font_size_Normal,QFont::Normal));
 }
 
 void wlanListTable::initConnection()
@@ -109,9 +110,9 @@ void wlanListTable::mouseMoveEvent(QMouseEvent *event)
 void wlanListTable::resizeEvent(QResizeEvent *event)
 {
     QTableWidget::resizeEvent(event);
-    horizontalHeader()->resizeSection(0,width()-290);
-    horizontalHeader()->resizeSection(1,130);
-    horizontalHeader()->resizeSection(2,30);
-    horizontalHeader()->resizeSection(3,130);
+    horizontalHeader()->resizeSection(0,width()-450);
+    horizontalHeader()->resizeSection(1,210);
+    horizontalHeader()->resizeSection(2,40);
+    horizontalHeader()->resizeSection(3,200);
 }
 

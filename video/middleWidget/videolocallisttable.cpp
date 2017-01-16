@@ -38,7 +38,7 @@ void videoLocalListTable::init()
 
     insertColumn(0);
     insertColumn(1);
-    verticalHeader()->setDefaultSectionSize(60);//设置默认item高度
+    verticalHeader()->setDefaultSectionSize(55);//设置默认item高度
 
     verticalScrollBar()->setStyleSheet("QScrollBar{background:transparent; width: 10px;margin: 0px 2px 0px 0px;}"
                                        "QScrollBar::handle{background:rgb(217,217,217);border-radius:4px;}"
@@ -107,6 +107,6 @@ void videoLocalListTable::mouseMoveEvent(QMouseEvent *event)
 
 void videoLocalListTable::resizeEvent(QResizeEvent *)
 {
-    horizontalHeader()->resizeSection(0,width()-120);
-    horizontalHeader()->resizeSection(1,120);
+    horizontalHeader()->resizeSection(0,width()-100);
+    horizontalHeader()->resizeSection(1,100);
 }

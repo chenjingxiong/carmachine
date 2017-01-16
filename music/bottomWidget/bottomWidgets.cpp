@@ -7,14 +7,14 @@
 
 bottomWidgets::bottomWidgets(QWidget *parent) : baseWidget(parent)
 {
+    setStyleSheet("bottomWidgets{background:transparent;}");
     init();
     setMouseTracking(true);
-    setFixedHeight(120);
+    setFixedHeight(160);
 }
 
 void bottomWidgets::init()
 {
-    setStyleSheet("bottomWidgets{background:transparent;}");
     setSizePolicy(QSizePolicy::Expanding,QSizePolicy::Fixed);
     QHBoxLayout *mainlyout=new QHBoxLayout;
 
@@ -25,9 +25,9 @@ void bottomWidgets::init()
     m_btnprevious=new flatButton(this);
     m_btnPlay=new flatButton(this);
 
-    m_btnnext->setFixedSize(80,80);
-    m_btnprevious->setFixedSize(80,80);
-    m_btnPlay->setFixedSize(80,80);
+    m_btnnext->setFixedSize(100,100);
+    m_btnprevious->setFixedSize(100,100);
+    m_btnPlay->setFixedSize(100,100);
 
     m_btnnext->setStyleSheet("QPushButton{border-image:url(:/image/music/btn_next (1).png);}"
                              "QPushButton::hover{border-image:url(:/image/music/btn_next (2).png);}"
@@ -53,29 +53,24 @@ void bottomWidgets::init()
     m_mainslider->setRange(0,1000);
     m_mainslider->setMinimumSize(403,12);
     m_mainslider->setMaximumHeight(12);
-    m_mainslider->setStyleSheet("QSlider::groove:horizontal{border-radius:2px;height:3px;}"
+    m_mainslider->setStyleSheet("QSlider::groove:horizontal{border-radius:4px;height:10px;}"
                                 "QSlider::sub-page:horizontal{background:rgb(255, 255, 160);}"
                                 "QSlider::add-page:horizontal{background:rgb(200,200,209);}"
                                 "QSlider::handle:horizontal{background:rgb(255, 255, 160);width:8px;border-radius:4px;margin:-3px 0px -3px 0px;}");
 
-//    QFont font;
-//    font.setFamily("微软雅黑");
-//    font.setPixelSize(16);
-//    font.setBold(true);
+
 
     QHBoxLayout *layout2_1=new QHBoxLayout;
     m_labnowPlayname=new TextMovingWidget(str_origin_move_songname,this);
     m_labnowPlayname->setMinimumWidth(250);
-    m_labnowPlayname->setFixedHeight(30);
+    m_labnowPlayname->setFixedHeight(25);
     m_labnowPlayname->setSizePolicy(QSizePolicy::Expanding,QSizePolicy::Fixed);
-    m_labnowPlayname->setFont(QFont(Font_Family,Font_size_Normal,QFont::Normal));
+    m_labnowPlayname->setFont(QFont(Font_Family,Font_size_Normal+1,QFont::Normal));
 
-//    font.setPixelSize(14);
-//    font.setBold(false);
     m_labposition=new QLabel("00:00/00:00",this);
     m_labposition->setAlignment(Qt::AlignRight|Qt::AlignVCenter);
-    m_labposition->setFixedSize(170,30);
-    m_labposition->setFont(QFont(Font_Family,Font_size_Normal,QFont::Normal));
+    m_labposition->setFixedSize(170,25);
+    m_labposition->setFont(QFont(Font_Family,Font_size_Normal+1,QFont::Normal));
 
     layout2_1->addWidget(m_labnowPlayname);
     layout2_1->addWidget(m_labposition);
@@ -91,18 +86,13 @@ void bottomWidgets::init()
     // third layout
     QHBoxLayout *layout3=new QHBoxLayout;
 
-    m_btnlrc=new flatButton(this);
     m_volwid=new volWidget(this);
     m_btnplaymode=new flatButton(this);
 
-    m_btnlrc->setFixedSize(40,40);
+
     //    m_volwid->setFixedSize(20,20);
     m_btnplaymode->setFixedSize(40,40);
 
-
-    m_btnlrc->setStyleSheet("QPushButton{border-image:url(:/image/music/btn_lrc (1).png);}"
-                            "QPushButton::hover{border-image:url(:/image/music/btn_lrc (2).png);}"
-                            "QPushButton::pressed{border-image:url(:/image/music/btn_lrc (3).png);}");
 
 
     m_btnplaymode->setStyleSheet("QPushButton{border-image:url(:/image/music/btn_listrandom (1).png);}"
@@ -111,14 +101,16 @@ void bottomWidgets::init()
 
     layout3->addWidget(m_btnplaymode);
     layout3->addWidget(m_volwid);
-    layout3->addWidget(m_btnlrc);
-
     layout3->setSpacing(18);
     layout3->setContentsMargins(0,0,0,0);
+
     ////////////////////////////////////////
+    mainlyout->addSpacing(30);
     mainlyout->addLayout(layout1);
     mainlyout->addLayout(layout2);
+    mainlyout->addSpacing(30);
     mainlyout->addLayout(layout3);
+    mainlyout->addSpacing(50);
     mainlyout->setSpacing(30);
     mainlyout->setContentsMargins(20,10,20,10);
     setLayout(mainlyout);
