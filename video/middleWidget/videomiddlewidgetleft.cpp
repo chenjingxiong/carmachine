@@ -1,6 +1,7 @@
 #include "videomiddlewidgetleft.h"
 #include <QHBoxLayout>
 #include <QTime>
+#include <QQuickItem>
 #include "global_value.h"
 
 videoMiddleWidgetLeft::videoMiddleWidgetLeft(QWidget *parent):baseWidget(parent)
@@ -14,7 +15,15 @@ void videoMiddleWidgetLeft::initLayout()
 {
     vmainlyout = new QVBoxLayout;
 
-    m_contentWid = new videoContentWidget(this);
+    // 改用qml播放视频
+    m_contentWid = new videoQuickContentWidget(this);
+    m_contentWid->setResizeMode(QQuickWidget::SizeRootObjectToView);
+    m_contentWid->setSource(QUrl("qrc:/video.qml"));
+    // 处理逻辑，将qml中的player转而用QMediaPlayer代替，便于用C++语言进行控制
+    QObject* qmlMediaPlayer = m_contentWid->rootObject()->findChild<QObject*>("mediaPlayer");
+    m_player = qvariant_cast<QMediaPlayer *>(qmlMediaPlayer->property("mediaObject"));
+
+//    m_contentWid = new videoContentWidget(this);
 
     m_slider = new videoSlider(Qt::Horizontal,this);
     m_slider->setRange(0,0);
@@ -50,7 +59,6 @@ void videoMiddleWidgetLeft::initLayout()
     vmainlyout->setSpacing(0);
 
     removePositionWidget();
-
     setLayout(vmainlyout);
 }
 

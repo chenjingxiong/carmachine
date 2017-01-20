@@ -62,9 +62,9 @@ void videoWidgets::initLayout()
 
 void videoWidgets::initPlayerAndConnection()
 {
-    m_player = new QMediaPlayer;
+    m_player = m_middleWid->m_leftWid->getMediaPlayerFormQml();
 
-    m_player->setVideoOutput(m_middleWid->m_leftWid->getContentWidget());
+    //    m_player->setVideoOutput(m_middleWid->m_leftWid->getContentWidget());
 
     connect(m_player,SIGNAL(mediaStatusChanged(QMediaPlayer::MediaStatus)),this,SLOT(slot_onMediaStateChanged(QMediaPlayer::MediaStatus)));
     connect(m_player, SIGNAL(stateChanged(QMediaPlayer::State)), this, SLOT(slot_onPlayerStateChanged(QMediaPlayer::State)));
@@ -158,13 +158,13 @@ void videoWidgets::slot_lastVideo()
 
 void videoWidgets::slot_onContentDoubleClick()
 {
-//    if(m_player->state()==QMediaPlayer::PlayingState||m_player->state()==QMediaPlayer::PausedState){
-        if(m_middleWid->m_leftWid->getContentWidget()->isFullScreen()){
-            m_middleWid->m_leftWid->getContentWidget()->setFullScreen(false);
-        }else{
-            m_middleWid->m_leftWid->getContentWidget()->setFullScreen(true);
-        }
-//    }
+    if(m_player->state()==QMediaPlayer::PlayingState||m_player->state()==QMediaPlayer::PausedState){
+//        if(m_middleWid->m_leftWid->getContentWidget()->isFullScreen()){
+//            m_middleWid->m_leftWid->getContentWidget()->setFullScreen(false);
+//        }else{
+//            m_middleWid->m_leftWid->getContentWidget()->setFullScreen(true);
+//        }
+    }
 }
 
 void videoWidgets::slot_onDurationChanged(qint64 duration)

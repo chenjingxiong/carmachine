@@ -4,9 +4,12 @@
 #include "basewidget.h"
 #include "videocontentwidget.h"
 #include "videoslider.h"
+#include "videoquickcontentwidget.h"
 
 #include <QLabel>
 #include <QVBoxLayout>
+#include <QQuickWidget>
+#include <QMediaPlayer>
 
 
 class videoMiddleWidgetLeft:public baseWidget
@@ -15,15 +18,20 @@ class videoMiddleWidgetLeft:public baseWidget
 public:
     videoMiddleWidgetLeft(QWidget *parent);
 
-    videoContentWidget* getContentWidget(){return m_contentWid;}
     void addPositionWidget();
     void removePositionWidget();
     void onDurationChanged(qint64 duration);
     void onMediaPositionChanged(qint64);
+    QMediaPlayer* getMediaPlayerFormQml(){return m_player;}
+    videoQuickContentWidget* getContentWidget(){return m_contentWid;}
 private:
     QVBoxLayout *vmainlyout;
+    // mediaplayer类， 将传递给视频主界面videoWidgets做控制
+    QMediaPlayer *m_player;
 
-    videoContentWidget *m_contentWid;
+//    videoContentWidget *m_contentWid;
+    videoQuickContentWidget *m_contentWid;
+
     QWidget *m_positionWid;
     videoSlider *m_slider;
     QLabel *m_currentTime;

@@ -1,16 +1,20 @@
-#ifndef VIDEOCONTENTWIDGET_H
-#define VIDEOCONTENTWIDGET_H
-
+#ifndef VIDEOQUICKCONTENTWIDGET_H
+#define VIDEOQUICKCONTENTWIDGET_H
+#include <QQuickWidget>
 #include <QObject>
-#include <QVideoWidget>
 #include <QTimer>
 
-class videoContentWidget: public QVideoWidget
+
+class videoQuickContentWidget:public QQuickWidget
 {
     Q_OBJECT
 public:
-    videoContentWidget(QWidget *parent = 0);
+    videoQuickContentWidget(QWidget *parent = 0);
+
+    void setFullScreen(bool fullScreen);
 private:
+    int normalWidth;
+    int normalHeight;
     void init();
 
     QTimer *m_timer;   // 定时器，区分单击和双击
@@ -26,4 +30,4 @@ private slots:
     void onOneClick();
 };
 
-#endif // VIDEOCONTENTWIDGET_H
+#endif // VIDEOQUICKCONTENTWIDGET_H

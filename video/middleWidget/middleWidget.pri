@@ -6,7 +6,8 @@ HEADERS += \
     $$PWD/videonetlisttable.h \
     $$PWD/videolocallisttable.h \
     $$PWD/videocontentwidget.h \
-    $$PWD/videoslider.h
+    $$PWD/videoslider.h \
+    $$PWD/videoquickcontentwidget.h
 
 SOURCES += \
     $$PWD/videomiddlewidgets.cpp \
@@ -16,4 +17,5 @@ SOURCES += \
     $$PWD/videonetlisttable.cpp \
     $$PWD/videolocallisttable.cpp \
     $$PWD/videocontentwidget.cpp \
-    $$PWD/videoslider.cpp
+    $$PWD/videoslider.cpp \
+    $$PWD/videoquickcontentwidget.cpp

@@ -4,7 +4,7 @@
 #
 #-------------------------------------------------
 
-QT       += core gui sql network multimedia multimediawidgets
+QT  += core gui sql network multimedia multimediawidgets quickwidgets quick
 
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 
@@ -68,9 +68,14 @@ RESOURCES += \
     res_music.qrc\
     res_camera.qrc\
     res_video.qrc \
-    res_setting.qrc
+    res_setting.qrc\
+    qml.qrc
 
-
+unix {
+  UI_DIR = .ui
+  MOC_DIR = .moc
+  OBJECTS_DIR = .obj
+}
 
 target.path = $$[QT_INSTALL_EXAMPLES]/multimediawidgets/Carmachine
 INSTALLS += target
