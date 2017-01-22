@@ -8,8 +8,8 @@ Rectangle {
     MediaPlayer {
         id:mediaPlayer
         objectName: qsTr("mediaPlayer")
-        autoLoad: false
-        loops: Audio.Infinite
+//        autoLoad: false
+//        loops: Audio.Infinite
 //        source: "file:///c:/Users/cjs/mnt/video/第2课：上午字符串.avi"
 //        autoPlay: true
 

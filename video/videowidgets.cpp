@@ -122,6 +122,7 @@ void videoWidgets::slot_onCurrentMediaChanged(QMediaContent content)
 
 void videoWidgets::slot_onLocalListItemDoubleClick(int row, int)
 {
+    m_player->stop();
     QUrl url= m_middleWid->m_rightWid->getVideoList()->getUrlAt(row);
     if(!url.isEmpty())
     {
@@ -144,6 +145,7 @@ void videoWidgets::slot_setPlayPause()
 
 void videoWidgets::slot_nextVideo()
 {
+    m_player->stop();
     videoList *m_playList = m_middleWid->m_rightWid->getVideoList();
     m_player->setMedia(m_playList->getNextVideoUrl());
     m_player->play();
@@ -151,6 +153,7 @@ void videoWidgets::slot_nextVideo()
 
 void videoWidgets::slot_lastVideo()
 {
+    m_player->stop();
     videoList *m_playList = m_middleWid->m_rightWid->getVideoList();
     m_player->setMedia(m_playList->getPreVideoUrl());
     m_player->play();
@@ -159,11 +162,11 @@ void videoWidgets::slot_lastVideo()
 void videoWidgets::slot_onContentDoubleClick()
 {
     if(m_player->state()==QMediaPlayer::PlayingState||m_player->state()==QMediaPlayer::PausedState){
-//        if(m_middleWid->m_leftWid->getContentWidget()->isFullScreen()){
-//            m_middleWid->m_leftWid->getContentWidget()->setFullScreen(false);
-//        }else{
-//            m_middleWid->m_leftWid->getContentWidget()->setFullScreen(true);
-//        }
+        //        if(m_middleWid->m_leftWid->getContentWidget()->isFullScreen()){
+        //            m_middleWid->m_leftWid->getContentWidget()->setFullScreen(false);
+        //        }else{
+        //            m_middleWid->m_leftWid->getContentWidget()->setFullScreen(true);
+        //        }
     }
 }
 
