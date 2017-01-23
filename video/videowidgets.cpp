@@ -122,12 +122,17 @@ void videoWidgets::slot_onCurrentMediaChanged(QMediaContent content)
 
 void videoWidgets::slot_onLocalListItemDoubleClick(int row, int)
 {
+    qDebug("itemClick1");
     m_player->stop();
     QUrl url= m_middleWid->m_rightWid->getVideoList()->getUrlAt(row);
     if(!url.isEmpty())
     {
-        m_player->setMedia(url);
-        m_player->play();
+        if(m_player->isAvailable()){
+            m_player->setMedia(url);
+            qDebug("itemClick2");
+            m_player->play();
+            qDebug("itemClick3");
+        }
     }
 }
 
@@ -145,18 +150,25 @@ void videoWidgets::slot_setPlayPause()
 
 void videoWidgets::slot_nextVideo()
 {
+    qDebug("nextVideo1");
     m_player->stop();
     videoList *m_playList = m_middleWid->m_rightWid->getVideoList();
-    m_player->setMedia(m_playList->getNextVideoUrl());
-    m_player->play();
+    if(m_player->isAvailable()){
+        m_player->setMedia(m_playList->getNextVideoUrl());
+        qDebug("nextVideo2");
+        m_player->play();
+        qDebug("nextVideo3");
+    }
 }
 
 void videoWidgets::slot_lastVideo()
 {
     m_player->stop();
     videoList *m_playList = m_middleWid->m_rightWid->getVideoList();
-    m_player->setMedia(m_playList->getPreVideoUrl());
-    m_player->play();
+    if(m_player->isAvailable()){
+        m_player->setMedia(m_playList->getPreVideoUrl());
+        m_player->play();
+    }
 }
 
 void videoWidgets::slot_onContentDoubleClick()

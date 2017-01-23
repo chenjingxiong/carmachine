@@ -67,8 +67,6 @@ void middleLeftStackWidget0::addToPlayList(const QString &name,const QString &pa
     m_table->setItem(rowcount,2, new QTableWidgetItem(duration));
     m_table->item(rowcount,2)->setTextAlignment(Qt::AlignVCenter|Qt::AlignRight);
 
-    qDebug("insert line:%d,the song is%s",rowcount,name);
-
     m_playlist->addPlayList(path);
 
     updateSongCountLabel();

@@ -5,6 +5,7 @@
 #include "videocontentwidget.h"
 #include "videoslider.h"
 #include "videoquickcontentwidget.h"
+#include "videopositionwidget.h"
 
 #include <QLabel>
 #include <QVBoxLayout>
@@ -32,10 +33,7 @@ private:
 //    videoContentWidget *m_contentWid;
     videoQuickContentWidget *m_contentWid;
 
-    QWidget *m_positionWid;
-    videoSlider *m_slider;
-    QLabel *m_currentTime;
-    QLabel *m_totalTime;
+    videoPositionWidget *m_positionWid;
 
     void initLayout();
 signals:

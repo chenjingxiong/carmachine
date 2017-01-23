@@ -21,6 +21,8 @@ class mainWindow : public baseWindow
 public:
     explicit mainWindow(QWidget *parent = 0);
     ~mainWindow();
+
+    musicWidgets* getMusicWidget(){return m_musicwid;}
 private:
     QStackedWidget *m_stackedwid;
     musicWidgets *m_musicwid;

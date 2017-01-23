@@ -47,17 +47,10 @@ void bottomWidgets::init()
     //////////////////////////////////////////////////////////////
 
     // second layput
-    QHBoxLayout *layout2=new QHBoxLayout;
-    m_mainslider=new mySlider(Qt::Horizontal,this);
-    m_mainslider->installEventFilter(this);
-    m_mainslider->setRange(0,1000);
-    m_mainslider->setMinimumSize(403,12);
-    m_mainslider->setMaximumHeight(12);
-    m_mainslider->setStyleSheet("QSlider::groove:horizontal{border-radius:4px;height:10px;}"
-                                "QSlider::sub-page:horizontal{background:rgb(255, 255, 160);}"
-                                "QSlider::add-page:horizontal{background:rgb(200,200,209);}"
-                                "QSlider::handle:horizontal{background:rgb(255, 255, 160);width:8px;border-radius:4px;margin:-3px 0px -3px 0px;}");
+    QVBoxLayout *layout2=new QVBoxLayout;
 
+    m_positionWid = new musicPositionWidget(this);
+    m_positionWid->m_mainslider->installEventFilter(this);
 
 
     QHBoxLayout *layout2_1=new QHBoxLayout;
@@ -75,12 +68,12 @@ void bottomWidgets::init()
     layout2_1->addWidget(m_labnowPlayname);
     layout2_1->addWidget(m_labposition);
 
-    QVBoxLayout *vlayout=new QVBoxLayout;
-    vlayout->addLayout(layout2_1);
-    vlayout->addWidget(m_mainslider);
-    vlayout->setSpacing(0);
-    vlayout->setContentsMargins(0,0,0,10);
-    layout2->addLayout(vlayout);
+
+    layout2->addSpacing(20);
+    layout2->addLayout(layout2_1);
+    layout2->addWidget(m_positionWid);
+    layout2->setSpacing(0);
+    layout2->setContentsMargins(0,0,0,10);
     /////////////////////////////////////////////
 
     // third layout
@@ -189,15 +182,15 @@ void bottomWidgets::setPositionLabel(const QString &str)
 
 bool bottomWidgets::eventFilter(QObject *obj, QEvent *event)
 {
-    if(obj==m_mainslider)
+    if(obj==m_positionWid->m_mainslider)
     {
         if (event->type()==QEvent::MouseButtonPress){
             QMouseEvent *mouseEvent = static_cast<QMouseEvent *>(event);
             if (mouseEvent->button() == Qt::LeftButton)	{
-                int dur = m_mainslider->maximum() - m_mainslider->minimum();
-                int pos = m_mainslider->minimum() + dur * ((double)mouseEvent->x() / m_mainslider->width());
-                if(pos != m_mainslider->sliderPosition()){
-                    m_mainslider->setValue(pos);
+                int dur = m_positionWid->m_mainslider->maximum() - m_positionWid->m_mainslider->minimum();
+                int pos = m_positionWid->m_mainslider->minimum() + dur * ((double)mouseEvent->x() /m_positionWid->m_mainslider->width());
+                if(pos != m_positionWid->m_mainslider->sliderPosition()){
+                    m_positionWid->m_mainslider->setValue(pos);
                     m_mainWid->getPlayer()->setPosition(pos);
                 }
             }

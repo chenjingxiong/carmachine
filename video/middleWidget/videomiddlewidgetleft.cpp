@@ -8,7 +8,7 @@ videoMiddleWidgetLeft::videoMiddleWidgetLeft(QWidget *parent):baseWidget(parent)
 {
     setStyleSheet("background:rgb(10,10,10)");
     initLayout();
-    connect(m_slider,SIGNAL(sig_sliderPositionChanged(int)),this,SIGNAL(sig_sliderPositionChanged(int)));
+    connect(m_positionWid->m_slider,SIGNAL(sig_sliderPositionChanged(int)),this,SIGNAL(sig_sliderPositionChanged(int)));
 }
 
 void videoMiddleWidgetLeft::initLayout()
@@ -25,33 +25,7 @@ void videoMiddleWidgetLeft::initLayout()
 
 //    m_contentWid = new videoContentWidget(this);
 
-    m_slider = new videoSlider(Qt::Horizontal,this);
-    m_slider->setRange(0,0);
-
-    m_currentTime = new QLabel("00:00",this);
-    m_currentTime->setFont(QFont(Font_Family,Font_size_Small,QFont::Normal));
-    m_currentTime->setStyleSheet("color:rgb(150,150,150);");
-    m_currentTime->setAlignment(Qt::AlignVCenter);
-
-
-    m_totalTime = new QLabel("00:00",this);
-    m_totalTime->setFont(QFont(Font_Family,Font_size_Small,QFont::Normal));
-    m_totalTime->setStyleSheet("color:rgb(150,150,150);");
-    m_totalTime->setAlignment(Qt::AlignVCenter);
-
-    QHBoxLayout *m_positionLayout = new QHBoxLayout;
-    m_positionLayout->addSpacing(10);
-    m_positionLayout->addWidget(m_currentTime);
-    m_positionLayout->addWidget(m_slider);
-    m_positionLayout->addWidget(m_totalTime);\
-    m_positionLayout->addSpacing(10);
-    m_positionLayout->setContentsMargins(0,0,0,0);
-
-    m_positionWid = new QWidget(this);
-    m_positionWid->setFixedHeight(60);
-    m_positionWid->setStyleSheet("background:rgb(31,31,31)");
-    m_positionWid->setLayout(m_positionLayout);
-
+    m_positionWid = new videoPositionWidget(this);
 
     vmainlyout->addWidget(m_contentWid);
     vmainlyout->addWidget(m_positionWid);
@@ -78,19 +52,19 @@ void videoMiddleWidgetLeft::removePositionWidget()
 
 void videoMiddleWidgetLeft::onDurationChanged(qint64 duration)
 {
-    m_slider->setRange(0, duration);
+    m_positionWid->m_slider->setRange(0, duration);
     QTime totalTime((duration % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60),
                     (duration % (1000 * 60 * 60)) / (1000 * 60),
                     (duration % (1000 * 60)) / 1000);
-    m_totalTime->setText(totalTime.toString("hh:mm:ss"));
+    m_positionWid->m_totalTime->setText(totalTime.toString("hh:mm:ss"));
 }
 
 void videoMiddleWidgetLeft::onMediaPositionChanged(qint64 position)
 {
-    m_slider->setValue(position);
+    m_positionWid->m_slider->setValue(position);
     QTime currentTime((position % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60),
                     (position % (1000 * 60 * 60)) / (1000 * 60),
                     (position % (1000 * 60)) / 1000);
-    m_currentTime->setText(currentTime.toString("hh:mm:ss"));
+    m_positionWid->m_currentTime->setText(currentTime.toString("hh:mm:ss"));
 
 }

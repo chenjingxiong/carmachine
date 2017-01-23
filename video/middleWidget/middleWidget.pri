@@ -7,7 +7,8 @@ HEADERS += \
     $$PWD/videolocallisttable.h \
     $$PWD/videocontentwidget.h \
     $$PWD/videoslider.h \
-    $$PWD/videoquickcontentwidget.h
+    $$PWD/videoquickcontentwidget.h \
+    $$PWD/videopositionwidget.h
 
 SOURCES += \
     $$PWD/videomiddlewidgets.cpp \
@@ -18,4 +19,5 @@ SOURCES += \
     $$PWD/videolocallisttable.cpp \
     $$PWD/videocontentwidget.cpp \
     $$PWD/videoslider.cpp \
-    $$PWD/videoquickcontentwidget.cpp
+    $$PWD/videoquickcontentwidget.cpp \
+    $$PWD/videopositionwidget.cpp

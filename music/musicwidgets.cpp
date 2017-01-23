@@ -151,12 +151,12 @@ void musicWidgets::slot_onPositonChanged(qint64 position){
     QTime totalTime(0, (duration/60000)%60, (duration/1000)%60);
     QTime currentTime(0, (position/60000)%60, (position/1000)%60);
     m_bottomwid->setPositionLabel(QString(currentTime.toString("mm:ss").append("/").append(totalTime.toString("mm:ss"))));
-    m_bottomwid->m_mainslider->setValue(position);
+    m_bottomwid->m_positionWid->m_mainslider->setValue(position);
 }
 
 void musicWidgets::slot_onDuratuonChanged(qint64 duration)
 {
-    m_bottomwid->m_mainslider->setRange(0,duration);
+    m_bottomwid->m_positionWid->m_mainslider->setRange(0,duration);
 }
 
 void musicWidgets::slot_setPlayMode(PlayMode mode)
