@@ -6,7 +6,8 @@
 
 videoMiddleWidgetLeft::videoMiddleWidgetLeft(QWidget *parent):baseWidget(parent)
 {
-    setStyleSheet("background:rgb(10,10,10)");
+    setObjectName("videoMiddleWidgetLeft");
+    setStyleSheet("#videoMiddleWidgetLeft{background:rgb(10,10,10)}");
     initLayout();
     connect(m_positionWid->m_slider,SIGNAL(sig_sliderPositionChanged(int)),this,SIGNAL(sig_sliderPositionChanged(int)));
 }

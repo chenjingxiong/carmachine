@@ -4,7 +4,7 @@
 #
 #-------------------------------------------------
 
-QT  += core gui sql network multimedia multimediawidgets quickwidgets quick
+QT       += core gui sql network multimedia multimediawidgets quickwidgets
 
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 
@@ -14,7 +14,10 @@ TEMPLATE = app
 
 DEFINES += CONFIG_CTRL_IFACE
 
-#CONFIG	+= qt warn_on release
+# 3399Linux、Big DPI
+DEFINES += DEVICE_EVB
+
+CONFIG	+= qt warn_on release
 
 win32 {
   LIBS += -lws2_32 -static
@@ -52,8 +55,12 @@ include(music/music.pri)
 INCLUDEPATH +=$$PWD video
 include(video/video.pri)
 
+INCLUDEPATH +=$$PWD gallery
+include(gallery/gallery.pri)
+
 INCLUDEPATH +=$$PWD camera
 include(camera/camera.pri)
+
 
 SOURCES +=$$PWD/singleApplication/qsingleapplication.cpp \
 
@@ -61,22 +68,19 @@ HEADERS +=$$PWD/singleApplication/qsingleapplication.h \
 
 FORMS = networkconfig.ui \
 
-
-
 RESOURCES += \
     res_main.qrc\
     res_music.qrc\
     res_camera.qrc\
     res_video.qrc \
-    res_setting.qrc\
+    res_setting.qrc \
+    res_gallery.qrc \
     qml.qrc
 
-unix {
-  UI_DIR = .ui
-  MOC_DIR = .moc
-  OBJECTS_DIR = .obj
-}
+UI_DIR = .ui
+MOC_DIR = .moc
+OBJECTS_DIR = .obj
 
-target.path = $$[QT_INSTALL_EXAMPLES]/multimediawidgets/Carmachine
+target.path = $$[QT_INSTALL_EXAMPLES]/multimedia/Carmachine
 INSTALLS += target
 

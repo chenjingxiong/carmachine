@@ -25,6 +25,7 @@ public:
 
     QMediaPlayer* getPlayer(){return m_player;}
     void savaSetting();
+    void updateVolume(bool volumeAdd);
 private:
     QMediaPlayer *m_player;
 
@@ -48,6 +49,8 @@ private slots:
     void slot_onCurrentMediaChanged(QMediaContent);
     void slot_onPositonChanged(qint64);
     void slot_onDuratuonChanged(qint64);
+protected:
+
 };
 
 #endif // MUSICWIDGETS_H

@@ -24,6 +24,7 @@ public:
     videoBottomWidgets *m_bottomWid;
 
     void savaSetting();
+    void updateVolume(bool volumeAdd);
 private:
     QMediaPlayer *m_player;
 
@@ -48,7 +49,6 @@ private slots:
     void slot_setPause();
 
     void slot_onContentDoubleClick(); // 双击videoWidget,设置全屏或者取消全屏
-
 };
 
 #endif // VIDEOWIDGETS_H

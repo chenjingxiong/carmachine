@@ -18,6 +18,14 @@
 #include "netconfigdialog.h"
 #include "global_value.h"
 
+#ifdef DEVICE_EVB
+int wifi_button_width = 145;
+int wifi_button_height = 45;
+#else
+int wifi_button_width = 80;
+int wifi_button_height = 30;
+#endif
+
 #define DBG false
 
 #if DBG
@@ -87,7 +95,7 @@ rightStackedWidgets0::rightStackedWidgets0(QWidget *parent):baseWidget(parent)
     setStyleSheet("#rightStackedWidgets0{background:rgb(33,36,43)}");
     initLayout();
     initData();
-    initConnection();  // 连接信号与槽、
+    initConnection();  // 连接信号与槽
 }
 
 void rightStackedWidgets0::initData()
@@ -109,7 +117,6 @@ void rightStackedWidgets0::initLayout()
 
     // 第2部分布局 TabWidget 包含2部分内容:Current status、WifiList
     m_tab = new QTabWidget(this);
-    m_tab->setFont(QFont(Font_Family,Font_size_Normal+1,QFont::Normal));
     m_tab->setStyleSheet("background:rgb(33,36,43)");
 
     m_tabCurrentStatus = new tabCurrentStatus(this);
@@ -389,11 +396,10 @@ switchWidget::switchWidget(QWidget *parent):baseWidget(parent)
     QHBoxLayout *mainlyout = new QHBoxLayout;
 
     m_lblState = new QLabel(this);
-    m_lblState->setFont(QFont(Font_Family,Font_size_Normal+1,QFont::Normal));
     m_lblState->setText("Open Wlan");
 
     m_btnSwitch = new switchButton(this);
-    m_btnSwitch->setFixedSize(60,25);
+    m_btnSwitch->setFixedSize(40,20);
 
     mainlyout->addWidget(m_lblState);
     mainlyout->addWidget(m_btnSwitch);
@@ -412,11 +418,9 @@ tabCurrentStatus::tabCurrentStatus(QWidget *parent):baseWidget(parent)
     // lyout1_Status
     QHBoxLayout *lyout1 = new QHBoxLayout;
     QLabel *statusLabel = new QLabel(this);
-    statusLabel->setFont(QFont(Font_Family,Font_size_Normal,QFont::Normal));
     statusLabel->setText("Status:");
 
     textStatus = new QLabel(this);
-    textStatus->setFont(QFont(Font_Family,Font_size_Normal,QFont::Normal));
     textStatus->setText(QString("connected"));
     lyout1->addWidget(statusLabel,1);
     lyout1->addWidget(textStatus,2);
@@ -424,11 +428,9 @@ tabCurrentStatus::tabCurrentStatus(QWidget *parent):baseWidget(parent)
     //lyout2_Last Message
     QHBoxLayout *lyout2 = new QHBoxLayout;
     QLabel *lastMessageLabel = new QLabel(this);
-    lastMessageLabel->setFont(QFont(Font_Family,Font_size_Normal,QFont::Normal));
     lastMessageLabel->setText("Last message:");
 
     textLastMsg = new QLabel(this);
-    textLastMsg->setFont(QFont(Font_Family,Font_size_Normal,QFont::Normal));
     textLastMsg->setText(QString());
     lyout2->addWidget(lastMessageLabel,1);
     lyout2->addWidget(textLastMsg,2);
@@ -436,11 +438,9 @@ tabCurrentStatus::tabCurrentStatus(QWidget *parent):baseWidget(parent)
     // lyou3_Authenticant
     QHBoxLayout *lyout3 = new QHBoxLayout;
     QLabel *authenticationLabel = new QLabel(this);
-    authenticationLabel->setFont(QFont(Font_Family,Font_size_Normal,QFont::Normal));
     authenticationLabel->setText("Authentication:");
 
     textAuthentication = new QLabel(this);
-    textAuthentication->setFont(QFont(Font_Family,Font_size_Normal,QFont::Normal));
     textAuthentication->setText(QString("None"));
     lyout3->addWidget(authenticationLabel,1);
     lyout3->addWidget(textAuthentication,2);
@@ -448,11 +448,9 @@ tabCurrentStatus::tabCurrentStatus(QWidget *parent):baseWidget(parent)
     //lyout4_Encryption
     QHBoxLayout *lyout4 = new QHBoxLayout;
     QLabel *encryptionLabel = new QLabel(this);
-    encryptionLabel->setFont(QFont(Font_Family,Font_size_Normal,QFont::Normal));
     encryptionLabel->setText("EncryptionLabel:");
 
     textEncryption = new QLabel(this);
-    textEncryption->setFont(QFont(Font_Family,Font_size_Normal,QFont::Normal));
     textEncryption->setText(QString("None"));
     lyout4->addWidget(encryptionLabel,1);
     lyout4->addWidget(textEncryption,2);
@@ -460,11 +458,9 @@ tabCurrentStatus::tabCurrentStatus(QWidget *parent):baseWidget(parent)
     //lyout5_SSID
     QHBoxLayout *lyout5 = new QHBoxLayout;
     QLabel *ssidLabel = new QLabel(this);
-    ssidLabel->setFont(QFont(Font_Family,Font_size_Normal,QFont::Normal));
     ssidLabel->setText("SSID:");
 
     textSSID = new QLabel(this);
-    textSSID->setFont(QFont(Font_Family,Font_size_Normal,QFont::Normal));
     textSSID->setText(QString("None"));
     lyout5->addWidget(ssidLabel,1);
     lyout5->addWidget(textSSID,2);
@@ -473,11 +469,9 @@ tabCurrentStatus::tabCurrentStatus(QWidget *parent):baseWidget(parent)
     //lyout6_BSSID
     QHBoxLayout *lyout6 = new QHBoxLayout;
     QLabel *bssidLabel = new QLabel(this);
-    bssidLabel->setFont(QFont(Font_Family,Font_size_Normal,QFont::Normal));
     bssidLabel->setText("BSSID:");
 
     textBSSID = new QLabel(this);
-    textBSSID->setFont(QFont(Font_Family,Font_size_Normal,QFont::Normal));
     textBSSID->setText(QString("None"));
     lyout6->addWidget(bssidLabel,1);
     lyout6->addWidget(textBSSID,2);
@@ -485,11 +479,9 @@ tabCurrentStatus::tabCurrentStatus(QWidget *parent):baseWidget(parent)
     //lyout7_IP address
     QHBoxLayout *lyout7 = new QHBoxLayout;
     QLabel *ipAddressLabel = new QLabel(this);
-    ipAddressLabel->setFont(QFont(Font_Family,Font_size_Normal,QFont::Normal));
     ipAddressLabel->setText("IP Address:");
 
     textIPAddress = new QLabel(this);
-    textIPAddress->setFont(QFont(Font_Family,Font_size_Normal,QFont::Normal));
     textIPAddress->setText(QString("None"));
     lyout7->addWidget(ipAddressLabel,1);
     lyout7->addWidget(textIPAddress,2);
@@ -497,18 +489,16 @@ tabCurrentStatus::tabCurrentStatus(QWidget *parent):baseWidget(parent)
     //lyout8 connect and disconnect button
     QHBoxLayout *lyout8 = new QHBoxLayout;
     connectButton = new QPushButton("Connect",this);
-    connectButton->setFont(QFont(Font_Family,Font_size_Normal,QFont::Normal));
     connectButton->setStyleSheet("QPushButton{background:rgb(85,92,108)}"
                                  "QPushButton{color:white}"
                                  "QPushButton{border-radius:5px}");
-    connectButton->setFixedSize(140,45);
+    connectButton->setFixedSize(wifi_button_width,wifi_button_height);
 
     disconnectButton = new QPushButton("Disconnect",this);
-    disconnectButton->setFont(QFont(Font_Family,Font_size_Normal,QFont::Normal));
     disconnectButton->setStyleSheet("QPushButton{background:rgb(85,92,108)}"
                                     "QPushButton{color:white}"
                                     "QPushButton{border-radius:5px}");
-    disconnectButton->setFixedSize(140,45);
+    disconnectButton->setFixedSize(wifi_button_width,wifi_button_height);
     lyout8->addStretch(0);
     lyout8->addWidget(connectButton);
     lyout8->addSpacing(30);
@@ -537,7 +527,6 @@ tabScanResult::tabScanResult(QWidget *parent):baseWidget(parent)
 
     // lyout1
     QLabel *tipLabel = new QLabel("the scan result:",this);
-    tipLabel->setFont(QFont(Font_Family,Font_size_Normal,QFont::Normal));
 
     // lyout2
     m_table = new wlanListTable(this);
@@ -548,8 +537,7 @@ tabScanResult::tabScanResult(QWidget *parent):baseWidget(parent)
     scanButton->setStyleSheet("QPushButton{background:rgb(85,92,108)}"
                               "QPushButton{color:white}"
                               "QPushButton{border-radius:5px}");
-    scanButton->setFont(QFont(Font_Family,Font_size_Normal,QFont::Normal));
-    scanButton->setFixedSize(120,45);
+    scanButton->setFixedSize(wifi_button_width,wifi_button_height);
 
     lyout1->addStretch(0);
     lyout1->addWidget(scanButton);
@@ -579,22 +567,26 @@ void tabScanResult::insertIntoTable(QString ssid, QString bssid, QString siganl,
 {
     int rowCount = m_table->rowCount();
     m_table->insertRow(rowCount);
+
+    m_table->setItem(rowCount,0,new QTableWidgetItem(ssid));
+    m_table->setItem(rowCount,1,new QTableWidgetItem(bssid));
+    m_table->item(rowCount,0)->setTextAlignment(Qt::AlignVCenter|Qt::AlignLeft);
+    m_table->item(rowCount,1)->setTextAlignment(Qt::AlignVCenter|Qt::AlignLeft);
+
     // 设置Wifi等级图标
     int siganlValue = siganl.toInt();
-    QLabel *label = new QLabel("");
+    QTableWidgetItem *siganlItem;
     if(siganlValue>=(-55)){
-        label->setPixmap(QPixmap(":/image/setting/ic_wifi_signal_4_dark.png").scaled(40,40));
+        siganlItem = new QTableWidgetItem(QIcon(":/image/setting/ic_wifi_signal_4_dark.png"),NULL);
     }else if(siganlValue>=(-70)){
-        label->setPixmap(QPixmap(":/image/setting/ic_wifi_signal_3_dark.png").scaled(40,40));
+        siganlItem = new QTableWidgetItem(QIcon(":/image/setting/ic_wifi_signal_3_dark.png"),NULL);
     }else if(siganlValue>=(-85)){
-        label->setPixmap(QPixmap(":/image/setting/ic_wifi_signal_2_dark.png").scaled(40,40));
+        siganlItem = new QTableWidgetItem(QIcon(":/image/setting/ic_wifi_signal_2_dark.png"),NULL);
     }else{
-        label->setPixmap(QPixmap(":/image/setting/ic_wifi_signal_1_dark.png").scaled(40,40));
+        siganlItem = new QTableWidgetItem(QIcon(":/image/setting/ic_wifi_signal_1_dark.png"),NULL);
     }
-    QTableWidgetItem *siganlItem = new QTableWidgetItem();
-    siganlItem->setData(Qt::DisplayRole,siganlValue); // 排序
     m_table->setItem(rowCount,2,siganlItem);
-    m_table->setCellWidget(rowCount,2,label);
+    m_table->item(rowCount,2)->setData(Qt::DisplayRole,siganlValue);
 
 
     // 设置安全性图标
@@ -616,11 +608,6 @@ void tabScanResult::insertIntoTable(QString ssid, QString bssid, QString siganl,
     }else{
         m_table->setItem(rowCount,3,new QTableWidgetItem(QIcon(":/image/setting/ic_wifi_locked.png"),auth));
     }
-
-    m_table->setItem(rowCount,0,new QTableWidgetItem(ssid));
-    m_table->setItem(rowCount,1,new QTableWidgetItem(bssid));
-    m_table->item(rowCount,0)->setTextAlignment(Qt::AlignVCenter|Qt::AlignLeft);
-    m_table->item(rowCount,1)->setTextAlignment(Qt::AlignVCenter|Qt::AlignLeft);
     // 数据存入结构体数组中
     m_netWorks[rowCount].SSID = ssid;
     m_netWorks[rowCount].BSSID = bssid;

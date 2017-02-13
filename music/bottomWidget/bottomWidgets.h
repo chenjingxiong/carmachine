@@ -12,7 +12,6 @@
 #include "volwidget.h"
 #include "musicwidgets.h"
 #include "player/medialist.h"
-#include "musicpositionwidget.h"
 
 class musicWidgets;
 
@@ -38,8 +37,9 @@ public:
     flatButton *m_btnprevious;
     flatButton *m_btnPlay;
 
-    musicPositionWidget *m_positionWid;
+    mySlider *m_mainslider;
 
+    flatButton *m_btnlrc;
     volWidget *m_volwid;
     flatButton *m_btnplaymode;
 protected:

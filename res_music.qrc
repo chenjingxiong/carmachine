@@ -51,8 +51,6 @@
         <file>image/music/btn_previous (4).png</file>
         <file>image/music/menu_vol.png</file>
         <file>image/music/music_example_pic.jpg</file>
-        <file>image/music/周杰伦-夜曲.jpg</file>
-        <file>image/music/马来西亚的女孩.jpg</file>
         <file>image/music/btn_addtips (1).png</file>
         <file>image/music/btn_addtips (2).png</file>
         <file>image/music/btn_addtips (3).png</file>
@@ -122,10 +120,8 @@
         <file>image/music/indicator_menu (3).png</file>
         <file>image/music/indicator_top (1).png</file>
         <file>image/music/indicator_top (2).png</file>
-        <file>image/music/lab_2DC.png</file>
         <file>image/music/lab_add.png</file>
         <file>image/music/lab_addfolder.png</file>
-        <file>image/music/lab_Author.png</file>
         <file>image/music/lab_backups.png</file>
         <file>image/music/lab_success.png</file>
         <file>image/music/loading.png</file>
@@ -138,5 +134,15 @@
         <file>image/music/wire_connect (2).png</file>
         <file>image/music/wire_connect (3).png</file>
         <file>image/music/wire_connect (4).png</file>
+        <file>image/music/btn_cloud (1)_big.png</file>
+        <file>image/music/btn_cloud (2)_big.png</file>
+        <file>image/music/btn_cloud (3)_big.png</file>
+        <file>image/music/btn_music (1)_big.png</file>
+        <file>image/music/btn_music (2)_big.png</file>
+        <file>image/music/btn_music (3)_big.png</file>
+        <file>image/music/btn_radio (1)_big.png</file>
+        <file>image/music/btn_radio (2)_big.png</file>
+        <file>image/music/btn_radio (3)_big.png</file>
+        <file>image/music/menu_vol (2).png</file>
     </qresource>
 </RCC>

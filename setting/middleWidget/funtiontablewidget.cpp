@@ -2,6 +2,12 @@
 #include <QDebug>
 #include "global_value.h"
 
+#ifdef DEVICE_EVB
+int table_item_height = 80;
+#else
+int table_item_height = 50;
+#endif
+
 funtiontablewidget:: funtiontablewidget(QWidget *parent) : QTableWidget(parent)
 {
     setAttribute(Qt::WA_TranslucentBackground, true);
@@ -28,8 +34,6 @@ funtiontablewidget:: funtiontablewidget(QWidget *parent) : QTableWidget(parent)
 
     connect(this, SIGNAL(cellEntered(int,int)), this,SLOT(listCellEntered(int,int)));
     connect(this, SIGNAL(cellClicked(int,int)), SLOT(listCellClicked(int,int)));
-
-    setFont(QFont(Font_Family,Font_size_Middle-2,QFont::Normal));
 }
 
 funtiontablewidget::~funtiontablewidget()
@@ -52,7 +56,7 @@ void funtiontablewidget::addFunctionItems(QStringList &normalicon, QStringList &
         item->setTextColor(QColor(255, 255, 255));
         item->setTextAlignment(Qt::AlignLeft | Qt::AlignVCenter);
         setItem(i, 2, item);
-        setRowHeight(i,80);  //单元格高度
+        setRowHeight(i,table_item_height);  //单元格高度
     }
 }
 
@@ -110,9 +114,17 @@ void funtiontablewidget::leaveEvent(QEvent *event)
 
 void funtiontablewidget::resizeEvent(QResizeEvent*)
 {
+#ifdef DEVICE_EVB
     QHeaderView *headerview = horizontalHeader();
     headerview->setVisible(false);
     headerview->resizeSection(0, 40);
     headerview->resizeSection(1, 70);
     headerview->resizeSection(2, width()-110);
+#else
+    QHeaderView *headerview = horizontalHeader();
+    headerview->setVisible(false);
+    headerview->resizeSection(0, 20);
+    headerview->resizeSection(1, 40);
+    headerview->resizeSection(2, width()-60);
+#endif
 }

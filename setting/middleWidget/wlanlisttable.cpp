@@ -4,6 +4,12 @@
 #include <QScrollBar>
 #include "global_value.h"
 
+#ifdef DEVICE_EVB
+int wlan_item_height = 50;
+#else
+int wlan_item_height = 30;
+#endif
+
 wlanListTable::wlanListTable(QWidget *parent):QTableWidget(parent)
 {
     init();
@@ -40,7 +46,7 @@ void wlanListTable::init()
     verticalHeader()->setVisible(false);
 
 
-    verticalHeader()->setDefaultSectionSize(50);//设置默认item高度
+    verticalHeader()->setDefaultSectionSize(wlan_item_height);//设置默认item高度
 
     verticalScrollBar()->setStyleSheet("QScrollBar{background:transparent; width: 10px;margin: 0px 2px 0px 0px;}"
                                        "QScrollBar::handle{background:rgb(217,217,217);border-radius:4px;}"
@@ -55,7 +61,13 @@ void wlanListTable::init()
                   "QTableWidget::item:selected{background:rgb(27,29,36);}"
                   "QTableWidget::item{selection-color:rgb(255,255,255);}");
 
-    setFont(QFont(Font_Family,Font_size_Normal,QFont::Normal));
+#ifdef DEVICE_EVB
+    QFont font = this->font();
+    font.setPixelSize(font_size-5);
+    setFont(font);
+#else
+
+#endif
 }
 
 void wlanListTable::initConnection()
@@ -65,30 +77,30 @@ void wlanListTable::initConnection()
 
 void wlanListTable::slot_cellEnter(int row,int column)
 {
-//    QTableWidgetItem *it = item(m_previousFousedRow,0);
-//    // 还原上次选中的item
-//    if(it != NULL)
-//    {
-//        if(m_playingItemRow!=m_previousFousedRow){
-//            setRowTextColor(m_previousFousedRow,QColor(255,255,255));
-//        }
-//    }
-//    // 设置当前选中item的字体颜色
-//    it = item(row, column);
-//    if(it != NULL)
-//    {
-//        setRowTextColor(row,QColor(26,158,255));
-//    }
-//    m_previousFousedRow = row;
+    //    QTableWidgetItem *it = item(m_previousFousedRow,0);
+    //    // 还原上次选中的item
+    //    if(it != NULL)
+    //    {
+    //        if(m_playingItemRow!=m_previousFousedRow){
+    //            setRowTextColor(m_previousFousedRow,QColor(255,255,255));
+    //        }
+    //    }
+    //    // 设置当前选中item的字体颜色
+    //    it = item(row, column);
+    //    if(it != NULL)
+    //    {
+    //        setRowTextColor(row,QColor(26,158,255));
+    //    }
+    //    m_previousFousedRow = row;
 }
 
 void wlanListTable::setRowTextColor(int row, const QColor &color)const
 {
-//    for(int col=0; col<columnCount(); col++)
-//    {
-//        QTableWidgetItem *it = item(row, col);
-//        it->setTextColor(color);
-//    }
+    //    for(int col=0; col<columnCount(); col++)
+    //    {
+    //        QTableWidgetItem *it = item(row, col);
+    //        it->setTextColor(color);
+    //    }
 }
 
 void wlanListTable::leaveEvent(QEvent *event)
@@ -109,10 +121,18 @@ void wlanListTable::mouseMoveEvent(QMouseEvent *event)
 
 void wlanListTable::resizeEvent(QResizeEvent *event)
 {
+#ifdef DEVICE_EVB
     QTableWidget::resizeEvent(event);
-    horizontalHeader()->resizeSection(0,width()-450);
+    horizontalHeader()->resizeSection(0,width()-470);
     horizontalHeader()->resizeSection(1,210);
-    horizontalHeader()->resizeSection(2,40);
+    horizontalHeader()->resizeSection(2,60);
     horizontalHeader()->resizeSection(3,200);
+#else
+    QTableWidget::resizeEvent(event);
+    horizontalHeader()->resizeSection(0,width()-290);
+    horizontalHeader()->resizeSection(1,120);
+    horizontalHeader()->resizeSection(2,20);
+    horizontalHeader()->resizeSection(3,150);
+#endif
 }
 

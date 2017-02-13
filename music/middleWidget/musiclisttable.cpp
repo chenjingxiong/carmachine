@@ -4,6 +4,12 @@
 #include <QScrollBar>
 #include "global_value.h"
 
+#ifdef DEVICE_EVB
+int item_height = 55;
+#else
+int item_height = 35;
+#endif
+
 musicListTable::musicListTable(QWidget *parent):QTableWidget(parent)
 {
     init();
@@ -35,7 +41,7 @@ void musicListTable::init()
     insertColumn(1);
     insertColumn(2);
     insertColumn(3);
-    verticalHeader()->setDefaultSectionSize(55);//设置默认item高度
+    verticalHeader()->setDefaultSectionSize(item_height);//设置默认item高度
 
     verticalScrollBar()->setStyleSheet("QScrollBar{background:transparent; width: 10px;margin: 0px 2px 0px 0px;}"
                                        "QScrollBar::handle{background:rgb(217,217,217);border-radius:4px;}"
@@ -48,7 +54,6 @@ void musicListTable::init()
                   "QTableWidget{color:rgb(48,48,48);}"
                   "QTableWidget::item:selected{background:rgb(255,255,255);}"
                   "QTableWidget::item{selection-color:rgb(37,120,255);}");
-    setFont(QFont(Font_Family,Font_size_Normal+1,QFont::Normal));
 }
 
 
@@ -65,6 +70,21 @@ void musicListTable::slot_cellClicked(int, int)
 {
 
 
+}
+
+void musicListTable::resizeEvent(QResizeEvent *)
+{
+#ifdef DEVICE_EVB
+    horizontalHeader()->resizeSection(0,20);
+    horizontalHeader()->resizeSection(1,this->width()-160);
+    horizontalHeader()->resizeSection(2,120);
+    horizontalHeader()->resizeSection(3,20);
+#else
+    horizontalHeader()->resizeSection(0,10);
+    horizontalHeader()->resizeSection(1,this->width()-80);
+    horizontalHeader()->resizeSection(2,60);
+    horizontalHeader()->resizeSection(3,10);
+#endif
 }
 
 

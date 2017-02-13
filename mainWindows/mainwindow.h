@@ -11,6 +11,7 @@
 #include "camerawidgets.h"
 #include "videowidgets.h"
 #include "settingwidgets.h"
+#include "gallerywidgets.h"
 
 #include <QPropertyAnimation>
 #include <QStackedLayout>
@@ -21,14 +22,13 @@ class mainWindow : public baseWindow
 public:
     explicit mainWindow(QWidget *parent = 0);
     ~mainWindow();
-
-    musicWidgets* getMusicWidget(){return m_musicwid;}
 private:
-    QStackedWidget *m_stackedwid;
-    musicWidgets *m_musicwid;
-    cameraWidgets *m_camerawid;
-    videoWidgets *m_videowid;
+    QStackedWidget *m_stackedWid;
+    musicWidgets *m_musicWid;
+    cameraWidgets *m_cameraWid;
+    videoWidgets *m_videoWid;
     settingWidgets *m_settingwid;
+    galleryWidgets *m_galleryWid;
 
     mainWidgetUp *m_mainwidup;
     mainWidgetLow *m_mainwidlow;
@@ -49,12 +49,15 @@ private:
 protected:
     // 解决无边框窗口在最小化之后子控件不刷新的问题
     void showEvent(QShowEvent *e);
+    void resizeEvent(QResizeEvent *event);
+    void keyPressEvent(QKeyEvent *event);
 private slots:
     void slot_appQuit();
-    void slot_showsetting();
-    void slot_showmusic();
-    void slot_showvideo();
-    void slot_showcamera();
+    void slot_showSetting();
+    void slot_showMusic();
+    void slot_showVideo();
+    void slot_showGallery();
+    void slot_showCamera();
     void slot_returnanimation();
     void slot_closeanimationfinished();
 };

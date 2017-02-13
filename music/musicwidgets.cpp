@@ -10,8 +10,7 @@
 musicWidgets::musicWidgets(QWidget *parent):baseWidget(parent)
 {
     setObjectName("musicWidgets");
-    setStyleSheet("#musicWidgets{border-image: url(:/image/music/music_bg.jpg);}"
-                  "QLabel{color:white;}");
+    setStyleSheet("#musicWidgets{border-image: url(:/image/music/music_bg.jpg);}");
     initLayout();
     initConnection();
     initPlayerAndConnection();
@@ -36,9 +35,7 @@ void musicWidgets::initLayout()
     QVBoxLayout *vlyout=new QVBoxLayout;
     vlyout->addWidget(m_topwid);
     vlyout->addWidget(m_middlewid);
-    vlyout->addSpacing(10);
     vlyout->addWidget(m_bottomwid);
-    vlyout->addSpacing(10);
     vlyout->setSpacing(0);
     vlyout->setContentsMargins(0,0,0,0);
     m_mainwid->setLayout(vlyout);
@@ -91,7 +88,7 @@ void musicWidgets::readSetting()
     if(vol==0)
         vol=80;
     m_player->setVolume(vol);
-    m_bottomwid->m_volwid->m_slider_vol->setValue(vol);
+    m_bottomwid->m_volwid->m_slider_vol->setValue(m_player->volume());
 
     setting.endGroup();
 }
@@ -151,12 +148,12 @@ void musicWidgets::slot_onPositonChanged(qint64 position){
     QTime totalTime(0, (duration/60000)%60, (duration/1000)%60);
     QTime currentTime(0, (position/60000)%60, (position/1000)%60);
     m_bottomwid->setPositionLabel(QString(currentTime.toString("mm:ss").append("/").append(totalTime.toString("mm:ss"))));
-    m_bottomwid->m_positionWid->m_mainslider->setValue(position);
+    m_bottomwid->m_mainslider->setValue(position);
 }
 
 void musicWidgets::slot_onDuratuonChanged(qint64 duration)
 {
-    m_bottomwid->m_positionWid->m_mainslider->setRange(0,duration);
+    m_bottomwid->m_mainslider->setRange(0,duration);
 }
 
 void musicWidgets::slot_setPlayMode(PlayMode mode)
@@ -208,6 +205,30 @@ void musicWidgets::savaSetting()
 void musicWidgets::slot_setPause()
 {
     m_player->stop();
-    m_player->setMedia(NULL);
+    m_player->setMedia(QMediaContent(NULL));
     setOriginData();
+}
+
+void musicWidgets::updateVolume(bool volumeAdd)
+{
+    if(volumeAdd){
+        if(m_player->volume()<95)
+        {
+            m_player->setVolume(m_player->volume()+5);
+        }
+        else
+        {
+            m_player->setVolume(100);
+        }
+    }else{
+        if(m_player->volume()>5)
+        {
+            m_player->setVolume(m_player->volume()-5);
+        }
+        else
+        {
+            m_player->setVolume(0);
+        }
+    }
+    m_bottomwid->m_volwid->m_slider_vol->setValue(m_player->volume());
 }

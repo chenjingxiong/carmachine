@@ -16,6 +16,7 @@ public:
     void setRowTextColor(int row, const QColor &color)const;
 protected:
     void resize(int w, int h);
+    void resizeEvent(QResizeEvent *event);
 private:
 
     void init();

@@ -6,9 +6,34 @@
 #include <QScrollBar>
 #include <QDebug>
 #include <QTimer>
+#include "global_value.h"
+
+#ifdef DEVICE_EVB
+    int tabIcon_size = 80;
+    QString music_tabIcon_res_str_1 = ":/image/music/btn_music (1)_big.png";
+    QString music_tabIcon_res_str_2 = ":/image/music/btn_music (2)_big.png";
+    QString music_tabIcon_res_str_3 = ":/image/music/btn_music (3)_big.png";
+    QString cloud_tabIcon_res_str_1 = ":/image/music/btn_cloud (1)_big.png";
+    QString cloud_tabIcon_res_str_2 = ":/image/music/btn_cloud (2)_big.png";
+    QString cloud_tabIcon_res_str_3 = ":/image/music/btn_cloud (3)_big.png";
+    QString radio_tabIcon_res_str_1 = ":/image/music/btn_radio (1)_big.png";
+    QString radio_tabIcon_res_str_2 = ":/image/music/btn_radio (2)_big.png";
+    QString radio_tabIcon_res_str_3 = ":/image/music/btn_radio (3)_big.png";
+#else
+    int tabIcon_size = 40;
+    QString music_tabIcon_res_str_1 = ":/image/music/btn_music (1).png";
+    QString music_tabIcon_res_str_2 = ":/image/music/btn_music (2).png";
+    QString music_tabIcon_res_str_3 = ":/image/music/btn_music (3).png";
+    QString cloud_tabIcon_res_str_1 = ":/image/music/btn_cloud (1).png";
+    QString cloud_tabIcon_res_str_2 = ":/image/music/btn_cloud (2).png";
+    QString cloud_tabIcon_res_str_3 = ":/image/music/btn_cloud (3).png";
+    QString radio_tabIcon_res_str_1 = ":/image/music/btn_radio (1).png";
+    QString radio_tabIcon_res_str_2 = ":/image/music/btn_radio (2).png";
+    QString radio_tabIcon_res_str_3 = ":/image/music/btn_radio (3).png";
+#endif
 
 QColor middleWidgetLeft::color=QColor(230,230,230);
-QColor middleWidgetLeft::bgcolor=QColor(255,255,255);
+QColor middleWidgetLeft::bgcolor=QColor(255,255,255,100);
 
 middleWidgetLeft::middleWidgetLeft(QWidget *parent):baseWidget(parent)
 {
@@ -37,13 +62,13 @@ void middleWidgetLeft::initLayout()
 
     m_stackwid->setContentsMargins(0,0,0,0);
 
-    m_btn[0]=new stackButton(":/image/music/btn_music (1).png",":/image/music/btn_music (2).png",":/image/music/btn_music (3).png",this);
-    m_btn[1]=new stackButton(":/image/music/btn_cloud (1).png",":/image/music/btn_cloud (2).png",":/image/music/btn_cloud (3).png",this);
-    m_btn[2]=new stackButton(":/image/music/btn_radio (1).png",":/image/music/btn_radio (2).png",":/image/music/btn_radio (3).png",this);
+    m_btn[0]=new stackButton(music_tabIcon_res_str_1,music_tabIcon_res_str_2,music_tabIcon_res_str_3,this);
+    m_btn[1]=new stackButton(cloud_tabIcon_res_str_1,cloud_tabIcon_res_str_2,cloud_tabIcon_res_str_3,this);
+    m_btn[2]=new stackButton(radio_tabIcon_res_str_1,radio_tabIcon_res_str_2,radio_tabIcon_res_str_3,this);
 
-    m_btn[0]->setFixedHeight(80);
-    m_btn[1]->setFixedHeight(80);
-    m_btn[2]->setFixedHeight(80);
+    m_btn[0]->setFixedHeight(tabIcon_size);
+    m_btn[1]->setFixedHeight(tabIcon_size);
+    m_btn[2]->setFixedHeight(tabIcon_size);
 
     QHBoxLayout *hlyout=new QHBoxLayout;
     hlyout->addWidget(m_btn[0]);
@@ -94,15 +119,15 @@ void middleWidgetLeft::slot_changeButtonSelected(int index)
     if(index>m_preItem)
     {
         m_Widanimation->setTargetObject(m_stackwid);
-        m_Widanimation->setStartValue(QRect(m_stackwid->width(),80,m_stackwid->width(),m_stackwid->height()));
-        m_Widanimation->setEndValue(QRect(0,80,m_stackwid->width(),m_stackwid->height()));
+        m_Widanimation->setStartValue(QRect(m_stackwid->width(),tabIcon_size,m_stackwid->width(),m_stackwid->height()));
+        m_Widanimation->setEndValue(QRect(0,tabIcon_size,m_stackwid->width(),m_stackwid->height()));
         m_Widanimation->start();
     }
     if(index<m_preItem)
     {
         m_Widanimation->setTargetObject(m_stackwid);
-        m_Widanimation->setStartValue(QRect(-m_stackwid->width(),80,m_stackwid->width(),m_stackwid->height()));
-        m_Widanimation->setEndValue(QRect(0,80,m_stackwid->width(),m_stackwid->height()));
+        m_Widanimation->setStartValue(QRect(-m_stackwid->width(),tabIcon_size,m_stackwid->width(),m_stackwid->height()));
+        m_Widanimation->setEndValue(QRect(0,tabIcon_size,m_stackwid->width(),m_stackwid->height()));
         m_Widanimation->start();
     }
     m_preItem=index;
@@ -163,7 +188,7 @@ void middleWidgetLeft::paintEvent(QPaintEvent *)
     if(m_isAnima)
     {
         if(m_isDrawVerticalLine)
-        p.drawLine(width()-1,0,width()-1,height());//vertical line
+            p.drawLine(width()-1,0,width()-1,height());//vertical line
         p.drawLine(0,m_btn[0]->y()+m_btn[0]->height()-1,m_x+(m_btn[0]->width()-m_pix.width())/2-1,m_btn[0]->y()+m_btn[0]->height()-1);//first line
         p.drawLine(m_x+(m_btn[0]->width()-m_pix.width())/2+m_pix.width(),m_btn[0]->y()+m_btn[0]->height()-1,width(),m_btn[0]->y()+m_btn[0]->height()-1);//second line
         p.drawPixmap(m_x+(m_btn[0]->width()-m_pix.width())/2,m_btn[0]->y()+m_btn[0]->height()-m_pix.height()+1,m_pix);

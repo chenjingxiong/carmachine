@@ -2,12 +2,21 @@
 #include <QHBoxLayout>
 #include <QVBoxLayout>
 
+#ifdef DEVICE_EVB
+int video_bottom_height  = 160;
+int video_playButton_size = 100;
+int openFile_size = 80;
+#else
+int video_bottom_height  = 70;
+int video_playButton_size = 50;
+int openFile_size = 30;
+#endif
 
 videoBottomWidgets::videoBottomWidgets(QWidget *parent):baseWidget(parent)
 {
     setObjectName("videoBottomWidgets");
     setStyleSheet("#videoBottomWidgets{background:rgb(89,92,102)}");
-    setFixedHeight(160);
+    setFixedHeight(video_bottom_height);
     initLayout();
 }
 
@@ -21,10 +30,10 @@ void videoBottomWidgets::initLayout()
     m_btnOpenFile = new flatButton(this);
     m_volWidget = new volWidget(this);
 
-    m_btnPlayPause->setFixedSize(100,100);
-    m_btnNext->setFixedSize(100,100);
-    m_btnLast->setFixedSize(100,100);
-    m_btnOpenFile->setFixedSize(80,80);
+    m_btnPlayPause->setFixedSize(video_playButton_size,video_playButton_size);
+    m_btnNext->setFixedSize(video_playButton_size,video_playButton_size);
+    m_btnLast->setFixedSize(video_playButton_size,video_playButton_size);
+    m_btnOpenFile->setFixedSize(video_playButton_size,video_playButton_size);
 
     m_btnNext->setStyleSheet("QPushButton{border-image:url(:/image/music/btn_next (1).png);}"
                              "QPushButton::hover{border-image:url(:/image/music/btn_next (2).png);}"

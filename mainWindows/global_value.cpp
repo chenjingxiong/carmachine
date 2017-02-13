@@ -2,5 +2,3 @@
 
 mainWindow *mainwid=NULL;
 rightStackedWidgets0 *wifiWid = NULL;
-
-

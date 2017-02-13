@@ -3,7 +3,6 @@
 #include "basepushbutton.h"
 #include <QVBoxLayout>
 #include <QPainter>
-#include "global_value.h"
 
 middleLeftStackWidget1::middleLeftStackWidget1(QWidget*parent):baseWidget(parent)
 {
@@ -21,19 +20,17 @@ void middleLeftStackWidget1::initLayout()
     QLabel *label2=new QLabel("Cloud Backup Multi-screen Display",this);
     label2->adjustSize();
     label2->setAlignment(Qt::AlignHCenter);
-    label2->setStyleSheet("color:rgb(52,52,52);");
-    label2->setFont(QFont(Font_Family,Font_size_Normal+1,QFont::Normal));
+    label2->setStyleSheet("color:rgb(52,52,52)");
 
 
-    QLabel *label3=new QLabel("",this);
-    label3->adjustSize();
-    label3->setAlignment(Qt::AlignHCenter);
-    label3->setStyleSheet("color:rgb(51,51,51);");
-    label3->setFont(QFont(Font_Family,Font_size_Normal+1,QFont::Normal));
+//    QLabel *label3=new QLabel("Your list has 0 songs that are not backed up",this);
+//    label3->adjustSize();
+//    label3->setAlignment(Qt::AlignHCenter);
+//    label3->setStyleSheet("color:rgb(51,51,51);");
 
-    flatButton *btn=new flatButton("Use This",this);
+    flatButton *btn=new flatButton("Use this",this);
     btn->setFixedSize(170,36);
-    btn->setStyleSheet("QPushButton{font-size:16px;color:rgb(80,80,80);border: 1px solid rgb(229,229,229);background:rgb(240,240,240);}"
+    btn->setStyleSheet("QPushButton{color:rgb(80,80,80);border: 1px solid rgb(229,229,229);background:rgb(240,240,240);}"
                        "QPushButton:hover{color:rgb(30,30,30);border: 1px solid rgb(219,219,219);background:rgb(229,229,229);}"
                        "QPushButton:pressed{color:rgb(80,80,80);border: 1px solid rgb(229,229,229);background:rgb(240,240,240);}");
 
@@ -42,8 +39,7 @@ void middleLeftStackWidget1::initLayout()
     vLyout->addWidget(label,0,Qt::AlignHCenter);
     vLyout->addSpacing(25);
     vLyout->addWidget(label2,0,Qt::AlignHCenter);
-    vLyout->addSpacing(10);
-    vLyout->addWidget(label3,0,Qt::AlignHCenter);
+//    vLyout->addWidget(label3,0,Qt::AlignHCenter);
     vLyout->addSpacing(20);
     vLyout->addWidget(btn,0,Qt::AlignHCenter);
     vLyout->addSpacing(100);

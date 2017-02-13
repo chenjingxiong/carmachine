@@ -23,9 +23,15 @@ netConfigDialog::netConfigDialog(QWidget *parent):QDialog(parent)
                   "QPushButton{border-radius:5px}");
 
     setupUi(this);
+#ifdef DEVICE_EVB
     closeButton->setFixedSize(140,50);
     addButton->setFixedSize(140,50);
     removeButton->setFixedSize(140,50);
+#else
+    closeButton->setFixedSize(80,30);
+    addButton->setFixedSize(80,30);
+    removeButton->setFixedSize(80,30);
+#endif
 
     connect(closeButton,SIGNAL(clicked(bool)),this,SLOT(close()));
     encrSelect->setEnabled(false);

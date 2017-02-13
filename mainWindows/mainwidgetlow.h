@@ -8,13 +8,14 @@ class mainWidgetLow:public baseWidget
 {
 public:
     mainWidgetLow(QWidget *parent = 0);
-    // 导航图标，收音机、音乐、视频、相机
-    guideButton *m_btnsetting;
-    guideButton *m_btnmusic;
-    guideButton *m_btnvideo;
-    guideButton *m_btncamera;
+    // five guide button
+    guideButton *m_btnSetUp;
+    guideButton *m_btnMusic;
+    guideButton *m_btnVideo;
+    guideButton *m_btnGallery;
+    guideButton *m_btnCamera;
 private:
-    void  initLayout();
+    void initLayout();
 
 };
 

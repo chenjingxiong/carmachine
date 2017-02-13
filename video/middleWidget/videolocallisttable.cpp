@@ -5,6 +5,11 @@
 
 #include "global_value.h"
 
+#ifdef DEVICE_EVB
+int video_item_height = 55;
+#else
+int video_item_height = 35;
+#endif
 
 videoLocalListTable::videoLocalListTable(QWidget *parent):QTableWidget(parent)
 {
@@ -38,7 +43,7 @@ void videoLocalListTable::init()
 
     insertColumn(0);
     insertColumn(1);
-    verticalHeader()->setDefaultSectionSize(55);//设置默认item高度
+    verticalHeader()->setDefaultSectionSize(video_item_height);//设置默认item高度
 
     verticalScrollBar()->setStyleSheet("QScrollBar{background:transparent; width: 10px;margin: 0px 2px 0px 0px;}"
                                        "QScrollBar::handle{background:rgb(217,217,217);border-radius:4px;}"
@@ -52,8 +57,6 @@ void videoLocalListTable::init()
                   "QTableWidget::item:selected{background:rgb(43,45,51);}"
                   "QTableWidget::item{selection-color:rgb(26,158,255);}"
                   );
-
-    setFont(QFont(Font_Family,Font_size_Normal,QFont::Normal));
 }
 
 void videoLocalListTable::initConnection()
@@ -107,6 +110,11 @@ void videoLocalListTable::mouseMoveEvent(QMouseEvent *event)
 
 void videoLocalListTable::resizeEvent(QResizeEvent *)
 {
-    horizontalHeader()->resizeSection(0,width()-100);
-    horizontalHeader()->resizeSection(1,100);
+#ifdef DEVICE_EVB
+    horizontalHeader()->resizeSection(0,width()-120);
+    horizontalHeader()->resizeSection(1,120);
+#else
+    horizontalHeader()->resizeSection(0,width()-80);
+    horizontalHeader()->resizeSection(1,80);
+#endif
 }

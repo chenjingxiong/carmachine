@@ -1,0 +1,6 @@
+<RCC>
+    <qresource prefix="/">
+        <file>image/gallery/gallery_top_icon.png</file>
+        <file>image/gallery/ic_empty_image.png</file>
+    </qresource>
+</RCC>

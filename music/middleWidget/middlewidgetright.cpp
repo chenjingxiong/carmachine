@@ -13,9 +13,6 @@ void middleWidgetRight::initLayout()
 
     m_lblTip=new QLabel("",this);
     m_lblTip->setAlignment(Qt::AlignCenter);
-    m_lblTip->setFont(QFont("Microsoft YaHei",18,QFont::Normal));
-    m_lblTip->setStyleSheet("color:red");
-    m_lblTip->adjustSize();
 
     vlyout->addWidget(m_lblTip);
 

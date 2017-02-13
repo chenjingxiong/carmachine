@@ -6,9 +6,16 @@
 #include <QEventLoop>
 #include <QTime>
 #include <QDir>
-#include <QHeaderView>
 #include <QFileDialog>
 #include "global_value.h"
+
+#ifdef DEVICE_EVB
+int header_height = 70;
+int menu_width = 50;
+#else
+int header_height = 40;
+int menu_width = 20;
+#endif
 
 QColor m_normalItemTextColor(48,48,48);
 QColor m_PlayingItemTextColor(37,120,255);
@@ -32,14 +39,7 @@ void middleLeftStackWidget0::initLayout()
     m_header = new playListHeader(this);
     m_table = new musicListTable(this);
 
-    // 分割线
-    //    QFrame *lineWid=new QFrame(this);
-    //    lineWid->setFixedHeight(1);
-    //    lineWid->setStyleSheet("QFrame{border:1px solid rgb(230,230,230);}");
-    //    lineWid->setSizePolicy(QSizePolicy::Expanding,QSizePolicy::Fixed);
-
     vlyout->addWidget(m_header);
-    vlyout->addSpacing(20);
     vlyout->addWidget(m_table);
     vlyout->setSpacing(0);
     vlyout->setContentsMargins(0,0,0,0);
@@ -231,18 +231,11 @@ void middleLeftStackWidget0::updatePlayingItemStyle(QMediaContent content)
     }
 }
 
-void middleLeftStackWidget0::resizeEvent(QResizeEvent *)
-{
-    m_table->horizontalHeader()->resizeSection(0,20);
-    m_table->horizontalHeader()->resizeSection(1,m_table->width()-140);
-    m_table->horizontalHeader()->resizeSection(2,110);
-    m_table->horizontalHeader()->resizeSection(3,10);
-}
 
 // 头标识
 playListHeader::playListHeader(QWidget*parent):baseWidget(parent)
 {
-    setFixedHeight(70);
+    setFixedHeight(header_height);
     setStyleSheet("background:rgb(240,240,240)");
     setCursor(Qt::PointingHandCursor);
     initWidget();
@@ -254,10 +247,9 @@ void playListHeader::initWidget()
     QHBoxLayout *lyout=new QHBoxLayout;
 
     m_listInfo=new QLabel(str_song_list+"[0]",this);
-    m_listInfo->setFont(QFont(Font_Family,Font_size_Normal+1,QFont::Normal));
 
     m_btnmenu=new flatButton(this);
-    m_btnmenu->setFixedSize(50,50);
+    m_btnmenu->setFixedSize(menu_width,menu_width);
     m_btnmenu->setStyleSheet("QPushButton{border-image:url(:/image/music/indicator_menu (1).png);}"
                              "QPushButton:hover{border-image:url(:/image/music/indicator_menu (2).png);}"
                              "QPushButton:pressed{border-image:url(:/image/music/indicator_menu (3).png);}");

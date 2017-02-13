@@ -43,12 +43,10 @@ void videoQuickContentWidget::onOneClick(){
 void videoQuickContentWidget::setFullScreen(bool fullScreen)
 {
     if(fullScreen){
-        qDebug("全屏");
         normalWidth = this->width();
         normalHeight=this->height();
         this->setFixedSize(QApplication::desktop()->screenGeometry().width(),QApplication::desktop()->screenGeometry().height());
     }else{
-         qDebug("取消全屏");
         this->setFixedSize(normalWidth,normalHeight);
     }
 }

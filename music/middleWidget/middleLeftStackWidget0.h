@@ -61,8 +61,7 @@ public:
     void setInitMainWidgets(musicWidgets*);
     void updatePlayingItemStyle(QMediaContent);
     QString getCurPlayingSongName(){return m_curPlayingSongName;}
-protected:
-    void resizeEvent(QResizeEvent *);
+
 private slots:
     void slot_addSong();
     void slot_itemDoubleClick(int,int);

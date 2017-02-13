@@ -2,9 +2,15 @@
 #include <QHBoxLayout>
 #include "global_value.h"
 
+#ifdef DEVICE_EVB
+int video_position_height = 60;
+#else
+int video_position_height = 35;
+#endif
+
 videoPositionWidget::videoPositionWidget(QWidget *parent):baseWidget(parent)
 {
-    setFixedHeight(110);
+    setFixedHeight(video_position_height);
     setStyleSheet("background:rgb(31,31,31)");
     initWidget();
 }
@@ -17,15 +23,16 @@ void videoPositionWidget::initWidget()
     m_slider->setRange(0,0);
 
     m_currentTime = new QLabel("00:00",this);
-    m_currentTime->setFont(QFont(Font_Family,Font_size_Small,QFont::Normal));
     m_currentTime->setStyleSheet("color:rgb(150,150,150);");
+    m_currentTime->setFixedHeight(video_position_height);
     m_currentTime->setAlignment(Qt::AlignVCenter);
 
 
     m_totalTime = new QLabel("00:00",this);
-    m_totalTime->setFont(QFont(Font_Family,Font_size_Small,QFont::Normal));
     m_totalTime->setStyleSheet("color:rgb(150,150,150);");
+    m_totalTime->setFixedHeight(video_position_height);
     m_totalTime->setAlignment(Qt::AlignVCenter);
+
 
     lyout->addSpacing(10);
     lyout->addWidget(m_currentTime);
@@ -37,13 +44,7 @@ void videoPositionWidget::initWidget()
 
     QVBoxLayout *mainlyout = new QVBoxLayout;
 
-    QWidget *fillWidget = new QWidget(this);
-    fillWidget->setFixedHeight(50);
-    fillWidget->setStyleSheet("background:rgb(0,0,0)");
-
-    mainlyout->addWidget(fillWidget);
     mainlyout->addLayout(lyout);
-    mainlyout->setSpacing(0);
     mainlyout->setContentsMargins(0,0,0,0);
 
     setLayout(mainlyout);

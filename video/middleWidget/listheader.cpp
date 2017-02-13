@@ -1,9 +1,14 @@
 #include "listheader.h"
 #include <QVBoxLayout>
 #include <QHBoxLayout>
+#include <QMouseEvent>
 #include "global_value.h"
 
-
+#ifdef DEVICE_EVB
+int video_header_height = 70;
+#else
+int video_header_height = 40;
+#endif
 listHeader::listHeader(QWidget *parent):baseWidget(parent)
 {
     initWidget();
@@ -18,8 +23,8 @@ void listHeader::initWidget()
 
     m_button1 = new funtionButton(str_listheader_local_video,this);
     m_button2 = new funtionButton(str_listheader_net_video,this);
-    m_button1->setFixedHeight(70);
-    m_button2->setFixedHeight(70);
+    m_button1->setFixedHeight(video_header_height);
+    m_button2->setFixedHeight(video_header_height);
 
     hmainlyout->addWidget(m_button1);
     hmainlyout->addWidget(m_button2);
@@ -53,9 +58,11 @@ void funtionButton::initWidget()
     QVBoxLayout *vmainlyout = new QVBoxLayout;
 
     m_title = new QLabel("",this);
+    QFont font = m_title->font();
+    font.setPixelSize(font_size_big);
+    font.setBold(true);
+    m_title->setFont(font);
     m_title->setAlignment(Qt::AlignCenter);
-    m_title->setFont(QFont(Font_Family,Font_size_Normal,QFont::DemiBold));
-    m_title->setStyleSheet("color:rgb(255,255,255);");
     m_title->adjustSize();
 
     m_bottomLine=new QFrame(this);

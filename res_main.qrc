@@ -16,9 +16,10 @@
         <file>image/main/btnborder.png</file>
         <file>image/main/icon_music.png</file>
         <file>image/main/icon_guide.png</file>
-        <file>image/main/icon_radio.png</file>
         <file>image/main/icon_video.png</file>
         <file>image/main/return.png</file>
         <file>image/main/icon_setting.png</file>
+        <file>image/main/icon_gallery.png</file>
+        <file>image/main/return_big.png</file>
     </qresource>
 </RCC>

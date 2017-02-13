@@ -27,7 +27,7 @@ void videoWidgets::readSetting()
     if(vol==0)
         vol=80;
     m_player->setVolume(vol);
-    m_bottomWid->m_volWidget->m_slider_vol->setValue(vol);
+    m_bottomWid->m_volWidget->m_slider_vol->setValue(m_player->volume());
 
     setting.endGroup();
 }
@@ -122,16 +122,13 @@ void videoWidgets::slot_onCurrentMediaChanged(QMediaContent content)
 
 void videoWidgets::slot_onLocalListItemDoubleClick(int row, int)
 {
-    qDebug("itemClick1");
     m_player->stop();
     QUrl url= m_middleWid->m_rightWid->getVideoList()->getUrlAt(row);
     if(!url.isEmpty())
     {
         if(m_player->isAvailable()){
             m_player->setMedia(url);
-            qDebug("itemClick2");
             m_player->play();
-            qDebug("itemClick3");
         }
     }
 }
@@ -150,14 +147,11 @@ void videoWidgets::slot_setPlayPause()
 
 void videoWidgets::slot_nextVideo()
 {
-    qDebug("nextVideo1");
     m_player->stop();
     videoList *m_playList = m_middleWid->m_rightWid->getVideoList();
     if(m_player->isAvailable()){
         m_player->setMedia(m_playList->getNextVideoUrl());
-        qDebug("nextVideo2");
         m_player->play();
-        qDebug("nextVideo3");
     }
 }
 
@@ -225,3 +219,29 @@ void videoWidgets::slot_setPause()
     m_player->setMedia(NULL);
     setOriginState();
 }
+
+void videoWidgets::updateVolume(bool volumeAdd)
+{
+    if(volumeAdd){
+        if(m_player->volume()<95)
+        {
+            m_player->setVolume(m_player->volume()+5);
+        }
+        else
+        {
+            m_player->setVolume(100);
+        }
+    }else{
+        if(m_player->volume()>5)
+        {
+            m_player->setVolume(m_player->volume()-5);
+        }
+        else
+        {
+            m_player->setVolume(0);
+        }
+    }
+    m_bottomWid->m_volWidget->m_slider_vol->setValue(m_player->volume());
+}
+
+

@@ -5,8 +5,7 @@
 cameraWidgets::cameraWidgets(QWidget *parent):baseWidget(parent)
 {
     setObjectName("cameraWidgets");
-    setStyleSheet("#cameraWidgets{border-image: url(:/image/camera/camera_bg.jpg);}"
-                  "QLabel{color:white;}");
+    setStyleSheet("#cameraWidgets{border-image: url(:/image/camera/camera_bg.jpg);}");
     init();
     initLayout();
 }

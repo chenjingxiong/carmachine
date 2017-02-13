@@ -18,7 +18,7 @@ void middleWidgets::initLayout()
     m_leftWid=new middleWidgetLeft(this);
     m_rightWid = new middleWidgetRight(this);
 
-    hyout->addWidget(m_leftWid,2);
+    hyout->addWidget(m_leftWid,1);
     hyout->addWidget(m_rightWid,3);
     hyout->setSpacing(0);
     hyout->setContentsMargins(0,0,0,0);
