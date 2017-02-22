@@ -50,11 +50,11 @@ void galleryTopWidgets::initWidget()
     label1->setFixedSize(6,16);
     label1->adjustSize();
 
-    QLabel*label2=new QLabel("gallery",this);
-    QFont font = label2->font();
+    m_titleLabel = new QLabel(str_top_title,this);
+    QFont font = m_titleLabel->font();
     font.setPixelSize(font_size_big);
-    label2->setFont(font);
-    label2->setAlignment(Qt::AlignCenter);
+    m_titleLabel->setFont(font);
+    m_titleLabel->setAlignment(Qt::AlignCenter);
 
     //lyout1
     QHBoxLayout *lyout1 = new QHBoxLayout;
@@ -74,7 +74,7 @@ void galleryTopWidgets::initWidget()
 
 
     hmainyout->addLayout(lyout1,1);
-    hmainyout->addWidget(label2,1);
+    hmainyout->addWidget(m_titleLabel,1);
     hmainyout->addLayout(lyout2,1);
     hmainyout->setContentsMargins(0,0,0,0);
     setLayout(hmainyout);

@@ -7,9 +7,9 @@
 mainWindow::mainWindow(QWidget *parent):baseWindow(parent)
 {
     // 设置布局只需要设置m_mainwid即可
-    m_mainwid->setStyleSheet("QLabel{color:white;}");
-    setMinimumSize(1000,700);
+//    m_mainwid->setStyleSheet("QLabel{color:white;}");
 
+    setStyleSheet("QLabel{color:white;}");
     initLayout();
     initAnimation();
     initConnection();
@@ -30,7 +30,7 @@ void mainWindow::initLayout()
     m_musicWid  = new musicWidgets(m_stackedWid);
     m_cameraWid = new cameraWidgets(m_stackedWid);
     m_videoWid = new videoWidgets(m_stackedWid);
-    m_galleryWid = new galleryWidgets(m_stackedWid);
+    m_galleryWid = new galleryWidgets(m_stackedWid,this);
 
     m_stackedWid->addWidget(m_settingwid);
     m_stackedWid->addWidget(m_musicWid);
@@ -77,7 +77,7 @@ void mainWindow::initConnection()
     connect(m_musicWid->m_topwid->m_btnreturn,SIGNAL(clicked(bool)),this,SLOT(slot_returnanimation()));
     connect(m_cameraWid->m_topWid->m_btnreturn,SIGNAL(clicked(bool)),this,SLOT(slot_returnanimation()));
     connect(m_videoWid->m_topWid->m_btnreturn,SIGNAL(clicked(bool)),this,SLOT(slot_returnanimation()));
-    connect(m_galleryWid->m_topWid->m_btnreturn,SIGNAL(clicked(bool)),this,SLOT(slot_returnanimation()));
+//    connect(m_galleryWid->m_topWid->m_btnreturn,SIGNAL(clicked(bool)),this,SLOT(slot_returnanimation()));
     connect(m_settingwid->m_topWid->m_btnreturn,SIGNAL(clicked(bool)),this,SLOT(slot_returnanimation()));
 }
 

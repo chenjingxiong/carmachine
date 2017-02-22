@@ -83,7 +83,7 @@ void videoMiddleWidgetRight::setOriginState()
 void videoMiddleWidgetRight::beginSearchFromPath(QString path)
 {
     QStringList filter;
-    filter<<"mp4"<<"avi"<<"mp3";
+    filter<<"mp4"<<"avi"<<"mp3"<<"rm"<<"rmvb"<<"wmv"<<"mkv";
 //    QMediaPlayer player;
 //    QEventLoop lp;
     QFileInfoList fileList = getFileList(path);

@@ -2,5 +2,12 @@
     <qresource prefix="/">
         <file>image/gallery/gallery_top_icon.png</file>
         <file>image/gallery/ic_empty_image.png</file>
+        <file>image/gallery/ic_thumb_checked.png</file>
+        <file>image/gallery/ic_last_image.png</file>
+        <file>image/gallery/ic_next_image.png</file>
+        <file>image/gallery/ic_delete.png</file>
+        <file>image/gallery/ic_detail.png</file>
+        <file>image/gallery/ic_expand.png</file>
+        <file>image/gallery/ic_rotate.png</file>
     </qresource>
 </RCC>

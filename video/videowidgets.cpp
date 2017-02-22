@@ -9,6 +9,7 @@
 
 videoWidgets::videoWidgets(QWidget *parent): baseWidget(parent)
 {
+    setStyleSheet("QLabel{color:white;}");
     initLayout();
     initPlayerAndConnection();
     readSetting();

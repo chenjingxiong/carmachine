@@ -16,6 +16,8 @@
 #include <QPropertyAnimation>
 #include <QStackedLayout>
 
+class galleryWidgets;
+
 class mainWindow : public baseWindow
 {
     Q_OBJECT
@@ -58,7 +60,8 @@ private slots:
     void slot_showVideo();
     void slot_showGallery();
     void slot_showCamera();
-    void slot_returnanimation();
     void slot_closeanimationfinished();
+public slots:
+    void slot_returnanimation();
 };
 #endif // MAINWINDOW_H

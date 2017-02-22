@@ -1,18 +1,21 @@
 #include "gallerywidgets.h"
 #include <QVBoxLayout>
 #include <QHBoxLayout>
+#include "global_value.h"
 
 
-galleryWidgets::galleryWidgets(QWidget *parent):baseWidget(parent)
+galleryWidgets::galleryWidgets(QWidget *parent,mainWindow *mainWid):baseWidget(parent)
 {
-    init();
+    m_mainWid = mainWid ;
     initLayout();
+    init();
 }
 
 
 void galleryWidgets::init()
 {
-
+    connect(m_topWid->m_btnreturn,SIGNAL(clicked(bool)),this,SLOT(slot_return()));
+    connect(m_middleWid,SIGNAL(viewerResChanged(QString)),this,SLOT(slot_onViewerResChanged(QString)));
 }
 
 void galleryWidgets::initLayout()
@@ -31,5 +34,24 @@ void galleryWidgets::initLayout()
     vmainlyout->setSpacing(0);
 
     setLayout(vmainlyout);
+}
+
+void galleryWidgets::slot_return()
+{
+    if(m_middleWid->isViewerMode()){
+        m_middleWid->leaveViewerMode();
+        m_topWid->updateTopTitle(str_top_title);
+    }else{
+        m_mainWid->slot_returnanimation();
+    }
+}
+
+void galleryWidgets::slot_onViewerResChanged(QString imagePath)
+{
+    QFileInfo *info = new QFileInfo(imagePath);
+    if(info->exists())
+    {
+        m_topWid->updateTopTitle(info->fileName());
+    }
 }
 

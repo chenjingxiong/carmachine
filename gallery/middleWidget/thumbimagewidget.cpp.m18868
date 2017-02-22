@@ -1,0 +1,108 @@
+#include "thumbimagewidget.h"
+
+#include <QHBoxLayout>
+#include <QIcon>
+#include <qdebug.h>
+#include <QCheckBox>
+
+#include "thumbimageitem.h"
+#include "global_value.h"
+
+thumbImageWidget::thumbImageWidget(QWidget *parent):baseWidget(parent)
+{
+    setStyleSheet("background:transparent");
+    initLayout();
+    initConnection();
+}
+
+void thumbImageWidget::initLayout()
+{
+    QVBoxLayout *mainLyout = new QVBoxLayout;
+
+    // control bottom
+    m_controlBottom = new QWidget(this);
+    m_controlBottom->setStyleSheet("background:rgb(20,22,28)");
+    m_controlBottom->setFixedHeight(50);
+
+    m_imageCountText = new QLabel(this);
+    m_imageCountText->setAlignment(Qt::AlignVCenter|Qt::AlignLeft);
+    QFont font = m_imageCountText->font();
+    font.setPixelSize(font_size_big);
+    m_imageCountText->setFont(font);
+
+    m_tipText = new QLabel("当前已选中0项",this);
+    m_tipText->setAlignment(Qt::AlignCenter);
+    m_tipText->setFont(font);
+
+    m_btnDelete = new QPushButton("编辑图片",this);
+    m_btnDelete->setStyleSheet("QPushButton{background:rgb(36,184,71);color:white;border-radius:5px}"
+                               "QPushButton::hover{background:rgb(25,166,58)}"
+                               "QPushButton::pressed{background:rgb(25,166,58)}");
+    m_btnDelete->setFixedSize(60,30);
+
+
+
+    QHBoxLayout *bottomLayout = new QHBoxLayout;
+    bottomLayout->addWidget(m_imageCountText,1);
+    bottomLayout->addWidget(m_tipText,1);
+    bottomLayout->addWidget(m_btnDelete,q);
+
+    m_controlBottom->setLayout(bottomLayout);
+
+    // listWidget
+    m_imageListWid = new QListWidget(this);
+    m_imageListWid->setIconSize(QSize(130,130));
+    m_imageListWid->setStyleSheet("QListWidget::item:selected{background: transparent;}");
+    /* cancel the border in ListWidget */
+    m_imageListWid->setFrameShape(QListWidget::NoFrame);
+    /* set QListWidget be IconMode to show image thumnail and unable to drag */
+    m_imageListWid->setViewMode(QListView::IconMode);
+    m_imageListWid->setMovement(QListView::Static);
+    m_imageListWid->setSpacing(5);
+    m_imageListWid->setEditTriggers(QAbstractItemView::NoEditTriggers);
+    m_imageListWid->setFocusPolicy(Qt::NoFocus);
+    m_imageListWid->setStyleSheet("QListWidget::indicator{subcontrol-position:top;}");
+
+
+    mainLyout->addWidget(m_imageListWid);
+    mainLyout->addWidget(m_controlBottom);
+    mainLyout->setContentsMargins(0,0,0,0);
+    mainLyout->setSpacing(0);
+
+    setLayout(mainLyout);
+}
+
+void thumbImageWidget::initConnection()
+{
+    connect(this,SIGNAL(imageListChanged(QList<QImage>)),this,SLOT(slot_onImageListChanged(QList<QImage>)));
+    connect(m_imageListWid,SIGNAL(itemClicked(QListWidgetItem*)),this,SLOT(slot_onListWidgetClick(QListWidgetItem*)));
+}
+
+void thumbImageWidget::updateImageCount()
+{
+    m_imageCountText->setText("～图片与预览("+QString::number(m_imageListWid->count())+")");
+}
+
+void thumbImageWidget::slot_onImageListChanged(QList<QImage> imageList)
+{
+    m_images = imageList;
+
+    for(int i=0;i<m_images.size();i++)
+    {
+        QListWidgetItem *litsItem = new QListWidgetItem(/*QIcon(QPixmap::fromImage(m_images.at(i)).scaled(130,130)),NULL*/);
+
+        thumbImageItem *itemWid = new thumbImageItem(m_images.at(i));
+
+        litsItem->setSizeHint(QSize(130,130));
+        m_imageListWid ->addItem(litsItem);
+        m_imageListWid->setItemWidget(litsItem,itemWid);
+    }
+    updateImageCount();
+}
+
+void thumbImageWidget::slot_onListWidgetClick(QListWidgetItem *listItem)
+{
+    thumbImageItem *imageItem = (thumbImageItem*)m_imageListWid->itemWidget(listItem);
+    imageItem->onItemClick();
+}
+

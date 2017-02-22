@@ -4,12 +4,18 @@
 #include <mainWindows/global_value.h>
 #include <global_value.h>
 
+#include <hdmithread.h>
+
 int main(int argc, char *argv[])
 {
     QSingleApplication app(argc, argv);
+
+    hdmiThread thread;
+    thread.start();
+
     if(!app.isRunning())    /* application run in single mode */
     {
-        app.setStyleSheet("QLabel{color:white;}"
+        app.setStyleSheet(/*"QLabel{color:white;}"*/
                           "QScrollBar{background:transparent; width: 10px;margin: 0px 2px 0px 0px;}"
                           "QScrollBar::handle{background:rgb(217,217,217);border-radius:4px;}"
                           "QScrollBar::handle:hover{background: rgb(191,191,191);}"
@@ -25,8 +31,8 @@ int main(int argc, char *argv[])
         mainWindow w;
         app.w=&w;
 
-        //w.setGeometry(100,100,1000,700);
-        //w.show();
+//        w.setGeometry(100,100,1000,700);
+//        w.show();
         w.showMaximized();
         return app.exec();
     }

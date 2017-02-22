@@ -13,7 +13,7 @@ galleryMiddleWidgets::galleryMiddleWidgets(QWidget *parent):baseWidget(parent)
     setStyleSheet("#galleryMiddleWidgets{background:rgb(43,45,51)}");
     initLayout();
     initConnection();
-    initRes(); // init m_images
+    updateRes(); // init m_images
 }
 
 /**
@@ -46,10 +46,10 @@ QFileInfoList findImgFiles(const QString& path = QString(""))
 }
 
 
-void galleryMiddleWidgets::initRes()
+void galleryMiddleWidgets::updateRes()
 {
-    m_imageMap.clear();
     m_imagesInfoList.clear();
+    m_imagesRes.clear();
 
     // get all image files and user class QImage to get thumbnail
     m_imagesInfoList = findImgFiles(MUSIC_SEARCH_PATH);
@@ -59,20 +59,13 @@ void galleryMiddleWidgets::initRes()
     {
         if(tempImage.load(m_imagesInfoList.at(i).absoluteFilePath()))
         {
-            if(!m_imageMap.contains(m_imagesInfoList.at(i).absolutePath()))
-            {
-                m_imageMap.insert(m_imagesInfoList.at(i).absolutePath(),QList<QImage>());
-            }
-            /* used to insert value into list that is the value of map */
-            QList<QImage> tempList =m_imageMap.value(m_imagesInfoList.at(i).absolutePath());
-            tempList.append(tempImage);
-            m_imageMap.insert(m_imagesInfoList.at(i).absolutePath(),tempList);
-            m_imageRes.append(tempImage);
+            m_imagesRes.insert(m_imagesInfoList.at(i).absoluteFilePath(),tempImage);
         }
     }
-    if(m_imageMap.size()>0)
+    if(m_imagesRes.size()>0)
     {
-        m_imageShowWid->updateList(m_imageRes);
+        emit m_thumbImgWid->imagesResChanged(m_imagesRes);
+        emit m_viewerWid->imagesResChanged(m_imagesRes);
     }
     else
     {
@@ -83,6 +76,8 @@ void galleryMiddleWidgets::initRes()
 void galleryMiddleWidgets::initConnection()
 {
     connect(this,SIGNAL(imageEmpty()),this,SLOT(slot_showEmptyImageTip()));
+    connect(this,SIGNAL(imageItemClick(QString,QImage)),this,SLOT(slot_showImageViewer(QString,QImage)));
+    connect(this,SIGNAL(imagesResChanged(QMap<QString,QImage>)),this,SLOT(slot_onImagesResChanged(QMap<QString,QImage>)));
 }
 
 void galleryMiddleWidgets::initLayout()
@@ -90,13 +85,13 @@ void galleryMiddleWidgets::initLayout()
     m_stackedMainLyout = new QStackedLayout(this);
 
     m_emptyImgWid = new emptyImagesWidget(this);
-
-
-    m_imageShowWid = new imageShowWidget(this);
+    m_thumbImgWid = new thumbImageWidget(this);
+    m_viewerWid = new imageViewerWidget(this);
 
     m_stackedMainLyout->addWidget(m_emptyImgWid);
-    m_stackedMainLyout->addWidget(m_imageShowWid);
-    m_stackedMainLyout->setCurrentWidget(m_imageShowWid);
+    m_stackedMainLyout->addWidget(m_thumbImgWid);
+    m_stackedMainLyout->addWidget(m_viewerWid);
+    m_stackedMainLyout->setCurrentWidget(m_thumbImgWid);
 
     setLayout(m_stackedMainLyout);
 }
@@ -104,5 +99,27 @@ void galleryMiddleWidgets::initLayout()
 void galleryMiddleWidgets::slot_showEmptyImageTip()
 {
     m_stackedMainLyout->setCurrentWidget(m_emptyImgWid);
-
 }
+
+void galleryMiddleWidgets::slot_showImageViewer(QString imagePath, QImage image)
+{
+    m_stackedMainLyout->setCurrentWidget(m_viewerWid);
+    m_viewerWid->updateRes(imagePath,image);
+}
+
+void galleryMiddleWidgets::slot_onImagesResChanged(QMap<QString, QImage> imagesRes)
+{
+    m_thumbImgWid->imagesResChanged(imagesRes);
+    m_viewerWid->imagesResChanged(imagesRes);
+}
+
+void galleryMiddleWidgets::leaveViewerMode()
+{
+    m_stackedMainLyout->setCurrentWidget(m_thumbImgWid);
+    if(m_viewerWid->m_detailWidget){
+        m_viewerWid->m_detailWidget->close();
+    }
+}
+
+
+

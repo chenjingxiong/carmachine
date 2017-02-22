@@ -5,6 +5,12 @@
 #include "basepushbutton.h"
 #include "global_value.h"
 
+#ifdef DEVICE_EVB
+int center_image_width = 300;
+#else
+int center_image_width = 150;
+#endif
+
 emptyImagesWidget::emptyImagesWidget(QWidget *parent):baseWidget(parent)
 {
     setStyleSheet("QLabel{color:white}");
@@ -16,7 +22,7 @@ void emptyImagesWidget::initLayout()
 
     flatButton *centerImage = new flatButton(this);
     centerImage->setEnabled(false);
-    centerImage->setFixedSize(150,150);
+    centerImage->setFixedSize(center_image_width,center_image_width);
     centerImage->setStyleSheet("QPushButton{background:transparent;border-image:url(:/image/gallery/ic_empty_image.png)}");
 
     QHBoxLayout *centerImageLyout = new QHBoxLayout;
