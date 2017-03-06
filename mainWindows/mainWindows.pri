@@ -3,7 +3,7 @@ HEADERS += \
     $$PWD/global_value.h \
     $$PWD/mainwidgetup.h \
     $$PWD/mainwidgetlow.h \
-    $$PWD/hdmithread.h
+    $$PWD/ueventthread.h
 
 
 SOURCES += \
@@ -12,4 +12,4 @@ SOURCES += \
     $$PWD/global_value.cpp \
     $$PWD/mainwidgetup.cpp \
     $$PWD/mainwidgetlow.cpp \
-    $$PWD/hdmithread.cpp
+    $$PWD/ueventthread.cpp

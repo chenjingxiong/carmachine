@@ -6,7 +6,7 @@
 
 #include "thumbimageitem.h"
 #include "global_value.h"
-#include <QMessageBox>
+#include <cmessagebox.h>
 
 #ifdef DEVICE_EVB
 int thumb_image_width = 280;
@@ -15,7 +15,7 @@ int button_width = 130;
 int button_height = 60;
 
 #else
-int thumb_image_width = 130;
+int thumb_image_width = 110;
 int bottom_widget_height = 50;
 int button_width = 60;
 int button_height = 30;
@@ -67,8 +67,6 @@ void thumbImageWidget::initLayout()
     buttonLayout->addWidget(m_btnMode);
     buttonLayout->setSpacing(20);
     buttonLayout->addSpacing(20);
-
-
 
     QHBoxLayout *bottomLayout = new QHBoxLayout;
     bottomLayout->addWidget(m_imageCountText,1);
@@ -199,9 +197,8 @@ void thumbImageWidget::slot_changeImageMode()
 void thumbImageWidget::slot_updateImages()
 {
     if(m_selectedItems.size()>0&&editMode){
-        QMessageBox::StandardButton rb = QMessageBox::question(NULL,str_question_Tip,
-                                                               str_question_delete_image,QMessageBox::Yes | QMessageBox::No, QMessageBox::Yes);
-        if(rb == QMessageBox::Yes)
+        int result = CMessageBox::showCMessageBox(this,str_question_delete_image,str_button_delete,str_button_cancel);
+        if(result == RESULT_CONFIRM)
         {
             // delete images selected
             for(int i=0;i<m_selectedItems.size();i++)

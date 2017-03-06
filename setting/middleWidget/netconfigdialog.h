@@ -23,6 +23,8 @@ private:
 
     virtual void wepEnabled(bool enabled);
     virtual void getEapCapa();
+protected:
+    void resizeEvent(QResizeEvent *);
 public slots:
     virtual void authChanged(int sel);
     virtual void eapChanged(int sel);

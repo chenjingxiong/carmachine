@@ -4,8 +4,10 @@ HEADERS += \
     $$PWD/thumbimagewidget.h \
     $$PWD/thumbimageitem.h \
     $$PWD/imageviewerwidget.h \
-    $$PWD/imagecontrolwidget.h \
-    $$PWD/imagedetailwidget.h
+    $$PWD/imagedetailwidget.h \
+    $$PWD/imageviewer.h \
+    $$PWD/imagecontroler.h \
+
 
 SOURCES += \
     $$PWD/gallerymiddlewidgets.cpp \
@@ -13,5 +15,6 @@ SOURCES += \
     $$PWD/thumbimagewidget.cpp \
     $$PWD/thumbimageitem.cpp \
     $$PWD/imageviewerwidget.cpp \
-    $$PWD/imagecontrolwidget.cpp \
-    $$PWD/imagedetailwidget.cpp
+    $$PWD/imagedetailwidget.cpp \
+    $$PWD/imageviewer.cpp\
+    $$PWD/imagecontroler.cpp

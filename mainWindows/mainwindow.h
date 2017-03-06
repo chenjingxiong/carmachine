@@ -23,7 +23,10 @@ class mainWindow : public baseWindow
     Q_OBJECT
 public:
     explicit mainWindow(QWidget *parent = 0);
-    ~mainWindow();
+private:
+    void initLayout();
+    void initConnection();
+    void initAnimation();
 private:
     QStackedWidget *m_stackedWid;
     musicWidgets *m_musicWid;
@@ -43,10 +46,7 @@ private:
     QPropertyAnimation *m_upwidopen;
     QPropertyAnimation *m_lowwidopen;
 
-    void initLayout();
-    void initConnection();
-    void initAnimation();
-
+    bool mediaHasUpdate;
 private:
 protected:
     // 解决无边框窗口在最小化之后子控件不刷新的问题
@@ -61,7 +61,27 @@ private slots:
     void slot_showGallery();
     void slot_showCamera();
     void slot_closeanimationfinished();
+    void slot_standby();
+    void slot_updateMedia1();
+    void slot_updateMedia2();
 public slots:
     void slot_returnanimation();
+    void slot_beginSearchMedia();
+signals:
+    void usbStateChanged();
+    void beginSearchMedia();
 };
+
+class mediaUpdateThread:public QThread
+{
+public:
+    mediaUpdateThread(QObject *parent ,mainWindow *mainWindow);
+private:
+    mainWindow *m_mainWindow;
+protected:
+    void run();
+};
+
+
+
 #endif // MAINWINDOW_H

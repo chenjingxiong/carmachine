@@ -9,6 +9,7 @@ class videoList:public QObject
     Q_OBJECT
 public:
     videoList(QObject *parent = 0);
+    void clearList(){m_list.clear();m_currentIndex=0;}
 
     inline void addToPlayList(const QString& path){m_list.append(QUrl::fromLocalFile(path));}
     QUrl getUrlAt(int index);

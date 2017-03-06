@@ -109,44 +109,49 @@ QFileInfoList middleLeftStackWidget0::getFileList(QString path){
     }
     return file_list;
 }
-bool isSearchOver = false;
+
 
 // 从path路径下搜索所有mp3文件并添加到list
 void middleLeftStackWidget0::beginSearchFromPath(QString path){
-    if(isSearchOver){
-        return;
+    //reset list
+    for(int i = m_table->rowCount();i > 0;i--)
+    {
+        m_table->removeRow(0);
     }
-    isSearchOver = true;
+    m_playlist->clearList();
+    updateSongCountLabel();
+
     QStringList filter;
     filter<<".mp3";
-//    QMediaPlayer player;
-//    QEventLoop lp;
+    //    QMediaPlayer player;
+    //    QEventLoop lp;
     QFileInfoList fileList = getFileList(path);
     for(int i=0;i<fileList.size();i++){
         QFileInfo fileInfo = fileList.at(i);
         for(int j=0;j<filter.size();j++){
             // 如果是后缀为mp3的文件
             if(!m_playlist->getUrlList().contains(QUrl::fromLocalFile(fileInfo.absoluteFilePath()))&&fileInfo.fileName().endsWith(filter.at(j))){
-//                player.setMedia(QUrl::fromLocalFile(fileInfo.absoluteFilePath()));
-//                //prevent the loop dont stop
-//                QTimer timer;
-//                connect(&timer,&QTimer::timeout,[&](){
-//                    lp.quit();
-//                });
-//                timer.setSingleShot(true);
-//                timer.start(2000);
+                //                player.setMedia(QUrl::fromLocalFile(fileInfo.absoluteFilePath()));
+                //                //prevent the loop dont stop
+                //                QTimer timer;
+                //                connect(&timer,&QTimer::timeout,[&](){
+                //                    lp.quit();
+                //                });
+                //                timer.setSingleShot(true);
+                //                timer.start(2000);
 
-//                connect(&player,SIGNAL(durationChanged(qint64)),&lp,SLOT(quit()));
-//                lp.exec();
-//                qint64 musicTime= player.duration();
-//                QTime total_time(0, (musicTime/60000)%60, (musicTime/1000)%60);
-//                QString duration=total_time.toString("mm:ss");
-//                if(musicTime>0){
-                    addToPlayList(fileInfo.baseName(),fileInfo.absoluteFilePath()," ");
-//                }
+                //                connect(&player,SIGNAL(durationChanged(qint64)),&lp,SLOT(quit()));
+                //                lp.exec();
+                //                qint64 musicTime= player.duration();
+                //                QTime total_time(0, (musicTime/60000)%60, (musicTime/1000)%60);
+                //                QString duration=total_time.toString("mm:ss");
+                //                if(musicTime>0){
+                addToPlayList(fileInfo.baseName(),fileInfo.absoluteFilePath()," ");
+                //                }
             }
         }
     }
+    m_curPlayingIndex = -1;
 }
 
 void middleLeftStackWidget0::slot_addSong()
@@ -156,34 +161,34 @@ void middleLeftStackWidget0::slot_addSong()
     if(files.isEmpty())
         return;
 
-//    QMediaPlayer player;
-//    QEventLoop lp;
+    //    QMediaPlayer player;
+    //    QEventLoop lp;
     for(int i=0;i<files.count();i++)
     {
         QFileInfo info(files[i]);
         QString m_name=info.baseName();
         if(!m_playlist->getUrlList().contains(QUrl::fromLocalFile(files.value(i))))
         {
-//            QString filePath=files.value(i);
-//            // to get the infomation of music
-//            player.setMedia(QUrl::fromLocalFile(filePath));
-//            //prevent the loop dont stop
-//            QTimer timer;
-//            connect(&timer,&QTimer::timeout,[&](){
-//                lp.quit();
-//            });
-//            timer.setSingleShot(true);
-//            timer.start(2000);
+            //            QString filePath=files.value(i);
+            //            // to get the infomation of music
+            //            player.setMedia(QUrl::fromLocalFile(filePath));
+            //            //prevent the loop dont stop
+            //            QTimer timer;
+            //            connect(&timer,&QTimer::timeout,[&](){
+            //                lp.quit();
+            //            });
+            //            timer.setSingleShot(true);
+            //            timer.start(2000);
 
-//            connect(&player,SIGNAL(durationChanged(qint64)),&lp,SLOT(quit()));
-//            lp.exec();
-//            qint64 musicTime= player.duration();
-//            QTime total_time(0, (musicTime/60000)%60, (musicTime/1000)%60);
-//            QString duration=total_time.toString("mm:ss");
+            //            connect(&player,SIGNAL(durationChanged(qint64)),&lp,SLOT(quit()));
+            //            lp.exec();
+            //            qint64 musicTime= player.duration();
+            //            QTime total_time(0, (musicTime/60000)%60, (musicTime/1000)%60);
+            //            QString duration=total_time.toString("mm:ss");
 
-//            if(musicTime>0){
-                addToPlayList(m_name,files.at(i)," ");
-//            }
+            //            if(musicTime>0){
+            addToPlayList(m_name,files.at(i)," ");
+            //            }
         }
     }
 }

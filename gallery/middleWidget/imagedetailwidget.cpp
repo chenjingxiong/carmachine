@@ -20,12 +20,14 @@ int title_width = 80;
 
 #endif
 
-ImageDetailWidget::ImageDetailWidget(QWidget *parent):QWidget(parent)
+ImageDetailWidget::ImageDetailWidget(QWidget *parent):QDialog(parent)
 {
-    this->setWindowFlags(Qt::FramelessWindowHint);
+    this->setWindowFlags(Qt::FramelessWindowHint|Qt::Dialog);
     setFixedSize(detail_widget_width,detail_widget_height);
+    move((int)((parent->width()-width())/2),(int)((parent->height()-height())/2));
+
     setObjectName("ImageDetailWidget");
-    setStyleSheet("#ImageDetailWidget{background:rgb(56,58,66);border-radius:10px}"
+    setStyleSheet("#ImageDetailWidget{background:rgb(56,58,66);border-radius:5px}"
                   "QLabel{color:white;}");
     QFont font = this->font();
     font.setPixelSize(font_size_big);
@@ -52,16 +54,9 @@ void ImageDetailWidget::initLayout()
     titleLabel->setFont(font);
     titleLabel->setAlignment(Qt::AlignLeft);
 
-    m_btnClose =  new flatButton(this);
-    m_btnClose->setFixedSize(16,16);
-    m_btnClose->setStyleSheet("QPushButton{border-image:url(:/image/main/btn_close (1).png);}"
-                              "QPushButton::hover{border-image:url(:/image/main/btn_close (2).png);}"
-                              "QPushButton::pressed{border-image:url(:/image/main/btn_close (3).png);}");
-
     headerLyout->addSpacing(10);
     headerLyout->addWidget(titleLabel);
     headerLyout->addStretch(0);
-    headerLyout->addWidget(m_btnClose);
     headerLyout->addSpacing(10);
 
     // image infomation
@@ -108,7 +103,6 @@ void ImageDetailWidget::initLayout()
 
 void ImageDetailWidget::initConnection()
 {
-    connect(m_btnClose,SIGNAL(clicked(bool)),this,SLOT(close()));
     connect(m_btnConfirm,SIGNAL(clicked(bool)),this,SLOT(close()));
 }
 
@@ -145,18 +139,38 @@ QString convertFileSize(qint64 size) {
     return QString::number(curSize).append(unit);
 }
 
-void ImageDetailWidget::updateImageInfo(QString imagePath)
+int ImageDetailWidget::showImageDetail(QWidget *parent, QString imagePath)
 {
+    ImageDetailWidget *detailWidget = new ImageDetailWidget(parent);
     QFileInfo *info = new QFileInfo(imagePath);
     if(info->exists())
     {
-        nameItem->updateItem(str_image_name,info->baseName());
-        patternItem->updateItem(str_image_pattern,info->completeSuffix());
-        resolutionItem->updateItem(str_image_resolution,getImageResolution(imagePath));
-        locationItem->updateItem(str_image_location,info->absolutePath());
-        sizeItem->updateItem(str_image_size,convertFileSize(info->size()));
-        createTimeItem->updateItem(str_image_create_time,info->created().toString("yyyy-MM-dd hh:mm"));
+        detailWidget->nameItem->updateItem(str_image_name,info->baseName());
+        detailWidget->patternItem->updateItem(str_image_pattern,info->completeSuffix());
+        detailWidget->resolutionItem->updateItem(str_image_resolution,getImageResolution(imagePath));
+        detailWidget->locationItem->updateItem(str_image_location,info->absolutePath());
+        detailWidget->sizeItem->updateItem(str_image_size,convertFileSize(info->size()));
+        detailWidget->createTimeItem->updateItem(str_image_create_time,info->created().toString("yyyy-MM-dd hh:mm"));
     }
+    return detailWidget->exec();
+}
+
+int ImageDetailWidget::exec()
+{
+    this->setWindowModality(Qt::WindowModal);
+    this->show();
+    m_eventLoop = new QEventLoop;
+    m_eventLoop->exec();
+    return -1;
+}
+
+void ImageDetailWidget::closeEvent(QCloseEvent *event)
+{
+    if (m_eventLoop != NULL)
+    {
+        m_eventLoop->exit();
+    }
+    event->accept();
 }
 
 ImageItem::ImageItem(QWidget *parent):QWidget(parent)
@@ -183,3 +197,4 @@ void ImageItem::updateItem(QString title, QString text)
     titleLabel->setText(title+":");
     textLabel->setText(text);
 }
+

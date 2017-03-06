@@ -4,9 +4,9 @@
 #include "basewidget.h"
 #include "basepushbutton.h"
 #include "gallerymiddlewidgets.h"
-#include "imagecontrolwidget.h"
 #include "imagedetailwidget.h"
-#include "moveablewidget.h"
+#include "imageviewer.h"
+#include "imagecontroler.h"
 
 #include <QLabel>
 
@@ -19,7 +19,6 @@ public:
     imageViewerWidget(QWidget *parent = 0);
 
     void updateRes(QString imagePath,QImage image);
-    ImageDetailWidget *m_detailWidget;
 private:
     void initLayout();
     void initConnection();
@@ -30,22 +29,23 @@ private:
     QString m_imagePath;
     QImage m_image;
 
-    flatButton *m_lastImgBtn;
-    flatButton *m_nextImgBtn;
-    QLabel *m_imageLabel;
-    // control layout
-    imageControlWidget *m_controlWid;
+    // imageViewer: 对图片进行显示与操作
+    ImageViewer *m_imageViewer;
+    ImageControler *m_imageControler;
+
 protected:
-    void resizeEvent(QResizeEvent *);
-    void mousePressEvent(QMouseEvent *);
+
 private slots:
-    void slot_onImagesResChanged(QMap<QString,QImage>);
-    void lastImage();
-    void nextImage();
+    void slot_onImagesResChanged(QMap<QString,QImage>,bool);
+    void slot_lastImage();
+    void slot_nextImage();
     void slot_viewDetail();
     void slot_deleteImage();
+    void slot_imageZoomOut();
+    void slot_imageZoomIn();
+    void slot_imageRotate();
 signals:
-    void imagesResChanged(QMap<QString,QImage>);
+    void imagesResChanged(QMap<QString,QImage>,bool);
 };
 
 #endif // IMAGEVIEWERWIDGET_H

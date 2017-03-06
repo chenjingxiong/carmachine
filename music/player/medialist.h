@@ -10,6 +10,8 @@ class mediaList:public QObject
 public:
     mediaList(QObject *parent = 0);
 
+    void clearList(){m_list.clear();m_musicindex=0;}
+
     void setPlayMode(PlayMode);
     int getPlayMode(){return m_playmode;}
     inline void addPlayList(const QString& path){m_list.append(QUrl::fromLocalFile(path));}

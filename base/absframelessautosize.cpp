@@ -1,5 +1,4 @@
 #include "absframelessautosize.h"
-#include <qdebug.h>
 
 AbsFrameLessAutoSize::AbsFrameLessAutoSize(QWidget *parent)
     : QWidget(parent)

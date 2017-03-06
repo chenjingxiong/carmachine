@@ -82,42 +82,50 @@ void videoMiddleWidgetRight::setOriginState()
 
 void videoMiddleWidgetRight::beginSearchFromPath(QString path)
 {
+    // clear list
+    for(int i = m_localTable->rowCount();i > 0;i--)
+    {
+        m_localTable->removeRow(0);
+    }
+    m_playList->clearList();
+
     QStringList filter;
     filter<<"mp4"<<"avi"<<"mp3"<<"rm"<<"rmvb"<<"wmv"<<"mkv";
-//    QMediaPlayer player;
-//    QEventLoop lp;
+    //    QMediaPlayer player;
+    //    QEventLoop lp;
     QFileInfoList fileList = getFileList(path);
     for(int i=0;i<fileList.size();i++){
         QFileInfo fileInfo = fileList.at(i);
         for(int j=0;j<filter.size();j++){
             if(!m_playList->getUrlList().contains(QUrl::fromLocalFile(fileInfo.absoluteFilePath()))&&fileInfo.fileName().endsWith(filter.at(j))){
-//                player.setMedia(QUrl::fromLocalFile(fileInfo.absoluteFilePath()));
-//                //prevent the loop dont stop
-//                QTimer timer;
-//                connect(&timer,&QTimer::timeout,[&](){
-//                    lp.quit();
-//                });
-//                timer.setSingleShot(true);
-//                timer.start(2000);
+                //                player.setMedia(QUrl::fromLocalFile(fileInfo.absoluteFilePath()));
+                //                //prevent the loop dont stop
+                //                QTimer timer;
+                //                connect(&timer,&QTimer::timeout,[&](){
+                //                    lp.quit();
+                //                });
+                //                timer.setSingleShot(true);
+                //                timer.start(2000);
 
-//                connect(&player,SIGNAL(durationChanged(qint64)),&lp,SLOT(quit()));
-//                lp.exec();
-//                qint64 videoTime= player.duration();
-//                QTime total_time((videoTime % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60),
-//                                 (videoTime % (1000 * 60 * 60)) / (1000 * 60),
-//                                 (videoTime % (1000 * 60)) / 1000);
-//                int allMinite = total_time.hour()*60+total_time.minute();
-//                QString duration = QString::number(allMinite).append(str_videoTime_minite);
-//                if(videoTime>0)
-//                {
-                    int rowCount = m_localTable->rowCount();
-                    insertIntoLocalTable(rowCount,fileInfo.fileName()," ");
-                    m_playList->addToPlayList(fileInfo.absoluteFilePath());
-                    //                    videoMediaDataBase::addVideo(fileInfo.baseName(),fileInfo.absoluteFilePath(),"..");
-//                }
+                //                connect(&player,SIGNAL(durationChanged(qint64)),&lp,SLOT(quit()));
+                //                lp.exec();
+                //                qint64 videoTime= player.duration();
+                //                QTime total_time((videoTime % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60),
+                //                                 (videoTime % (1000 * 60 * 60)) / (1000 * 60),
+                //                                 (videoTime % (1000 * 60)) / 1000);
+                //                int allMinite = total_time.hour()*60+total_time.minute();
+                //                QString duration = QString::number(allMinite).append(str_videoTime_minite);
+                //                if(videoTime>0)
+                //                {
+                int rowCount = m_localTable->rowCount();
+                insertIntoLocalTable(rowCount,fileInfo.fileName()," ");
+                m_playList->addToPlayList(fileInfo.absoluteFilePath());
+                //                    videoMediaDataBase::addVideo(fileInfo.baseName(),fileInfo.absoluteFilePath(),"..");
+                //                }
             }
         }
     }
+    m_curPlayingIndex = -1;
 }
 
 // 搜索path路径下的所有文件
@@ -171,7 +179,7 @@ void videoMiddleWidgetRight::updatePlayingItemStyle(QMediaContent content)
         m_localTable->setRowTextColor(m_curPlayingIndex,QColor(26,158,255));
         m_localTable->item(index,1)->setText(str_video_playing);
 
-         m_localTable->setCurrentCell(index,0);
+        m_localTable->setCurrentCell(index,0);
         m_localTable->setPlayingItemIndex(m_curPlayingIndex);
     }
     update();
@@ -185,8 +193,8 @@ void videoMiddleWidgetRight::addVideo()
     if(files.isEmpty())
         return;
 
-//    QMediaPlayer player;
-//    QEventLoop lp;
+    //    QMediaPlayer player;
+    //    QEventLoop lp;
     for(int i=0;i<files.count();i++)
     {
         if(!m_playList->getUrlList().contains(QUrl::fromLocalFile(files.value(i))))
@@ -195,30 +203,30 @@ void videoMiddleWidgetRight::addVideo()
             QString fileName=info.fileName();
             QString filePath=files.value(i);
 
-//            player.setMedia(QUrl::fromLocalFile(filePath));
-//            //prevent the loop dont stop
-//            QTimer timer;
-//            connect(&timer,&QTimer::timeout,[&](){
-//                lp.quit();
-//            });
-//            timer.setSingleShot(true);
-//            timer.start(2000);
+            //            player.setMedia(QUrl::fromLocalFile(filePath));
+            //            //prevent the loop dont stop
+            //            QTimer timer;
+            //            connect(&timer,&QTimer::timeout,[&](){
+            //                lp.quit();
+            //            });
+            //            timer.setSingleShot(true);
+            //            timer.start(2000);
 
-//            connect(&player,SIGNAL(durationChanged(qint64)),&lp,SLOT(quit()));
-//            lp.exec();
-//            qint64 videoTime= player.duration();
-//            QTime total_time((videoTime % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60),
-//                             (videoTime % (1000 * 60 * 60)) / (1000 * 60),
-//                             (videoTime % (1000 * 60)) / 1000);
-//            int allMinite = total_time.hour()*60+total_time.minute();
-//            QString duration = QString::number(allMinite).append(str_videoTime_minite);
-//            if(videoTime>0)
-//            {
-                int rowCount = m_localTable->rowCount();
-                insertIntoLocalTable(rowCount,fileName," ");
-                m_playList->addToPlayList(filePath);
-                //                videoMediaDataBase::addVideo(fileName,filePath,"..");
-//            }
+            //            connect(&player,SIGNAL(durationChanged(qint64)),&lp,SLOT(quit()));
+            //            lp.exec();
+            //            qint64 videoTime= player.duration();
+            //            QTime total_time((videoTime % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60),
+            //                             (videoTime % (1000 * 60 * 60)) / (1000 * 60),
+            //                             (videoTime % (1000 * 60)) / 1000);
+            //            int allMinite = total_time.hour()*60+total_time.minute();
+            //            QString duration = QString::number(allMinite).append(str_videoTime_minite);
+            //            if(videoTime>0)
+            //            {
+            int rowCount = m_localTable->rowCount();
+            insertIntoLocalTable(rowCount,fileName," ");
+            m_playList->addToPlayList(filePath);
+            //                videoMediaDataBase::addVideo(fileName,filePath,"..");
+            //            }
         }
     }
 }

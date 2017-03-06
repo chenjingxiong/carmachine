@@ -21,9 +21,13 @@
 #ifdef DEVICE_EVB
 int wifi_button_width = 145;
 int wifi_button_height = 45;
+int wifi_switch_width = 80;
+int wifi_switch_height = 40;
 #else
 int wifi_button_width = 80;
 int wifi_button_height = 30;
+int wifi_switch_width = 40;
+int wifi_switch_height = 20;
 #endif
 
 #define DBG false
@@ -102,7 +106,7 @@ void rightStackedWidgets0::initData()
 {
     wifiWid = this;
     m_netManager = wpaManager::getInstance(this);
-    m_wifiSwitch->getSwitchButton()->setToggle(is_supplicant_running());
+    m_wifiSwitch->getSwitchButton()->setChecked(is_supplicant_running());
     if(is_supplicant_running())
     {
         m_netManager->openCtrlConnection("wlan0");
@@ -159,12 +163,14 @@ void rightStackedWidgets0::initConnection()
     connect(m_tabScanResult->scanButton,SIGNAL(clicked(bool)),m_netManager,SLOT(scan()));
 
     connect(m_tabScanResult->m_table,SIGNAL(cellClicked(int,int)),this,SLOT(slot_showItemDetail(int,int)));
-    connect(m_wifiSwitch->getSwitchButton(),SIGNAL(toggled(bool)),this,SLOT(slot_onToggled(bool)));
+    connect(m_wifiSwitch->getSwitchButton(),SIGNAL(checkStateChanged(bool)),this,SLOT(slot_onToggled(bool)));
 
     m_workTimer = new QTimer(this);
     m_workTimer->setSingleShot(false);
+#ifdef DEVICE_EVB
     connect(m_workTimer, SIGNAL(timeout()), this, SLOT(slot_checkLanConnection()));
     m_workTimer->start(5000);
+#endif
 }
 
 void rightStackedWidgets0::slot_showItemDetail(int row,int)
@@ -173,7 +179,6 @@ void rightStackedWidgets0::slot_showItemDetail(int row,int)
     if (dialog == NULL)
         return;
     dialog->paramsFromScanResults(m_tabScanResult->m_netWorks[row]);
-    dialog->show();
     dialog->exec();
 }
 
@@ -238,7 +243,7 @@ int wifi_start_supplicant()
         return 0;
     }
 
-    console_run("/usr/sbin/wpa_supplicant -Dnl80211 -iwlan0 -c /tmp/wpa_supplicant.conf -B");
+    console_run("/usr/sbin/wpa_supplicant -Dnl80211 -iwlan0 -c /tmp/wpa_supplicant.conf &");
 
     return 0;
 }
@@ -307,6 +312,7 @@ int wifi_stop_hostapd()
     //    console_run("ifconfig wlan0 down");
     return 0;
 }
+
 void rightStackedWidgets0::wifiStationOn()
 {
 
@@ -344,7 +350,6 @@ void rightStackedWidgets0::slot_onToggled(bool isChecked)
         DEBUG_INFO("=======wifiStationOff========\n");
         wifiStationOff();
     }
-
 }
 
 void lanStateChanhe(bool state){
@@ -355,8 +360,13 @@ void lanStateChanhe(bool state){
     }else{
         console_run("ifconfig eth0 down");
     }
-
 }
+
+void rightStackedWidgets0::getIPAdress()
+{
+    console_run("udhcpc -i wlan0 &");
+}
+
 void rightStackedWidgets0::slot_checkLanConnection()
 {
     char cmdbuf[1024] = {0};
@@ -398,8 +408,8 @@ switchWidget::switchWidget(QWidget *parent):baseWidget(parent)
     m_lblState = new QLabel(this);
     m_lblState->setText("Open Wlan");
 
-    m_btnSwitch = new switchButton(this);
-    m_btnSwitch->setFixedSize(40,20);
+    m_btnSwitch = new CSwitchButton(this);
+    m_btnSwitch->setFixedSize(wifi_switch_width,wifi_switch_height);
 
     mainlyout->addWidget(m_lblState);
     mainlyout->addWidget(m_btnSwitch);
@@ -608,13 +618,23 @@ void tabScanResult::insertIntoTable(QString ssid, QString bssid, QString siganl,
     }else{
         m_table->setItem(rowCount,3,new QTableWidgetItem(QIcon(":/image/setting/ic_wifi_locked.png"),auth));
     }
-    // 数据存入结构体数组中
+
+    // 将数据存入数据结构
     m_netWorks[rowCount].SSID = ssid;
     m_netWorks[rowCount].BSSID = bssid;
     m_netWorks[rowCount].signal = siganl;
     m_netWorks[rowCount].flags = flags;
 
-    m_table->sortByColumn(2);
+//    m_table->sortByColumn(2);
+
+//    // 数据存入结构体数组中
+//    for(int i=0;i<m_table->rowCount();i++)
+//    {
+//        m_netWorks[i].SSID = m_table->itemAt(i,0)->text();
+//        m_netWorks[i].BSSID = m_table->itemAt(i,1)->text();
+//        m_netWorks[i].signal = m_table->itemAt(i,2)->data(Qt::DisplayRole).toString();
+//        m_netWorks[i].flags = m_table->itemAt(i,3)->text();
+//    }
 }
 
 //tabApHotspot::tabApHotspot(QWidget *parent):baseWidget(parent)

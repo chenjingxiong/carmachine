@@ -10,9 +10,9 @@
 #include <QLineEdit>
 #include "basewidget.h"
 #include "basepushbutton.h"
-#include "commonwidgets.h"
 #include "wlanlisttable.h"
 #include "wpa_supplicant/wpamanager.h"
+#include "cswitchbutton.h"
 
 class switchWidget;
 class tabCurrentStatus;
@@ -42,6 +42,8 @@ public:
 //    tabApHotspot *m_tabHotspot;
 
     wpaManager *m_netManager; // 网络管理类
+public:
+    void getIPAdress();
 private:
     void initData();
     void initLayout();
@@ -66,10 +68,10 @@ class switchWidget:public baseWidget
 {
 public:
     switchWidget(QWidget *parent);
-    switchButton* getSwitchButton(){return m_btnSwitch;}
+    CSwitchButton* getSwitchButton(){return m_btnSwitch;}
 private:
     QLabel *m_lblState;
-    switchButton *m_btnSwitch;
+    CSwitchButton *m_btnSwitch;
 
 };
 

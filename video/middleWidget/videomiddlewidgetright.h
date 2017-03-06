@@ -12,7 +12,6 @@
 #include <QStackedWidget>
 #include <QMediaContent>
 #include <QEventLoop>
-#include <QMediaPlayer>
 
 class videoMiddleWidgetRight:public baseWidget
 {
@@ -26,6 +25,8 @@ public:
     void addVideo(); // 添加视频文件
     videoLocalListTable *m_localTable;
     void setOriginState();
+
+    void beginSearchFromPath(QString path);
 private:
     listHeader *m_listHeader;
     QStackedWidget *m_stackedWid;
@@ -38,8 +39,8 @@ private:
 
     void initLayout();
     void initConnection();
-//    void getLocalListFromDataBase();
-    void beginSearchFromPath(QString path);
+    //    void getLocalListFromDataBase();
+
     QFileInfoList getFileList(QString path);
     void insertIntoLocalTable(int row,QString videoName,QString duration);
 

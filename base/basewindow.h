@@ -47,8 +47,15 @@ class baseWindow : public AbsFrameLessAutoSize
 public:
     explicit baseWindow(QWidget *parent = 0);
     baseWidget *m_mainwid;
+private:
+    bool m_drag;
+    QPoint m_dragPosition;
 protected:
     virtual void paintEvent(QPaintEvent *);
+
+    void mouseMoveEvent(QMouseEvent *event);
+    void mousePressEvent(QMouseEvent *event);
+    void mouseReleaseEvent(QMouseEvent *event);
 
 private:
 

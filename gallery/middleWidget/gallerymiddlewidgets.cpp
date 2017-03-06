@@ -53,7 +53,6 @@ void galleryMiddleWidgets::updateRes()
 
     // get all image files and user class QImage to get thumbnail
     m_imagesInfoList = findImgFiles(MUSIC_SEARCH_PATH);
-    qDebug("gallery: the size of images is %d",m_imagesInfoList.size());
     QImage tempImage;
     for(int i = 0;i < m_imagesInfoList.size();i++)
     {
@@ -62,15 +61,7 @@ void galleryMiddleWidgets::updateRes()
             m_imagesRes.insert(m_imagesInfoList.at(i).absoluteFilePath(),tempImage);
         }
     }
-    if(m_imagesRes.size()>0)
-    {
-        emit m_thumbImgWid->imagesResChanged(m_imagesRes);
-        emit m_viewerWid->imagesResChanged(m_imagesRes);
-    }
-    else
-    {
-        emit imageEmpty();
-    }
+    slot_onImagesResChanged(m_imagesRes);
 }
 
 void galleryMiddleWidgets::initConnection()
@@ -98,6 +89,7 @@ void galleryMiddleWidgets::initLayout()
 
 void galleryMiddleWidgets::slot_showEmptyImageTip()
 {
+    emit viewerResChanged("");
     m_stackedMainLyout->setCurrentWidget(m_emptyImgWid);
 }
 
@@ -109,16 +101,25 @@ void galleryMiddleWidgets::slot_showImageViewer(QString imagePath, QImage image)
 
 void galleryMiddleWidgets::slot_onImagesResChanged(QMap<QString, QImage> imagesRes)
 {
-    m_thumbImgWid->imagesResChanged(imagesRes);
-    m_viewerWid->imagesResChanged(imagesRes);
+    m_imagesRes = imagesRes;
+    if(m_imagesRes.size()>0)
+    {
+        if(m_stackedMainLyout->currentWidget()==m_emptyImgWid)
+        {
+            m_stackedMainLyout->setCurrentWidget(m_thumbImgWid);
+        }
+        emit m_thumbImgWid->imagesResChanged(m_imagesRes);
+        emit m_viewerWid->imagesResChanged(m_imagesRes,m_stackedMainLyout->currentWidget()==m_viewerWid);
+    }
+    else
+    {
+        emit imageEmpty();
+    }
 }
 
 void galleryMiddleWidgets::leaveViewerMode()
 {
     m_stackedMainLyout->setCurrentWidget(m_thumbImgWid);
-    if(m_viewerWid->m_detailWidget){
-        m_viewerWid->m_detailWidget->close();
-    }
 }
 
 

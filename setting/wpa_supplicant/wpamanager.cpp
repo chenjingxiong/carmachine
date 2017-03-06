@@ -772,6 +772,7 @@ void wpaManager::processMsg(char *msg)
         //        showTrayMessage(QSystemTrayIcon::Information, 3,
         //                tr("Connection to network established."));
         QTimer::singleShot(5 * 1000, this, SLOT(showTrayStatus()));
+        wifiWid->getIPAdress();
         stopWpsRun(true);
     } else if (str_match(pos, WPS_EVENT_AP_AVAILABLE_PBC)) {
         //        wpsStatusText->setText(tr("WPS AP in active PBC mode found"));

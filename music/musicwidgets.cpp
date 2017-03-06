@@ -118,8 +118,10 @@ void musicWidgets::slot_onMediaStatusChanged(QMediaPlayer::MediaStatus status)
 {
     if(status==QMediaPlayer::InvalidMedia)
     {
+        qDebug()<<"InvalidMedia";
     }else if(status==QMediaPlayer::StalledMedia)
     {
+        slot_nextSong();
     }else if(status==QMediaPlayer::EndOfMedia){
         slot_nextSong();
     }
@@ -139,6 +141,7 @@ void musicWidgets::slot_onStateChanged(QMediaPlayer::State state)
 
 void musicWidgets::slot_onCurrentMediaChanged(QMediaContent content)
 {
+    qDebug()<<"this";
     m_middlewid->m_leftWid->m_Swidget0->updatePlayingItemStyle(content);
     m_bottomwid->setCurrentSongName(m_middlewid->m_leftWid->m_Swidget0->getCurPlayingSongName());
 }
@@ -164,18 +167,22 @@ void musicWidgets::slot_setPlayMode(PlayMode mode)
 
 void musicWidgets::slot_nextSong()
 {
-    mediaList *m_playlist = m_middlewid->m_leftWid->m_Swidget0->m_playlist;
-    int curIndex = m_playlist->nextSong();
-    m_player->setMedia(m_playlist->mediaUrl(curIndex));
-    m_player->play();
+    mediaList *playlist = m_middlewid->m_leftWid->m_Swidget0->m_playlist;
+    if(playlist->getUrlList().size()>0){
+        int curIndex = playlist->nextSong();
+        m_player->setMedia(playlist->mediaUrl(curIndex));
+        m_player->play();
+    }
 }
 
 void musicWidgets::slot_preSong()
 {
-    mediaList *m_playlist = m_middlewid->m_leftWid->m_Swidget0->m_playlist;
-    int curIndex = m_playlist->preSong();
-    m_player->setMedia(m_playlist->mediaUrl(curIndex));
-    m_player->play();
+    mediaList *playlist = m_middlewid->m_leftWid->m_Swidget0->m_playlist;
+    if(playlist->getUrlList().size()>0){
+        int curIndex = playlist->preSong();
+        m_player->setMedia(playlist->mediaUrl(curIndex));
+        m_player->play();
+    }
 }
 
 void musicWidgets::slot_playOrPause()

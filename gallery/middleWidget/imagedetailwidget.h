@@ -1,11 +1,11 @@
 #ifndef IMAGEDETAILWIDGET_H
 #define IMAGEDETAILWIDGET_H
 
-
+#include <QDialog>
 #include <QWidget>
 #include <QLabel>
+#include <QEventLoop>
 
-//#include "moveablewidget.h"
 #include "basepushbutton.h"
 
 class ImageItem:public QWidget
@@ -18,18 +18,20 @@ private:
     QLabel *textLabel;
 };
 
-class ImageDetailWidget:public QWidget
+class ImageDetailWidget:public QDialog
 {
     Q_OBJECT
 public:
     ImageDetailWidget(QWidget *parent=0);
 
-    void updateImageInfo(QString imagePath);
+    int static showImageDetail(QWidget *parent,QString imagePath);
 private:
     void initLayout();
     void initConnection();
-private:
-    flatButton *m_btnClose;
+protected:
+    int exec();
+    void closeEvent(QCloseEvent *event);
+public:
     flatButton *m_btnConfirm;
 
     ImageItem *nameItem;
@@ -38,6 +40,9 @@ private:
     ImageItem *locationItem;
     ImageItem *sizeItem;
     ImageItem *createTimeItem;
+
+    QEventLoop* m_eventLoop;
+
 
 };
 

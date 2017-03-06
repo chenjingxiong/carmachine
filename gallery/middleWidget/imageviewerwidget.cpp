@@ -1,11 +1,9 @@
 #include "imageviewerwidget.h"
 
 #include <QVBoxLayout>
-#include <QMessageBox>
+#include <cmessagebox.h>
 #include "global_value.h"
 
-int labelWidth;
-int labelHeight;
 
 #ifdef DEVICE_EVB
 int button_last_image_width = 100;
@@ -26,94 +24,51 @@ imageViewerWidget::imageViewerWidget(QWidget *parent):baseWidget(parent)
 
 void imageViewerWidget::initLayout()
 {
-    QVBoxLayout *mainLayout = new QVBoxLayout;
+    QStackedLayout *mainLayout = new QStackedLayout;
+    mainLayout->setStackingMode(QStackedLayout::StackAll);
 
-    m_imageLabel = new QLabel;
-    m_imageLabel->adjustSize();
-    m_imageLabel->setSizePolicy(QSizePolicy::Expanding,QSizePolicy::Expanding);
-    m_imageLabel->setAlignment(Qt::AlignCenter);
+    m_imageViewer = new ImageViewer(this);
+    m_imageControler = new ImageControler(this);
 
-    m_lastImgBtn = new flatButton(this);
-    m_lastImgBtn->setFixedSize(button_last_image_width,button_last_image_width);
-    m_lastImgBtn->setStyleSheet("QPushButton{border-image:url(:/image/gallery/ic_last_image.png);}");
-
-    m_nextImgBtn = new flatButton(this);
-    m_nextImgBtn->setFixedSize(button_last_image_width,button_last_image_width);
-    m_nextImgBtn->setStyleSheet("QPushButton{border-image:url(:/image/gallery/ic_next_image.png);}");
-
-    QHBoxLayout *imageLayout = new QHBoxLayout;
-    imageLayout->addWidget(m_lastImgBtn);
-    imageLayout->addWidget(m_imageLabel);
-    imageLayout->addWidget(m_nextImgBtn);
-    imageLayout->setContentsMargins(layout_spacing,0,layout_spacing,0);
-    imageLayout->setSpacing(layout_spacing);
-
-
-    // image control layout
-    QHBoxLayout *controlLyout = new QHBoxLayout;
-
-    m_controlWid = new imageControlWidget(this);
-
-    controlLyout->addStretch(0);
-    controlLyout->addWidget(m_controlWid);
-    controlLyout->addStretch(0);
-
-
-    mainLayout->setAlignment(Qt::AlignHCenter);
-    mainLayout->addSpacing(layout_spacing);
-    mainLayout->addLayout(imageLayout);
-    mainLayout->addLayout(controlLyout);
-    mainLayout->addSpacing(layout_spacing);
-    mainLayout->setSpacing(layout_spacing);
+    mainLayout->addWidget(m_imageControler);
+    mainLayout->addWidget(m_imageViewer);
+    mainLayout->setMargin(0);
 
     setLayout(mainLayout);
 }
 
 void imageViewerWidget::initConnection()
 {
-    connect(this,SIGNAL(imagesResChanged(QMap<QString,QImage>)),this,SLOT(slot_onImagesResChanged(QMap<QString,QImage>)));
+    connect(this,SIGNAL(imagesResChanged(QMap<QString,QImage>,bool)),this,SLOT(slot_onImagesResChanged(QMap<QString,QImage>,bool)));
 
-    connect(m_lastImgBtn,SIGNAL(clicked(bool)),this,SLOT(lastImage()));
-    connect(m_nextImgBtn,SIGNAL(clicked(bool)),this,SLOT(nextImage()));
-    // control
-    connect(m_controlWid->m_detailBtn,SIGNAL(clicked(bool)),this,SLOT(slot_viewDetail()));
-    connect(m_controlWid->m_deleteBtn,SIGNAL(clicked(bool)),this,SLOT(slot_deleteImage()));
-}
-
-void imageViewerWidget::resizeEvent(QResizeEvent *)
-{
-    labelWidth = m_imageLabel->width();
-    labelHeight = m_imageLabel->height();
-}
-
-void imageViewerWidget::mousePressEvent(QMouseEvent *event)
-{
-    if(m_detailWidget)
-    {
-        m_detailWidget->close();
-    }
-    QWidget::mousePressEvent(event);
+    connect(m_imageControler->m_btnLast,SIGNAL(clicked(bool)),this,SLOT(slot_lastImage()));
+    connect(m_imageControler->m_btnNext,SIGNAL(clicked(bool)),this,SLOT(slot_nextImage()));
+    connect(m_imageControler->m_btnZoomOut,SIGNAL(clicked(bool)),this,SLOT(slot_imageZoomOut()));
+    connect(m_imageControler->m_btnZoomIn,SIGNAL(clicked(bool)),this,SLOT(slot_imageZoomIn()));
+    connect(m_imageControler->m_btnRotate,SIGNAL(clicked(bool)),this,SLOT(slot_imageRotate()));
+    connect(m_imageControler->m_btnDelete,SIGNAL(clicked(bool)),this,SLOT(slot_deleteImage()));
+    connect(m_imageControler->m_btnDetail,SIGNAL(clicked(bool)),this,SLOT(slot_viewDetail()));
 }
 
 void imageViewerWidget::updateRes(QString imagePath, QImage image)
 {
+    m_imageViewer->setPixmap(QPixmap::fromImage(image));
     m_imagePath = imagePath;
     m_image = image;
-    if(image.width()>labelWidth||image.height()>labelHeight)
-    {
-        m_imageLabel->setPixmap(QPixmap::fromImage(image.scaled(labelWidth,labelHeight,Qt::KeepAspectRatio, Qt::SmoothTransformation)));
-    }else{
-        m_imageLabel->setPixmap(QPixmap::fromImage(image));
-    }
     emit m_middleWidgets->viewerResChanged(imagePath);
 }
 
-void imageViewerWidget::slot_onImagesResChanged(QMap<QString,QImage> imagesRes)
+void imageViewerWidget::slot_onImagesResChanged(QMap<QString,QImage> imagesRes,bool update)
 {
     m_imagesRes = imagesRes;
+    if(!m_imagesRes.keys().contains(m_imagePath)&&update)
+    {
+        QMap<QString,QImage>::Iterator  it = m_imagesRes.begin();
+        updateRes(it.key(),it.value());
+    }
 }
 
-void imageViewerWidget::lastImage()
+void imageViewerWidget::slot_lastImage()
 {
     QMap<QString,QImage>::Iterator  it = m_imagesRes.begin();
     while(it != m_imagesRes.end())
@@ -132,7 +87,7 @@ void imageViewerWidget::lastImage()
     }
 }
 
-void imageViewerWidget::nextImage()
+void imageViewerWidget::slot_nextImage()
 {
     QMap<QString,QImage>::Iterator  it = m_imagesRes.begin();
     while(it!=m_imagesRes.end())
@@ -153,25 +108,42 @@ void imageViewerWidget::nextImage()
 
 void imageViewerWidget::slot_viewDetail()
 {
-    if(m_detailWidget)
+    QFileInfo *info = new QFileInfo(m_imagePath);
+    if(info->exists())
     {
-        m_detailWidget->close();
+        ImageDetailWidget::showImageDetail(this,m_imagePath);
     }
-    m_detailWidget = new ImageDetailWidget();
-    m_detailWidget->updateImageInfo(m_imagePath);
-    m_detailWidget->show();
 }
 
 void imageViewerWidget::slot_deleteImage()
 {
-    QMessageBox::StandardButton rb = QMessageBox::question(NULL,str_question_Tip,
-                                                          str_question_delete_image ,QMessageBox::Yes | QMessageBox::No, QMessageBox::Yes);
-    if(rb == QMessageBox::Yes)
+    QFileInfo *info = new QFileInfo(m_imagePath);
+    if(info->exists())
     {
-        nextImage();
-        // delete images
-        m_imagesRes.remove(m_imagePath);
-        m_middleWidgets->imagesResChanged(m_imagesRes);
+        int result = CMessageBox::showCMessageBox(this,str_question_delete_image,str_button_delete,str_button_cancel);
+        if(result == ChosseResult::RESULT_CONFIRM)
+        {
+            if(QFile::remove(m_imagePath)){
+                QString removePath = m_imagePath;
+                slot_nextImage();
+                m_imagesRes.remove(removePath);
+                m_middleWidgets->imagesResChanged(m_imagesRes);
+            }
+        }
     }
 }
 
+void imageViewerWidget::slot_imageZoomOut()
+{
+    m_imageViewer->zoomOut();
+}
+
+void imageViewerWidget::slot_imageZoomIn()
+{
+    m_imageViewer->zoomIn();
+}
+
+void imageViewerWidget::slot_imageRotate()
+{
+    m_imageViewer->clockwise90();
+}

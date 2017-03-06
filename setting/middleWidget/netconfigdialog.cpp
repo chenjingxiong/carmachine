@@ -1,7 +1,10 @@
 #include "netconfigdialog.h"
 #include <cstdio>
 #include <QMessageBox>
+#include <QDebug>
+#include <QDesktopWidget>
 #include "wpa_supplicant/wpamanager.h"
+
 
 enum {
     AUTH_NONE_OPEN,
@@ -17,6 +20,7 @@ enum {
 
 netConfigDialog::netConfigDialog(QWidget *parent):QDialog(parent)
 {
+    this->setWindowFlags(Qt::Dialog);
     setStyleSheet("QLabel{color:black}"
                   "QPushButton{background:rgb(143,145,152)}"
                   "QPushButton{color:black}"
@@ -41,9 +45,18 @@ netConfigDialog::netConfigDialog(QWidget *parent):QDialog(parent)
     connect(encrSelect, SIGNAL(activated(const QString &)),this,SLOT(encrChanged(const QString &)));
     connect(removeButton, SIGNAL(clicked()), this, SLOT(removeNetwork()));
     connect(eapSelect, SIGNAL(activated(int)), this,SLOT(eapChanged(int)));
-//    connect(useWpsButton, SIGNAL(clicked()), this, SLOT(useWps()));
+    //    connect(useWpsButton, SIGNAL(clicked()), this, SLOT(useWps()));
 
     new_network = false;
+}
+
+void netConfigDialog::resizeEvent(QResizeEvent *)
+{
+    QDesktopWidget* desktopWidget = QApplication::desktop();
+    QRect screenRect = desktopWidget->screenGeometry();
+    int g_nActScreenW = screenRect.width();
+    int g_nActScreenH = screenRect.height();
+    move((int)((g_nActScreenW-width())/2),(int)((g_nActScreenH-height())/2));
 }
 
 static int key_value_isset(const char *reply, size_t reply_len)
@@ -91,18 +104,18 @@ void netConfigDialog::paramsFromScanResults(netWork network)
 
     getEapCapa();
 
-//    if (flags.indexOf("[WPS") >= 0)
-//        useWpsButton->setEnabled(true);
+    //    if (flags.indexOf("[WPS") >= 0)
+    //        useWpsButton->setEnabled(true);
     bssid = network.BSSID;
 }
 
 void netConfigDialog::authChanged(int sel)
 {
     encrSelect->setEnabled(sel != AUTH_NONE_OPEN && sel != AUTH_NONE_WEP &&
-                   sel != AUTH_NONE_WEP_SHARED);
+            sel != AUTH_NONE_WEP_SHARED);
     pskEdit->setEnabled(sel == AUTH_WPA_PSK || sel == AUTH_WPA2_PSK);
     bool eap = sel == AUTH_IEEE8021X || sel == AUTH_WPA_EAP ||
-        sel == AUTH_WPA2_EAP;
+            sel == AUTH_WPA2_EAP;
     eapSelect->setEnabled(eap);
     identityEdit->setEnabled(eap);
     passwordEdit->setEnabled(eap);
@@ -115,7 +128,7 @@ void netConfigDialog::authChanged(int sel)
         encrSelect->removeItem(0);
 
     if (sel == AUTH_NONE_OPEN || sel == AUTH_NONE_WEP ||
-        sel == AUTH_NONE_WEP_SHARED || sel == AUTH_IEEE8021X) {
+            sel == AUTH_NONE_WEP_SHARED || sel == AUTH_IEEE8021X) {
         encrSelect->addItem("None");
         encrSelect->addItem("WEP");
         encrSelect->setCurrentIndex(sel == AUTH_NONE_OPEN ? 0 : 1);
@@ -123,7 +136,7 @@ void netConfigDialog::authChanged(int sel)
         encrSelect->addItem("TKIP");
         encrSelect->addItem("CCMP");
         encrSelect->setCurrentIndex((sel == AUTH_WPA2_PSK ||
-                         sel == AUTH_WPA2_EAP) ? 1 : 0);
+                                     sel == AUTH_WPA2_EAP) ? 1 : 0);
     }
 
     wepEnabled(sel == AUTH_NONE_WEP || sel == AUTH_NONE_WEP_SHARED);
@@ -155,7 +168,7 @@ void netConfigDialog::eapChanged(int sel)
     int i;
     QStringList allowed;
     allowed << "MSCHAPV2" << "MD5" << "GTC" << "TLS" << "OTP" << "SIM"
-        << "AKA";
+            << "AKA";
     for (i = 0; i < eapSelect->count(); i++) {
         if (allowed.contains(eapSelect->itemText(i))) {
             phase2Select->addItem("EAP-" + eapSelect->itemText(i));
@@ -208,11 +221,11 @@ void netConfigDialog::addNetwork()
     if (auth == AUTH_WPA_PSK || auth == AUTH_WPA2_PSK) {
         if (psklen < 8 || psklen > 64) {
             QMessageBox::warning(
-                this,
-                tr("WPA Pre-Shared Key Error"),
-                tr("WPA-PSK requires a passphrase of 8 to 63 "
-                   "characters\n"
-                   "or 64 hex digit PSK"));
+                        this,
+                        tr("WPA Pre-Shared Key Error"),
+                        tr("WPA-PSK requires a passphrase of 8 to 63 "
+                           "characters\n"
+                           "or 64 hex digit PSK"));
             pskEdit->setFocus();
             return;
         }
@@ -222,13 +235,13 @@ void netConfigDialog::addNetwork()
         QRegExp rx("^(\\w|-)+$");
         if (rx.indexIn(idstrEdit->text()) < 0) {
             QMessageBox::warning(
-                this, tr("Network ID Error"),
-                tr("Network ID String contains non-word "
-                   "characters.\n"
-                   "It must be a simple string, "
-                   "without spaces, containing\n"
-                   "only characters in this range: "
-                   "[A-Za-z0-9_-]\n"));
+                        this, tr("Network ID Error"),
+                        tr("Network ID String contains non-word "
+                           "characters.\n"
+                           "It must be a simple string, "
+                           "without spaces, containing\n"
+                           "only characters in this range: "
+                           "[A-Za-z0-9_-]\n"));
             idstrEdit->setFocus();
             return;
         }
@@ -242,9 +255,9 @@ void netConfigDialog::addNetwork()
         wpaManager::getInstance(this)->ctrlRequest("ADD_NETWORK", reply, &reply_len);
         if (reply[0] == 'F') {
             QMessageBox::warning(this, "wpa_gui",
-                         tr("Failed to add "
-                        "network to wpa_supplicant\n"
-                        "configuration."));
+                                 tr("Failed to add "
+                                    "network to wpa_supplicant\n"
+                                    "configuration."));
             return;
         }
         id = atoi(reply);
@@ -287,7 +300,7 @@ void netConfigDialog::addNetwork()
         setNetworkParam(id, "auth_alg", "OPEN", false);
 
     if (auth == AUTH_WPA_PSK || auth == AUTH_WPA_EAP ||
-        auth == AUTH_WPA2_PSK || auth == AUTH_WPA2_EAP) {
+            auth == AUTH_WPA2_PSK || auth == AUTH_WPA2_EAP) {
         int encr = encrSelect->currentIndex();
         if (encr == 0)
             pairwise = "TKIP";
@@ -304,14 +317,14 @@ void netConfigDialog::addNetwork()
         setNetworkParam(id, "group", "TKIP CCMP WEP104 WEP40", false);
     }
     if (pskEdit->isEnabled() &&
-        strcmp(pskEdit->text().toLocal8Bit().constData(),
-           WPA_GUI_KEY_DATA) != 0)
+            strcmp(pskEdit->text().toLocal8Bit().constData(),
+                   WPA_GUI_KEY_DATA) != 0)
         setNetworkParam(id, "psk",
-                pskEdit->text().toLocal8Bit().constData(),
-                psklen != 64);
+                        pskEdit->text().toLocal8Bit().constData(),
+                        psklen != 64);
     if (eapSelect->isEnabled()) {
         const char *eap =
-            eapSelect->currentText().toLocal8Bit().constData();
+                eapSelect->currentText().toLocal8Bit().constData();
         setNetworkParam(id, "eap", eap, false);
         if (strcmp(eap, "SIM") == 0 || strcmp(eap, "AKA") == 0)
             setNetworkParam(id, "pcsc", "", true);
@@ -326,36 +339,36 @@ void netConfigDialog::addNetwork()
         if (eap.compare("PEAP") == 0) {
             if (inner.startsWith("EAP-"))
                 snprintf(phase2, sizeof(phase2), "auth=%s",
-                     inner.right(inner.size() - 4).
-                     toLocal8Bit().constData());
+                         inner.right(inner.size() - 4).
+                         toLocal8Bit().constData());
         } else if (eap.compare("TTLS") == 0) {
             if (inner.startsWith("EAP-"))
                 snprintf(phase2, sizeof(phase2), "autheap=%s",
-                     inner.right(inner.size() - 4).
-                     toLocal8Bit().constData());
+                         inner.right(inner.size() - 4).
+                         toLocal8Bit().constData());
             else
                 snprintf(phase2, sizeof(phase2), "auth=%s",
-                     inner.toLocal8Bit().constData());
+                         inner.toLocal8Bit().constData());
         } else if (eap.compare("FAST") == 0) {
             const char *provisioning = NULL;
             if (inner.startsWith("EAP-")) {
                 snprintf(phase2, sizeof(phase2), "auth=%s",
-                     inner.right(inner.size() - 4).
-                     toLocal8Bit().constData());
+                         inner.right(inner.size() - 4).
+                         toLocal8Bit().constData());
                 provisioning = "fast_provisioning=2";
             } else if (inner.compare("GTC(auth) + MSCHAPv2(prov)")
-                   == 0) {
+                       == 0) {
                 snprintf(phase2, sizeof(phase2),
-                     "auth=GTC auth=MSCHAPV2");
+                         "auth=GTC auth=MSCHAPV2");
                 provisioning = "fast_provisioning=1";
             } else
                 provisioning = "fast_provisioning=3";
             if (provisioning) {
                 char blob[32];
                 setNetworkParam(id, "phase1", provisioning,
-                        true);
+                                true);
                 snprintf(blob, sizeof(blob),
-                     "blob://fast-pac-%d", id);
+                         "blob://fast-pac-%d", id);
                 setNetworkParam(id, "pac_file", blob, true);
             }
         }
@@ -367,22 +380,22 @@ void netConfigDialog::addNetwork()
         setNetworkParam(id, "phase2", "NULL", false);
     if (identityEdit->isEnabled() && identityEdit->text().length() > 0)
         setNetworkParam(id, "identity",
-                identityEdit->text().toLocal8Bit().constData(),
-                true);
+                        identityEdit->text().toLocal8Bit().constData(),
+                        true);
     else
         setNetworkParam(id, "identity", "NULL", false);
     if (passwordEdit->isEnabled() && passwordEdit->text().length() > 0 &&
-        strcmp(passwordEdit->text().toLocal8Bit().constData(),
-           WPA_GUI_KEY_DATA) != 0)
+            strcmp(passwordEdit->text().toLocal8Bit().constData(),
+                   WPA_GUI_KEY_DATA) != 0)
         setNetworkParam(id, "password",
-                passwordEdit->text().toLocal8Bit().constData(),
-                true);
+                        passwordEdit->text().toLocal8Bit().constData(),
+                        true);
     else if (passwordEdit->text().length() == 0)
         setNetworkParam(id, "password", "NULL", false);
     if (cacertEdit->isEnabled() && cacertEdit->text().length() > 0)
         setNetworkParam(id, "ca_cert",
-                cacertEdit->text().toLocal8Bit().constData(),
-                true);
+                        cacertEdit->text().toLocal8Bit().constData(),
+                        true);
     else
         setNetworkParam(id, "ca_cert", "NULL", false);
     writeWepKey(id, wep0Edit, 0);
@@ -401,8 +414,8 @@ void netConfigDialog::addNetwork()
 
     if (idstrEdit->isEnabled() && idstrEdit->text().length() > 0)
         setNetworkParam(id, "id_str",
-                idstrEdit->text().toLocal8Bit().constData(),
-                true);
+                        idstrEdit->text().toLocal8Bit().constData(),
+                        true);
     else
         setNetworkParam(id, "id_str", "NULL", false);
 
@@ -410,7 +423,7 @@ void netConfigDialog::addNetwork()
         QString prio;
         prio = prio.setNum(prioritySpinBox->value());
         setNetworkParam(id, "priority", prio.toLocal8Bit().constData(),
-                false);
+                        false);
     }
 
     snprintf(cmd, sizeof(cmd), "ENABLE_NETWORK %d", id);
@@ -418,9 +431,9 @@ void netConfigDialog::addNetwork()
     wpaManager::getInstance(this)->ctrlRequest(cmd, reply, &reply_len);
     if (strncmp(reply, "OK", 2) != 0) {
         QMessageBox::warning(this, "wpa_gui",
-                     tr("Failed to enable "
-                    "network in wpa_supplicant\n"
-                    "configuration."));
+                             tr("Failed to enable "
+                                "network in wpa_supplicant\n"
+                                "configuration."));
         /* Network was added, so continue anyway */
     }
     wpaManager::getInstance(this)->triggerUpdate();
@@ -466,14 +479,13 @@ void netConfigDialog::writeWepKey(int network_id, QLineEdit *edit, int id)
     setNetworkParam(network_id, buf, txt, !hex);
 }
 
-
 int netConfigDialog::setNetworkParam(int id, const char *field,
-                   const char *value, bool quote)
+                                     const char *value, bool quote)
 {
     char reply[10], cmd[256];
     size_t reply_len;
     snprintf(cmd, sizeof(cmd), "SET_NETWORK %d %s %s%s%s",
-         id, field, quote ? "\"" : "", value, quote ? "\"" : "");
+             id, field, quote ? "\"" : "", value, quote ? "\"" : "");
     reply_len = sizeof(reply);
     wpaManager::getInstance(this)->ctrlRequest(cmd, reply, &reply_len);
     return strncmp(reply, "OK", 2) == 0 ? 0 : -1;
@@ -485,11 +497,11 @@ void netConfigDialog::removeNetwork()
     size_t reply_len;
 
     if (QMessageBox::information(
-            this, "netConfigDialog",
-            tr("This will permanently remove the network\n"
-               "from the configuration. Do you really want\n"
-               "to remove this network?"),
-            tr("Yes"), tr("No")) != 0)
+                this, "netConfigDialog",
+                tr("This will permanently remove the network\n"
+                   "from the configuration. Do you really want\n"
+                   "to remove this network?"),
+                tr("Yes"), tr("No")) != 0)
         return;
 
     snprintf(cmd, sizeof(cmd), "REMOVE_NETWORK %d", edit_network_id);
@@ -497,9 +509,9 @@ void netConfigDialog::removeNetwork()
     wpaManager::getInstance(this)->ctrlRequest(cmd, reply, &reply_len);
     if (strncmp(reply, "OK", 2) != 0) {
         QMessageBox::warning(this, "netConfigDialog",
-                     tr("Failed to remove network from "
-                    "wpa_supplicant\n"
-                    "configuration."));
+                             tr("Failed to remove network from "
+                                "wpa_supplicant\n"
+                                "configuration."));
     } else {
         wpaManager::getInstance(this)->triggerUpdate();
         wpaManager::getInstance(this)->ctrlRequest("SAVE_CONFIG", reply, &reply_len);
@@ -507,11 +519,9 @@ void netConfigDialog::removeNetwork()
     close();
 }
 
-
 void netConfigDialog::encrChanged(const QString &)
 {
 }
-
 
 void netConfigDialog::paramsFromConfig(int network_id)
 {
@@ -525,7 +535,7 @@ void netConfigDialog::paramsFromConfig(int network_id)
     snprintf(cmd, sizeof(cmd), "GET_NETWORK %d ssid", network_id);
     reply_len = sizeof(reply) - 1;
     if (wpaManager::getInstance(this)->ctrlRequest(cmd, reply, &reply_len) >= 0 &&
-        reply_len >= 2 && reply[0] == '"') {
+            reply_len >= 2 && reply[0] == '"') {
         reply[reply_len] = '\0';
         pos = strchr(reply + 1, '"');
         if (pos)
@@ -564,7 +574,7 @@ void netConfigDialog::paramsFromConfig(int network_id)
     if (wpaManager::getInstance(this)->ctrlRequest(cmd, reply, &reply_len) >= 0) {
         reply[reply_len] = '\0';
         if (strstr(reply, "CCMP") && auth != AUTH_NONE_OPEN &&
-            auth != AUTH_NONE_WEP && auth != AUTH_NONE_WEP_SHARED)
+                auth != AUTH_NONE_WEP && auth != AUTH_NONE_WEP_SHARED)
             encr = 1;
         else if (strstr(reply, "TKIP"))
             encr = 0;
@@ -590,7 +600,7 @@ void netConfigDialog::paramsFromConfig(int network_id)
     snprintf(cmd, sizeof(cmd), "GET_NETWORK %d identity", network_id);
     reply_len = sizeof(reply) - 1;
     if (wpaManager::getInstance(this)->ctrlRequest(cmd, reply, &reply_len) >= 0 &&
-        reply_len >= 2 && reply[0] == '"') {
+            reply_len >= 2 && reply[0] == '"') {
         reply[reply_len] = '\0';
         pos = strchr(reply + 1, '"');
         if (pos)
@@ -614,7 +624,7 @@ void netConfigDialog::paramsFromConfig(int network_id)
     snprintf(cmd, sizeof(cmd), "GET_NETWORK %d ca_cert", network_id);
     reply_len = sizeof(reply) - 1;
     if (wpaManager::getInstance(this)->ctrlRequest(cmd, reply, &reply_len) >= 0 &&
-        reply_len >= 2 && reply[0] == '"') {
+            reply_len >= 2 && reply[0] == '"') {
         reply[reply_len] = '\0';
         pos = strchr(reply + 1, '"');
         if (pos)
@@ -626,7 +636,7 @@ void netConfigDialog::paramsFromConfig(int network_id)
     snprintf(cmd, sizeof(cmd), "GET_NETWORK %d eap", network_id);
     reply_len = sizeof(reply) - 1;
     if (wpaManager::getInstance(this)->ctrlRequest(cmd, reply, &reply_len) >= 0 &&
-        reply_len >= 1) {
+            reply_len >= 1) {
         reply[reply_len] = '\0';
         for (i = 0; i < eapSelect->count(); i++) {
             if (eapSelect->itemText(i).compare(reply) == 0) {
@@ -644,10 +654,10 @@ void netConfigDialog::paramsFromConfig(int network_id)
 
     if (eap != NO_INNER) {
         snprintf(cmd, sizeof(cmd), "GET_NETWORK %d phase2",
-             network_id);
+                 network_id);
         reply_len = sizeof(reply) - 1;
         if (wpaManager::getInstance(this)->ctrlRequest(cmd, reply, &reply_len) >= 0 &&
-            reply_len >= 1) {
+                reply_len >= 1) {
             reply[reply_len] = '\0';
             eapChanged(eapSelect->currentIndex());
         } else
@@ -714,7 +724,7 @@ void netConfigDialog::paramsFromConfig(int network_id)
             break;
         }
         snprintf(cmd, sizeof(cmd), "GET_NETWORK %d wep_key%d",
-             network_id, i);
+                 network_id, i);
         reply_len = sizeof(reply) - 1;
         res = wpaManager::getInstance(this)->ctrlRequest(cmd, reply, &reply_len);
         if (res >= 0 && reply_len >= 2 && reply[0] == '"') {
@@ -741,7 +751,7 @@ void netConfigDialog::paramsFromConfig(int network_id)
 
     if (auth == AUTH_NONE_WEP) {
         snprintf(cmd, sizeof(cmd), "GET_NETWORK %d auth_alg",
-             network_id);
+                 network_id);
         reply_len = sizeof(reply) - 1;
         if (wpaManager::getInstance(this)->ctrlRequest(cmd, reply, &reply_len) >= 0) {
             reply[reply_len] = '\0';
@@ -774,7 +784,7 @@ void netConfigDialog::paramsFromConfig(int network_id)
     snprintf(cmd, sizeof(cmd), "GET_NETWORK %d id_str", network_id);
     reply_len = sizeof(reply) - 1;
     if (wpaManager::getInstance(this)->ctrlRequest(cmd, reply, &reply_len) >= 0 &&
-        reply_len >= 2 && reply[0] == '"') {
+            reply_len >= 2 && reply[0] == '"') {
         reply[reply_len] = '\0';
         pos = strchr(reply + 1, '"');
         if (pos)

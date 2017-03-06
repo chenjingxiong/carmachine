@@ -3,16 +3,19 @@
 #include <QVBoxLayout>
 #include <QDesktopWidget>
 
+#include <stdlib.h>
 
 mainWindow::mainWindow(QWidget *parent):baseWindow(parent)
+  ,mediaHasUpdate(false)
 {
     // 设置布局只需要设置m_mainwid即可
-//    m_mainwid->setStyleSheet("QLabel{color:white;}");
+    //    m_mainwid->setStyleSheet("QLabel{color:white;}");
 
     setStyleSheet("QLabel{color:white;}");
     initLayout();
     initAnimation();
     initConnection();
+    mainwid = this;
 }
 
 void mainWindow::initLayout()
@@ -77,8 +80,11 @@ void mainWindow::initConnection()
     connect(m_musicWid->m_topwid->m_btnreturn,SIGNAL(clicked(bool)),this,SLOT(slot_returnanimation()));
     connect(m_cameraWid->m_topWid->m_btnreturn,SIGNAL(clicked(bool)),this,SLOT(slot_returnanimation()));
     connect(m_videoWid->m_topWid->m_btnreturn,SIGNAL(clicked(bool)),this,SLOT(slot_returnanimation()));
-//    connect(m_galleryWid->m_topWid->m_btnreturn,SIGNAL(clicked(bool)),this,SLOT(slot_returnanimation()));
+    //    connect(m_galleryWid->m_topWid->m_btnreturn,SIGNAL(clicked(bool)),this,SLOT(slot_returnanimation()));
     connect(m_settingwid->m_topWid->m_btnreturn,SIGNAL(clicked(bool)),this,SLOT(slot_returnanimation()));
+
+    connect(this,SIGNAL(usbStateChanged()),this,SLOT(slot_updateMedia1()));
+    connect(this,SIGNAL(beginSearchMedia()),this,SLOT(slot_beginSearchMedia()));
 }
 
 void mainWindow::slot_appQuit()
@@ -109,8 +115,8 @@ void mainWindow::slot_showMusic()
     m_stackedWid->setCurrentIndex(1);
     m_upwidclose->start();
     m_lowwidclose->start();
-}
 
+}
 
 void mainWindow::slot_showVideo()
 {
@@ -125,7 +131,6 @@ void mainWindow::slot_showGallery()
     m_upwidclose->start();
     m_lowwidclose->start();
 }
-
 
 void mainWindow::slot_showCamera()
 {
@@ -144,6 +149,38 @@ void mainWindow::slot_returnanimation()
 void mainWindow::slot_closeanimationfinished()
 {
     m_mainlyout->setCurrentWidget(m_stackedWid);
+}
+
+void mainWindow::slot_updateMedia1()
+{
+    if(!mediaHasUpdate)
+    {
+        qDebug()<<"Carmachine: Update media resource.";
+        mediaHasUpdate = true;
+        QTimer::singleShot(2000,this,SLOT(slot_updateMedia2()));
+    }
+}
+
+void mainWindow::slot_updateMedia2()
+{
+    mediaHasUpdate =false;
+    mediaUpdateThread *thread = new mediaUpdateThread(this,this);
+    thread->start();
+}
+
+void mainWindow::slot_beginSearchMedia()
+{
+    m_musicWid->m_middlewid->m_leftWid->m_Swidget0->beginSearchFromPath(MUSIC_SEARCH_PATH);
+    m_videoWid->m_middleWid->m_rightWid->beginSearchFromPath(VIDEO_SEARCH_PATH);
+    m_galleryWid->m_middleWid->updateRes();
+    if(m_videoWid->getPlayer()->currentMedia().canonicalUrl().toString()!="")
+    {
+        m_videoWid->slot_onCurrentMediaChanged(m_videoWid->getPlayer()->currentMedia());
+    }
+    if(m_musicWid->getPlayer()->currentMedia().canonicalUrl().toString()!="")
+    {
+        m_musicWid->slot_onCurrentMediaChanged(m_musicWid->getPlayer()->currentMedia());
+    }
 }
 
 // 解决无边框窗口在最小化之后子控件不刷新的问题
@@ -172,6 +209,11 @@ void mainWindow::resizeEvent(QResizeEvent*)
     m_lowwidopen->setDuration(500);
 }
 
+void mainWindow::slot_standby()
+{
+    system("echo mem > /sys/power/state");
+}
+
 void mainWindow::keyPressEvent(QKeyEvent *event)
 {
     switch(event->key())
@@ -183,6 +225,7 @@ void mainWindow::keyPressEvent(QKeyEvent *event)
         }else if(m_stackedWid->currentWidget()==m_musicWid){
             m_musicWid->updateVolume(false);
         }
+        QWidget::keyPressEvent(event);
         break;
     case Qt::Key_VolumeUp:
         if(m_stackedWid->currentWidget()==m_videoWid){
@@ -190,12 +233,27 @@ void mainWindow::keyPressEvent(QKeyEvent *event)
         }else if(m_stackedWid->currentWidget()==m_musicWid){
             m_musicWid->updateVolume(true);
         }
+        QWidget::keyPressEvent(event);
+        break;
+    case 0:   // when key_power enter
+        if(m_stackedWid->currentWidget()==m_videoWid){
+            m_videoWid->setPlayerPause();
+        }
+        QTimer::singleShot(100, this, SLOT(slot_standby()));
         break;
     default:
         break;
     }
 }
 
-mainWindow::~mainWindow()
+mediaUpdateThread::mediaUpdateThread(QObject *parent,mainWindow *mainWindow):QThread(parent)
 {
+    this->m_mainWindow = mainWindow;
+    qRegisterMetaType<QVector<int> >("QVector<int>");
+    qRegisterMetaType<QMap<QString,QImage>>("QMap<QString,QImage>");
+}
+
+void mediaUpdateThread::run()
+{
+    m_mainWindow->slot_beginSearchMedia();
 }

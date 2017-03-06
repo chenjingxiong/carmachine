@@ -46,9 +46,10 @@ private slots:
     // about player
     void slot_onMediaStatusChanged(QMediaPlayer::MediaStatus);
     void slot_onStateChanged(QMediaPlayer::State);
-    void slot_onCurrentMediaChanged(QMediaContent);
     void slot_onPositonChanged(qint64);
     void slot_onDuratuonChanged(qint64);
+public slots:
+    void slot_onCurrentMediaChanged(QMediaContent);
 protected:
 
 };

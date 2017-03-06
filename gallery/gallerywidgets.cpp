@@ -48,10 +48,17 @@ void galleryWidgets::slot_return()
 
 void galleryWidgets::slot_onViewerResChanged(QString imagePath)
 {
-    QFileInfo *info = new QFileInfo(imagePath);
-    if(info->exists())
+    if(imagePath == "")
     {
-        m_topWid->updateTopTitle(info->fileName());
+        m_topWid->updateTopTitle(str_top_title);
+    }
+    else
+    {
+        QFileInfo *info = new QFileInfo(imagePath);
+        if(info->exists())
+        {
+            m_topWid->updateTopTitle(info->fileName());
+        }
     }
 }
 

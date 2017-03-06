@@ -7,6 +7,7 @@
 #include "global_value.h"
 
 baseWindow::baseWindow(QWidget *parent) : AbsFrameLessAutoSize(parent)
+  , m_drag(false)
 {
     setSizePolicy(QSizePolicy::Expanding,QSizePolicy::Expanding);
     m_mainwid=new baseWidget(this);
@@ -35,6 +36,29 @@ void baseWindow::paintEvent(QPaintEvent *e)
         painter.setPen(color);
         painter.drawPath(path);
     }
+}
+
+void baseWindow::mousePressEvent(QMouseEvent *event)
+{
+//    if(event->button() == Qt::LeftButton /*&& rectMove.contains(event->pos())*/) {
+//        m_drag = true;
+//        m_dragPosition = event->globalPos() - this->pos();
+//    }
+    QWidget::mousePressEvent(event);
+}
+
+void baseWindow::mouseReleaseEvent(QMouseEvent *event)
+{
+//    m_drag = false;
+    QWidget::mouseReleaseEvent(event);
+}
+
+void baseWindow::mouseMoveEvent(QMouseEvent *event)
+{
+//    if(m_drag) {
+//        move(event->globalPos() - m_dragPosition);
+//    }
+    QWidget::mouseMoveEvent(event);
 }
 
 

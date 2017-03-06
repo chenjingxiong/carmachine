@@ -3,7 +3,6 @@ HEADERS += \
     $$PWD/leftwidgets.h \
     $$PWD/funtiontablewidget.h \
     $$PWD/rightstackedwidgets0.h \
-    $$PWD/commonwidgets.h \
     $$PWD/wlanlisttable.h \
     $$PWD/rightstackedwidgets1.h \
     $$PWD/netconfigdialog.h
@@ -13,7 +12,6 @@ SOURCES += \
     $$PWD/leftwidgets.cpp \
     $$PWD/funtiontablewidget.cpp \
     $$PWD/rightstackedwidgets0.cpp \
-    $$PWD/commonwidgets.cpp \
     $$PWD/wlanlisttable.cpp \
     $$PWD/rightstackedwidgets1.cpp \
     $$PWD/netconfigdialog.cpp

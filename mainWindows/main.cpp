@@ -3,15 +3,15 @@
 #include "singleApplication/qsingleapplication.h"
 #include <mainWindows/global_value.h>
 #include <global_value.h>
-
-#include <hdmithread.h>
+#include <ueventthread.h>
 
 int main(int argc, char *argv[])
 {
     QSingleApplication app(argc, argv);
 
-    hdmiThread thread;
+    ueventThread thread;
     thread.start();
+
 
     if(!app.isRunning())    /* application run in single mode */
     {
@@ -33,7 +33,7 @@ int main(int argc, char *argv[])
 
 //        w.setGeometry(100,100,1000,700);
 //        w.show();
-        w.showMaximized();
+        w.showFullScreen();
         return app.exec();
     }
     return 0;

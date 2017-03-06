@@ -25,6 +25,8 @@ public:
 
     void savaSetting();
     void updateVolume(bool volumeAdd);
+    void setPlayerPause(){m_player->pause();}
+    QMediaPlayer* getPlayer(){return m_player;}
 private:
     QMediaPlayer *m_player;
 
@@ -32,10 +34,11 @@ private:
     void initPlayerAndConnection();
     void readSetting();
     void setOriginState();
+public slots:
+     void slot_onCurrentMediaChanged(QMediaContent);
 private slots:
     void slot_onMediaStateChanged(QMediaPlayer::MediaStatus);
     void slot_onPlayerStateChanged(QMediaPlayer::State);
-    void slot_onCurrentMediaChanged(QMediaContent);
     void slot_onMediaPositionChanged(qint64);
     void slot_onDurationChanged(qint64);
     void slot_onSliderPositionChanged(int);

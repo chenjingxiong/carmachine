@@ -75,6 +75,8 @@ const int top_icon_size = 40;
 //const QString str_image_size= "文件大小";
 //const QString str_image_create_time= "创建时间";
 //const QString str_resolution_tip = "像素(宽×高)";
+//const QString str_button_delete= "删除";
+//const QString str_button_cancel= "取消";
 
 
 // music
@@ -123,6 +125,8 @@ const QString str_image_size= "Size";
 const QString str_image_create_time= "CreateTime";
 const QString str_resolution_tip = "(width×height)";
 const QString str_question_Tip= "warm";
-const QString str_question_delete_image= "would you like to delete images？";
+const QString str_question_delete_image= "Delete images？";
+const QString str_button_delete= "Delete";
+const QString str_button_cancel= "Cancel";
 
 #endif
